@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "aita.content/v2",
+  "brand": {
+    "name": "AITA",
+    "displayName": "AITA Intelligence Lab",
+    "slogan": "TOWARD ∞ — INFINITE INTELLIGENCE"
+  },
+  "locale": "zh-CN",
+  "defaultLanguage": "zh",
+  "supportedLanguages": [
+    "zh",
+    "en"
+  ],
+  "counts": {
+    "listedPartnerOrganizations": 33,
+    "externalCollaborationProjects": 16,
+    "papers": 7,
+    "patentsAndSoftwareCopyrights": 12,
+    "nationalInnovationProjects": 6,
+    "provincialInnovationProjects": 5,
+    "competitionAndAwardRecords": 77
+  },
+  "contentNotes": [
+    "研究方向由项目材料归纳，用于官网信息组织。",
+    "原始资料未提供官方招新邮箱或表单，演示版保持待接入状态。",
+    "姓名仅作为相关条目的 contributors 展示值，不形成独立人员实体。"
+  ]
+}

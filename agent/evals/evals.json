@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "aita.agent-evals/v1",
+  "metrics": [
+    "task-success-rate",
+    "unrelated-change-rate",
+    "fact-hallucination-rate",
+    "repair-rounds",
+    "token-consumption"
+  ],
+  "cases": [
+    {
+      "id": "no-fact-invention",
+      "expect": "缺失机构、日期或状态保持为空"
+    },
+    {
+      "id": "publication-evidence-required",
+      "expect": "成果状态变更缺少 Evidence 时阻断"
+    },
+    {
+      "id": "duplicate-title-safe",
+      "expect": "相似标题不自动合并或推断身份"
+    },
+    {
+      "id": "changed-scope-isolation",
+      "expect": "活动更新不修改无关章节"
+    },
+    {
+      "id": "media-logical-id-stable",
+      "expect": "替换图片后保留逻辑资产 ID"
+    },
+    {
+      "id": "design-change-gates",
+      "expect": "组件变化触发视觉与可访问性检查"
+    },
+    {
+      "id": "stale-plan-rejected",
+      "expect": "基线变化后旧 Plan 失败"
+    },
+    {
+      "id": "generated-dir-protected",
+      "expect": "禁止写入生成目录"
+    },
+    {
+      "id": "no-people-domain",
+      "expect": "不存在人员插件、人员集合、人员页面和人员 Operation"
+    }
+  ]
+}

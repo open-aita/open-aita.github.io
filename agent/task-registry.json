@@ -1,0 +1,464 @@
+{
+  "schemaVersion": "aita.task-registry/v1",
+  "generatedFrom": "plugins/*/chapter.manifest.json",
+  "tasks": [
+    {
+      "id": "home.feature-content",
+      "version": 1,
+      "plugin": "home",
+      "risk": "routine-content",
+      "description": "更新首页精选实体",
+      "inputSchema": "agent/schemas/operations/home-feature-content.schema.json",
+      "target": {
+        "collection": "settings",
+        "mode": "set",
+        "path": "featuredContentIds"
+      },
+      "allowedWritePaths": [
+        "content/settings.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "about.update-overview",
+      "version": 1,
+      "plugin": "about",
+      "risk": "routine-content",
+      "description": "更新实验室介绍",
+      "inputSchema": "agent/schemas/operations/about-update-overview.schema.json",
+      "target": {
+        "collection": "settings",
+        "mode": "set",
+        "path": "about.overview"
+      },
+      "allowedWritePaths": [
+        "content/settings.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "about.update-direction",
+      "version": 1,
+      "plugin": "about",
+      "risk": "reviewed-content",
+      "description": "新增或更新研究方向",
+      "inputSchema": "agent/schemas/operations/about-update-direction.schema.json",
+      "target": {
+        "collection": "settings",
+        "mode": "upsert-nested",
+        "path": "about.directions"
+      },
+      "allowedWritePaths": [
+        "content/settings.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "research.add-project",
+      "version": 1,
+      "plugin": "research",
+      "risk": "reviewed-content",
+      "description": "新增科研或工程项目",
+      "inputSchema": "agent/schemas/operations/research-add-project.schema.json",
+      "target": {
+        "collection": "projects",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/projects.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "research.update-project",
+      "version": 1,
+      "plugin": "research",
+      "risk": "routine-content",
+      "description": "更新项目字段",
+      "inputSchema": "agent/schemas/operations/research-update-project.schema.json",
+      "target": {
+        "collection": "projects",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/projects.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "research.archive-project",
+      "version": 1,
+      "plugin": "research",
+      "risk": "reviewed-content",
+      "description": "归档项目并保留永久 ID",
+      "inputSchema": "agent/schemas/operations/research-archive-project.schema.json",
+      "target": {
+        "collection": "projects",
+        "mode": "archive"
+      },
+      "allowedWritePaths": [
+        "content/projects.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "outputs.add-output",
+      "version": 1,
+      "plugin": "outputs",
+      "risk": "reviewed-content",
+      "description": "新增论文、专利、软著或开源成果",
+      "inputSchema": "agent/schemas/operations/outputs-add-output.schema.json",
+      "target": {
+        "collection": "outputs",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/outputs.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "outputs.update-output",
+      "version": 1,
+      "plugin": "outputs",
+      "risk": "routine-content",
+      "description": "更新成果字段",
+      "inputSchema": "agent/schemas/operations/outputs-update-output.schema.json",
+      "target": {
+        "collection": "outputs",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/outputs.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "outputs.change-status",
+      "version": 1,
+      "plugin": "outputs",
+      "risk": "reviewed-content",
+      "description": "变更成果状态并要求证据",
+      "inputSchema": "agent/schemas/operations/outputs-change-status.schema.json",
+      "target": {
+        "collection": "outputs",
+        "mode": "status"
+      },
+      "allowedWritePaths": [
+        "content/outputs.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "achievements.add-record",
+      "version": 1,
+      "plugin": "achievements",
+      "risk": "reviewed-content",
+      "description": "新增荣誉、竞赛或创新项目",
+      "inputSchema": "agent/schemas/operations/achievements-add-record.schema.json",
+      "target": {
+        "collection": "achievements",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/achievements.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "achievements.update-record",
+      "version": 1,
+      "plugin": "achievements",
+      "risk": "routine-content",
+      "description": "更新荣誉记录",
+      "inputSchema": "agent/schemas/operations/achievements-update-record.schema.json",
+      "target": {
+        "collection": "achievements",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/achievements.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "partners.upsert-organization",
+      "version": 1,
+      "plugin": "partners",
+      "risk": "reviewed-content",
+      "description": "新增或更新合作机构",
+      "inputSchema": "agent/schemas/operations/partners-upsert-organization.schema.json",
+      "target": {
+        "collection": "organizations",
+        "mode": "upsert"
+      },
+      "allowedWritePaths": [
+        "content/organizations.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "activities.publish-event",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "reviewed-content",
+      "description": "发布活动记录",
+      "inputSchema": "agent/schemas/operations/activities-publish-event.schema.json",
+      "target": {
+        "collection": "events",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/events.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "activities.update-event",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "routine-content",
+      "description": "更新活动记录",
+      "inputSchema": "agent/schemas/operations/activities-update-event.schema.json",
+      "target": {
+        "collection": "events",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/events.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "activities.publish-news",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "reviewed-content",
+      "description": "发布新闻记录",
+      "inputSchema": "agent/schemas/operations/activities-publish-news.schema.json",
+      "target": {
+        "collection": "news",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/news.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "join.update-recruitment",
+      "version": 1,
+      "plugin": "join",
+      "risk": "reviewed-content",
+      "description": "更新招新状态和公开入口",
+      "inputSchema": "agent/schemas/operations/join-update-recruitment.schema.json",
+      "target": {
+        "collection": "recruitment",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/recruitment.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ]
+    },
+    {
+      "id": "media.import",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "reviewed-content",
+      "description": "导入媒体资产及元数据",
+      "inputSchema": "agent/schemas/operations/media-import.schema.json",
+      "target": {
+        "collection": "media-assets",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/media-assets.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "evidence",
+        "media-metadata",
+        "routes"
+      ]
+    },
+    {
+      "id": "media.replace",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "reviewed-content",
+      "description": "替换媒体文件并保留逻辑 ID",
+      "inputSchema": "agent/schemas/operations/media-replace.schema.json",
+      "target": {
+        "collection": "media-assets",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/media-assets.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "evidence",
+        "media-metadata",
+        "routes"
+      ]
+    },
+    {
+      "id": "media.update-metadata",
+      "version": 1,
+      "plugin": "activities",
+      "risk": "routine-content",
+      "description": "更新媒体替代文本、版权与焦点元数据",
+      "inputSchema": "agent/schemas/operations/media-update-metadata.schema.json",
+      "target": {
+        "collection": "media-assets",
+        "mode": "update"
+      },
+      "allowedWritePaths": [
+        "content/media-assets.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "evidence",
+        "media-metadata"
+      ]
+    },
+    {
+      "id": "site.update-setting",
+      "version": 1,
+      "plugin": "home",
+      "risk": "structural",
+      "description": "更新站点设置",
+      "inputSchema": "agent/schemas/operations/site-update-setting.schema.json",
+      "target": {
+        "collection": "settings",
+        "mode": "set"
+      },
+      "allowedWritePaths": [
+        "content/settings.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "routes",
+        "seo",
+        "i18n"
+      ]
+    },
+    {
+      "id": "redirect.add",
+      "version": 1,
+      "plugin": "home",
+      "risk": "reviewed-content",
+      "description": "新增永久路由重定向",
+      "inputSchema": "agent/schemas/operations/redirect-add.schema.json",
+      "target": {
+        "collection": "redirects",
+        "mode": "create"
+      },
+      "allowedWritePaths": [
+        "content/redirects.json"
+      ],
+      "requiredChecks": [
+        "content-schema",
+        "routes",
+        "redirects"
+      ]
+    }
+  ]
+}

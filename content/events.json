@@ -1,0 +1,118 @@
+[
+  {
+    "id": "event:ijcai-2025",
+    "title": {
+      "zh": "第三十四届国际人工智能联合会议"
+    },
+    "kind": "conference",
+    "mediaAssetIds": [
+      "media:ijcai-2025"
+    ],
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "participant",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "谷岩",
+        "role": "participant",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "何昊锦",
+        "role": "participant",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:ai-summer-camp",
+    "title": {
+      "zh": "AI 夏令营"
+    },
+    "kind": "community",
+    "mediaAssetIds": [
+      "media:ai-summer-camp"
+    ],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:datawhale-aix",
+    "title": {
+      "zh": "Datawhale AI+X 高校行"
+    },
+    "kind": "community",
+    "mediaAssetIds": [],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:coze-workshop",
+    "title": {
+      "zh": "扣子 AI 工坊校园专场——广东工业大学站"
+    },
+    "kind": "workshop",
+    "mediaAssetIds": [],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:gdut-ai-challenge",
+    "title": {
+      "zh": "广东工业大学第一届人工智能与算法挑战赛"
+    },
+    "kind": "competition",
+    "mediaAssetIds": [],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:public-ai-education",
+    "title": {
+      "zh": "公益 AI 科普进校园"
+    },
+    "kind": "outreach",
+    "mediaAssetIds": [],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "event:ascend-developer-day",
+    "title": {
+      "zh": "华为昇腾开发者创享日"
+    },
+    "kind": "developer-event",
+    "mediaAssetIds": [
+      "media:ascend-developer-day"
+    ],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" role="img" aria-labelledby="title desc">
+  <title id="title">AITA</title>
+  <desc id="desc">A geometric mark combining the letter A with an infinite trajectory.</desc>
+  <g fill="none" stroke="#f4f4f2" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M4 39 22 7l18 32"/>
+    <path d="M12 27h20"/>
+    <path d="M38 13c11 0 18 5 18 13s-7 13-18 13c-8 0-14-4-14-10 0-5 5-9 12-9 8 0 13 4 20 13"/>
+  </g>
+</svg>

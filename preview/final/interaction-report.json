@@ -1,0 +1,105 @@
+{
+  "url": "file:///.../AITA官网Demo_v2_Agent-Native/index.html",
+  "checks": [
+    {
+      "name": "desktop-no-horizontal-overflow",
+      "ok": true,
+      "details": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "initial-project-count",
+      "ok": true,
+      "details": "16 SHOWN"
+    },
+    {
+      "name": "project-filter-medical",
+      "ok": true,
+      "details": {
+        "label": "06 SHOWN",
+        "visible": 6
+      }
+    },
+    {
+      "name": "project-filter-reset",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "demo-dialog-opens",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "demo-dialog-closes",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "fixed-header-anchor-offset",
+      "ok": true,
+      "details": {
+        "sectionTop": 93.703125,
+        "headerHeight": 76
+      }
+    },
+    {
+      "name": "skip-link-first-focus",
+      "ok": true,
+      "details": "skip-link"
+    },
+    {
+      "name": "desktop-console-clean",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "no-http-runtime-requests",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "mobile-no-horizontal-overflow",
+      "ok": true,
+      "details": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "mobile-menu-opens",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "mobile-menu-closes-on-navigation",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "mobile-console-clean",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "reduced-motion-scroll-behavior",
+      "ok": true,
+      "details": "auto"
+    },
+    {
+      "name": "no-js-primary-content-visible",
+      "ok": true,
+      "details": null
+    },
+    {
+      "name": "no-js-navigation-present",
+      "ok": true,
+      "details": null
+    }
+  ],
+  "errors": [],
+  "network_requests": [],
+  "ok": true
+}

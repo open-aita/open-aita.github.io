@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Change output status",
+  "type": "object",
+  "required": [
+    "id",
+    "status",
+    "evidenceRefs",
+    "verifiedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^output:"
+    },
+    "status": {
+      "type": "string"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    },
+    "verifiedAt": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

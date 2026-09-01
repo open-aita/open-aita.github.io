@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "aita.release/v1",
+  "releaseId": "aita-demo-v2-agent-native-20260901",
+  "releasedAt": "2026-09-01",
+  "gitSha": null,
+  "gitShaNote": "离线 Demo 交付目录不处于 Git 仓库中，以 sourceRevision 与 CHECKSUMS.sha256 标识制品。",
+  "sourceRevision": "a508eb507b86fdb3",
+  "contentSchemaVersion": "aita.content/v2",
+  "chapterProtocolVersion": "aita.chapter/v1",
+  "operationProtocolVersion": "aita.operations/v1",
+  "plugins": [
+    {
+      "id": "about",
+      "version": "1.0.0",
+      "routeBase": "/about",
+      "demoEntry": "#about"
+    },
+    {
+      "id": "achievements",
+      "version": "1.0.0",
+      "routeBase": "/achievements",
+      "demoEntry": "#achievements"
+    },
+    {
+      "id": "activities",
+      "version": "1.0.0",
+      "routeBase": "/activities",
+      "demoEntry": "#activities"
+    },
+    {
+      "id": "home",
+      "version": "1.0.0",
+      "routeBase": "/",
+      "demoEntry": "#top"
+    },
+    {
+      "id": "join",
+      "version": "1.0.0",
+      "routeBase": "/join",
+      "demoEntry": "#join"
+    },
+    {
+      "id": "outputs",
+      "version": "1.0.0",
+      "routeBase": "/outputs",
+      "demoEntry": "#outputs"
+    },
+    {
+      "id": "partners",
+      "version": "1.0.0",
+      "routeBase": "/partners",
+      "demoEntry": "#network"
+    },
+    {
+      "id": "research",
+      "version": "1.0.0",
+      "routeBase": "/research",
+      "demoEntry": "#research"
+    }
+  ],
+  "contentDigest": "dddeb50838006ffbdeeca8591d52f92bbd5c79f4bb79fea67e3e1ddd23d466be",
+  "assetManifest": "asset.manifest.json",
+  "redirectManifest": "content/redirects.json",
+  "verificationReport": "qa/verification-report.json",
+  "visualReport": "preview/视觉迭代报告.md",
+  "rollbackUnit": "complete-immutable-zip-artifact",
+  "checksums": "CHECKSUMS.sha256"
+}

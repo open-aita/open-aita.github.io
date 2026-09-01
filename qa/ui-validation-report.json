@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "id": "component-registry",
+      "status": "passed",
+      "componentCount": 12,
+      "missingSchemas": []
+    },
+    {
+      "id": "html-structure",
+      "status": "passed",
+      "duplicateHtmlIds": [],
+      "brokenAnchors": [],
+      "missingAnchors": []
+    },
+    {
+      "id": "accessibility-baseline",
+      "status": "passed",
+      "imagesWithoutAlt": 0
+    },
+    {
+      "id": "performance-budget",
+      "status": "passed",
+      "cssGzipKb": 11.08,
+      "baseJsGzipKb": 2.96,
+      "limits": {
+        "cssGzipKb": 35,
+        "baseJsGzipKb": 10
+      }
+    }
+  ]
+}

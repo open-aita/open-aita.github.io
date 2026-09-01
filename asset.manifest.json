@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "aita.asset-manifest/v1",
+  "entrypoint": "index.html",
+  "runtimeAssets": [
+    {
+      "path": "index.html",
+      "bytes": 57723,
+      "sha256": "00641738763739eaae47322d5a5aaf90bb7a5458f2de9be62da62bcae1f06609"
+    },
+    {
+      "path": "assets/css/styles.css",
+      "bytes": 57839,
+      "sha256": "6f2ca3a9d4952e4b10e6f474b20901bc126c82bc3c5a61bfaf24d3e9522d06b4"
+    },
+    {
+      "path": "assets/js/main.js",
+      "bytes": 9136,
+      "sha256": "56523140fc62a781166e3d02cbbf47dab6ed35ede7e4315647ef214fc42f4762"
+    },
+    {
+      "path": "assets/images/ai-summer-camp.jpg",
+      "bytes": 355516,
+      "sha256": "8cf601dc66d48cded4f6926b625f2040e9b883c7a6edf52abcc0787e015fb39b"
+    },
+    {
+      "path": "assets/images/ai-summer-camp.webp",
+      "bytes": 184566,
+      "sha256": "aaf84e7be3e88dca771f7647a0e99c35bbde3c94b5445929785d5d78a3afb418"
+    },
+    {
+      "path": "assets/images/aita-mark.svg",
+      "bytes": 496,
+      "sha256": "7b2b27a1e058988b45b01158fb27ac258286a557463939cb849f13f26c2caf20"
+    },
+    {
+      "path": "assets/images/ascend-developer-day.jpg",
+      "bytes": 188441,
+      "sha256": "0105e412270a1cc3e24db4e9326f727836eebf368acae751d8d66279b6473804"
+    },
+    {
+      "path": "assets/images/ascend-developer-day.webp",
+      "bytes": 90710,
+      "sha256": "ddc9f5e69f3f8a238bbe9fbf3dfa3ac8c3bc77f3f39743bbecc65cfb917baf50"
+    },
+    {
+      "path": "assets/images/favicon.svg",
+      "bytes": 378,
+      "sha256": "dd6f7c0d30eba1455fd48fcc0566c4d576a0af7caa204db40abe154ae17bf9f9"
+    },
+    {
+      "path": "assets/images/ijcai-2025.jpg",
+      "bytes": 202321,
+      "sha256": "27e547ddc6fa8004971226a0afe025107a6dde11c1fac5f59d69dfbd06e157a2"
+    },
+    {
+      "path": "assets/images/ijcai-2025.webp",
+      "bytes": 161564,
+      "sha256": "5022c0ee9a22b036be34b650967fcac6627339a58a3b0dd9ffb0058f1ab05f0a"
+    }
+  ]
+}

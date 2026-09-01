@@ -1,0 +1,13 @@
+{
+  "operation": "media.replace",
+  "changeType": "update-entity",
+  "mustRequireEvidence": true,
+  "requiredChecksInclude": [
+    "content-schema"
+  ],
+  "affectedPathsExclude": [
+    "dist/",
+    "preview/",
+    "plugins/people/"
+  ]
+}

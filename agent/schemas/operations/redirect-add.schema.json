@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Add redirect",
+  "type": "object",
+  "required": [
+    "id",
+    "from",
+    "to",
+    "statusCode"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^redirect:"
+    },
+    "from": {
+      "type": "string",
+      "pattern": "^/"
+    },
+    "to": {
+      "type": "string",
+      "pattern": "^/"
+    },
+    "statusCode": {
+      "enum": [
+        301,
+        308
+      ]
+    }
+  },
+  "additionalProperties": false
+}

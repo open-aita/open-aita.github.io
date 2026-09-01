@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aita.entity.project/v2",
+  "title": "Project",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "status",
+    "organizationIds",
+    "contributors",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^project:"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "title": {
+      "$ref": "common.schema.json#/$defs/localizedText"
+    },
+    "status": {
+      "type": "string"
+    },
+    "organizationIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^org:"
+      }
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/contributor"
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    }
+  },
+  "additionalProperties": true
+}

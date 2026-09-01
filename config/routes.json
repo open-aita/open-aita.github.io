@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "aita.routes/v1",
+  "defaultLanguageRoot": "/",
+  "englishPrefix": "/en",
+  "productionRoutes": [
+    {
+      "plugin": "home",
+      "routeBase": "/",
+      "routes": [
+        "/"
+      ]
+    },
+    {
+      "plugin": "about",
+      "routeBase": "/about",
+      "routes": [
+        "/about"
+      ]
+    },
+    {
+      "plugin": "research",
+      "routeBase": "/research",
+      "routes": [
+        "/research",
+        "/research/[slug]"
+      ]
+    },
+    {
+      "plugin": "outputs",
+      "routeBase": "/outputs",
+      "routes": [
+        "/outputs",
+        "/outputs/[slug]"
+      ]
+    },
+    {
+      "plugin": "achievements",
+      "routeBase": "/achievements",
+      "routes": [
+        "/achievements"
+      ]
+    },
+    {
+      "plugin": "partners",
+      "routeBase": "/partners",
+      "routes": [
+        "/partners",
+        "/partners/[slug]"
+      ]
+    },
+    {
+      "plugin": "activities",
+      "routeBase": "/activities",
+      "routes": [
+        "/activities",
+        "/activities/[slug]"
+      ]
+    },
+    {
+      "plugin": "join",
+      "routeBase": "/join",
+      "routes": [
+        "/join"
+      ]
+    }
+  ],
+  "offlineDemoAnchors": [
+    {
+      "plugin": "home",
+      "anchor": "#top"
+    },
+    {
+      "plugin": "about",
+      "anchor": "#about"
+    },
+    {
+      "plugin": "research",
+      "anchor": "#research"
+    },
+    {
+      "plugin": "outputs",
+      "anchor": "#outputs"
+    },
+    {
+      "plugin": "achievements",
+      "anchor": "#achievements"
+    },
+    {
+      "plugin": "partners",
+      "anchor": "#network"
+    },
+    {
+      "plugin": "activities",
+      "anchor": "#activities"
+    },
+    {
+      "plugin": "join",
+      "anchor": "#join"
+    }
+  ]
+}

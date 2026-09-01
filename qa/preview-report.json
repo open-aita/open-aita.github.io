@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "mode": "offline-prebuilt-preview",
+  "path": "preview/final/",
+  "sourceRevision": "a508eb507b86fdb3",
+  "changedRequested": true,
+  "nextActions": [
+    "review-screenshots"
+  ]
+}

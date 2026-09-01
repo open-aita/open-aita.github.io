@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Import media",
+  "type": "object",
+  "required": [
+    "id",
+    "path",
+    "alt",
+    "source",
+    "width",
+    "height",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^media:"
+    },
+    "path": {
+      "type": "string"
+    },
+    "fallbackPath": {
+      "type": "string"
+    },
+    "alt": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "string"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "copyrightStatus": {
+      "type": "string"
+    },
+    "contentHash": {
+      "type": "string"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    }
+  },
+  "additionalProperties": false
+}

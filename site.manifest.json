@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "aita.static-demo/v2",
+  "name": "AITA 官网 Demo v2 — Agent-Native",
+  "entrypoint": "index.html",
+  "windowsLauncher": "打开AITA官网Demo.bat",
+  "viewingRequirements": {
+    "node": false,
+    "python": false,
+    "localServer": false,
+    "network": false
+  },
+  "sourceRevision": "a508eb507b86fdb3",
+  "chapters": [
+    "home",
+    "about",
+    "research",
+    "outputs",
+    "achievements",
+    "partners",
+    "activities",
+    "join"
+  ],
+  "contentCounts": {
+    "listedPartnerOrganizations": 33,
+    "externalCollaborationProjects": 16,
+    "papers": 7,
+    "patentsAndSoftwareCopyrights": 12,
+    "nationalInnovationProjects": 6,
+    "provincialInnovationProjects": 5,
+    "competitionAndAwardRecords": 77,
+    "events": 7,
+    "totalOrganizationsIncludingReferenced": 35
+  },
+  "runtime": {
+    "externalScriptCount": 0,
+    "externalStylesheetCount": 0,
+    "networkApiUsage": false
+  },
+  "agentMaintenance": {
+    "cli": "aita.cmd",
+    "operationCount": 21,
+    "componentCount": 12,
+    "recipeCount": 5
+  },
+  "visualLanguage": "Prime Intellect-inspired industrial research editorial system",
+  "limitations": [
+    "离线 Demo 是预构建静态制品；生产 Astro、Keystatic、Pagefind、CI/CD 和 CDN 适配器未在浏览时启动。",
+    "原始资料未提供官方招新邮箱或报名表单，相关字段保持为空。"
+  ],
+  "archiveName": "AITA官网Demo_v2_Agent-Native_Windows离线版.zip"
+}

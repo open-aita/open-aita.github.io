@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Publish news",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "publishedAt",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^news:"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "publishedAt": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    }
+  },
+  "additionalProperties": false
+}

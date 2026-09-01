@@ -1,0 +1,48 @@
+{
+  "apiVersion": "aita.chapter/v1",
+  "id": "research",
+  "version": "1.0.0",
+  "routeBase": "/research",
+  "renderer": "astro",
+  "demoEntry": "#research",
+  "routes": [
+    "/research",
+    "/research/[slug]"
+  ],
+  "navigation": {
+    "label": {
+      "zh": "科研项目",
+      "en": "Research"
+    },
+    "order": 20
+  },
+  "consumes": [
+    "projects",
+    "organizations",
+    "outputs",
+    "mediaAssets",
+    "evidence"
+  ],
+  "contributes": {
+    "home": [],
+    "footer": []
+  },
+  "operations": [
+    "research.add-project",
+    "research.update-project",
+    "research.archive-project"
+  ],
+  "capabilities": [
+    "responsive-images",
+    "search"
+  ],
+  "performance": {
+    "contentPageInitialJsKb": 0,
+    "interactiveRouteJsKb": 80
+  },
+  "constraints": {
+    "globalStyleMutation": false,
+    "crossPluginImports": false,
+    "peopleEntities": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "apiVersion": "aita.chapter/v1",
+  "id": "partners",
+  "version": "1.0.0",
+  "routeBase": "/partners",
+  "renderer": "astro",
+  "demoEntry": "#network",
+  "routes": [
+    "/partners",
+    "/partners/[slug]"
+  ],
+  "navigation": {
+    "label": {
+      "zh": "合作单位",
+      "en": "Partners"
+    },
+    "order": 50
+  },
+  "consumes": [
+    "organizations",
+    "projects",
+    "events",
+    "evidence"
+  ],
+  "contributes": {
+    "home": [],
+    "footer": []
+  },
+  "operations": [
+    "partners.upsert-organization"
+  ],
+  "capabilities": [
+    "responsive-images",
+    "search"
+  ],
+  "performance": {
+    "contentPageInitialJsKb": 0,
+    "interactiveRouteJsKb": 80
+  },
+  "constraints": {
+    "globalStyleMutation": false,
+    "crossPluginImports": false,
+    "peopleEntities": false
+  }
+}

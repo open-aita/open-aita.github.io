@@ -1,0 +1,45 @@
+{
+  "apiVersion": "aita.chapter/v1",
+  "id": "home",
+  "version": "1.0.0",
+  "routeBase": "/",
+  "renderer": "astro",
+  "demoEntry": "#top",
+  "routes": [
+    "/"
+  ],
+  "navigation": {
+    "label": {
+      "zh": "首页",
+      "en": "Home"
+    },
+    "order": 0
+  },
+  "consumes": [
+    "projects",
+    "outputs",
+    "achievements",
+    "events",
+    "organizations",
+    "siteSettings"
+  ],
+  "contributes": {
+    "home": [],
+    "footer": []
+  },
+  "operations": [
+    "home.feature-content"
+  ],
+  "capabilities": [
+    "responsive-images"
+  ],
+  "performance": {
+    "contentPageInitialJsKb": 0,
+    "interactiveRouteJsKb": 80
+  },
+  "constraints": {
+    "globalStyleMutation": false,
+    "crossPluginImports": false,
+    "peopleEntities": false
+  }
+}

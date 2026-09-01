@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Update event",
+  "type": "object",
+  "required": [
+    "id",
+    "patch"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^event:"
+    },
+    "patch": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

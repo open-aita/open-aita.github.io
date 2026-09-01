@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "aita.component-registry/v1",
+  "components": {
+    "ProjectCard": {
+      "purpose": "展示科研或工程项目摘要",
+      "propsSchema": "agent/schemas/ui/project-card.schema.json",
+      "allowedVariants": [
+        "default",
+        "featured",
+        "compact"
+      ],
+      "allowedContexts": [
+        "home",
+        "research"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "ProjectHero": {
+      "purpose": "展示项目详情首屏",
+      "propsSchema": "agent/schemas/ui/project-hero.schema.json",
+      "allowedVariants": [
+        "default",
+        "medical",
+        "systems"
+      ],
+      "allowedContexts": [
+        "research"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "PublicationCitation": {
+      "purpose": "展示规范论文引用",
+      "propsSchema": "agent/schemas/ui/publication-citation.schema.json",
+      "allowedVariants": [
+        "default",
+        "compact"
+      ],
+      "allowedContexts": [
+        "home",
+        "outputs",
+        "research"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "OutputStatusBadge": {
+      "purpose": "展示成果状态",
+      "propsSchema": "agent/schemas/ui/output-status-badge.schema.json",
+      "allowedVariants": [
+        "preprint",
+        "accepted",
+        "published",
+        "authorized",
+        "archived"
+      ],
+      "allowedContexts": [
+        "outputs",
+        "research"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "AchievementTimeline": {
+      "purpose": "展示荣誉与创新项目时间线",
+      "propsSchema": "agent/schemas/ui/achievement-timeline.schema.json",
+      "allowedVariants": [
+        "default",
+        "dense"
+      ],
+      "allowedContexts": [
+        "achievements",
+        "home"
+      ],
+      "clientJavaScriptKb": 4,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "PartnerLogoWall": {
+      "purpose": "展示合作单位网络",
+      "propsSchema": "agent/schemas/ui/partner-logo-wall.schema.json",
+      "allowedVariants": [
+        "grid",
+        "index"
+      ],
+      "allowedContexts": [
+        "home",
+        "partners"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "ActivityGallery": {
+      "purpose": "展示活动图片与说明",
+      "propsSchema": "agent/schemas/ui/activity-gallery.schema.json",
+      "allowedVariants": [
+        "grid",
+        "feature"
+      ],
+      "allowedContexts": [
+        "activities",
+        "home"
+      ],
+      "clientJavaScriptKb": 8,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "NewsCard": {
+      "purpose": "展示新闻摘要",
+      "propsSchema": "agent/schemas/ui/news-card.schema.json",
+      "allowedVariants": [
+        "default",
+        "compact"
+      ],
+      "allowedContexts": [
+        "activities",
+        "home",
+        "search"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "RecruitmentCTA": {
+      "purpose": "展示招新状态与入口",
+      "propsSchema": "agent/schemas/ui/recruitment-c-t-a.schema.json",
+      "allowedVariants": [
+        "default",
+        "inactive"
+      ],
+      "allowedContexts": [
+        "join",
+        "home"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "EvidenceBadge": {
+      "purpose": "展示事实证据状态",
+      "propsSchema": "agent/schemas/ui/evidence-badge.schema.json",
+      "allowedVariants": [
+        "verified",
+        "pending",
+        "missing"
+      ],
+      "allowedContexts": [
+        "research",
+        "outputs",
+        "achievements",
+        "activities"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "ExternalLinkCard": {
+      "purpose": "展示外部资源链接",
+      "propsSchema": "agent/schemas/ui/external-link-card.schema.json",
+      "allowedVariants": [
+        "default",
+        "paper",
+        "demo"
+      ],
+      "allowedContexts": [
+        "research",
+        "outputs",
+        "activities"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    },
+    "SectionHeading": {
+      "purpose": "统一章节标题与编号",
+      "propsSchema": "agent/schemas/ui/section-heading.schema.json",
+      "allowedVariants": [
+        "default",
+        "split"
+      ],
+      "allowedContexts": [
+        "home",
+        "about",
+        "research",
+        "outputs",
+        "achievements",
+        "partners",
+        "activities",
+        "join"
+      ],
+      "clientJavaScriptKb": 0,
+      "accessibilityRules": [
+        "使用语义 HTML",
+        "交互元素具备可访问名称",
+        "图片必须包含替代文本或明确标记为装饰"
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# ===== 交付打包产物（不入库）=====
+CHANGELOG_v2.md
+QA_交付与视觉验收报告.txt
+README_运行与维护说明.txt
+CHECKSUMS.sha256
+打开AITA官网Demo.bat
+
+# ===== 依赖 =====
+node_modules/
+
+# ===== 构建产物 =====
+dist/
+build/
+out/
+coverage/
+*.tsbuildinfo
+
+# ===== 环境变量 / 密钥 =====
+.env
+.env.*
+!.env.example
+
+# ===== 日志 =====
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== 编辑器 / IDE =====
+.vscode/
+.idea/
+*.swp
+
+# ===== 包管理器缓存 =====
+.pnpm-store/
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+Desktop.ini

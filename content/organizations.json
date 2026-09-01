@@ -1,0 +1,422 @@
+[
+  {
+    "id": "org:001",
+    "name": {
+      "zh": "清华大学智能产业研究院"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:002",
+    "name": {
+      "zh": "北京大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:003",
+    "name": {
+      "zh": "英国贝法斯特女王大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:004",
+    "name": {
+      "zh": "英国谢菲尔德大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:005",
+    "name": {
+      "zh": "意大利特伦托大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:006",
+    "name": {
+      "zh": "意大利FBK研究所"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:007",
+    "name": {
+      "zh": "中国科学院自动化研究所"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:008",
+    "name": {
+      "zh": "中国科学院香港创新研究院"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:009",
+    "name": {
+      "zh": "香港理工大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:010",
+    "name": {
+      "zh": "香港科技大学（广州）"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:011",
+    "name": {
+      "zh": "中国科学院深圳先进技术研究院"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:012",
+    "name": {
+      "zh": "中国科学院鹏城实验室"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:013",
+    "name": {
+      "zh": "广州人工智能公共算力中心"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:014",
+    "name": {
+      "zh": "中国石油集团安全环保技术研究院有限公司"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:015",
+    "name": {
+      "zh": "中国移动通信集团广东有限公司广州分公司"
+    },
+    "category": "industry",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:016",
+    "name": {
+      "zh": "琶洲实验室"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:017",
+    "name": {
+      "zh": "广东省农业科学院"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:018",
+    "name": {
+      "zh": "中山大学中山眼科中心"
+    },
+    "category": "medical",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:019",
+    "name": {
+      "zh": "哈尔滨工业大学（深圳校区）"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:020",
+    "name": {
+      "zh": "南方医科大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:021",
+    "name": {
+      "zh": "华南农业大学"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:022",
+    "name": {
+      "zh": "深圳大学大数据智能信息处理工程实验室"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:023",
+    "name": {
+      "zh": "深圳市精神卫生中心"
+    },
+    "category": "medical",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:024",
+    "name": {
+      "zh": "广州医科大学附属脑科医院"
+    },
+    "category": "medical",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:025",
+    "name": {
+      "zh": "广州医科大学附属肿瘤医院"
+    },
+    "category": "medical",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:026",
+    "name": {
+      "zh": "广州市中医医院"
+    },
+    "category": "medical",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:027",
+    "name": {
+      "zh": "广州博睿创新技术有限公司"
+    },
+    "category": "industry",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:028",
+    "name": {
+      "zh": "江西桑沃科技有限公司"
+    },
+    "category": "industry",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:029",
+    "name": {
+      "zh": "广东工业大学智能感知与控制团队"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:030",
+    "name": {
+      "zh": "广东工业大学YC勇创团队"
+    },
+    "category": "academic",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:031",
+    "name": {
+      "zh": "广东工业大学信息物理融合实验室"
+    },
+    "category": "institute",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:032",
+    "name": {
+      "zh": "广州微调科技有限公司"
+    },
+    "category": "industry",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:033",
+    "name": {
+      "zh": "Datawhale"
+    },
+    "category": "community",
+    "listedPartner": true,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:supplemental-01",
+    "name": {
+      "zh": "广州市卫生健康委员会"
+    },
+    "category": "public",
+    "listedPartner": false,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "org:supplemental-02",
+    "name": {
+      "zh": "京东"
+    },
+    "category": "industry",
+    "listedPartner": false,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

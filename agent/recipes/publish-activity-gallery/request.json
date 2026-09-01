@@ -1,0 +1,16 @@
+{
+  "id": "event:recipe-gallery",
+  "slug": "recipe-gallery",
+  "title": {
+    "zh": "示例活动图库"
+  },
+  "kind": "gallery",
+  "mediaAssetIds": [
+    "media:ijcai-2025"
+  ],
+  "contributors": [],
+  "evidenceRefs": [
+    "evidence:activities"
+  ],
+  "verifiedAt": "2026-09-01"
+}

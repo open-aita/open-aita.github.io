@@ -1,0 +1,9 @@
+{
+  "id": "media:ijcai-2025",
+  "path": "assets/images/ijcai-2025.webp",
+  "fallbackPath": "assets/images/ijcai-2025.jpg",
+  "contentHash": "recipe-demo-hash",
+  "evidenceRefs": [
+    "evidence:activities"
+  ]
+}

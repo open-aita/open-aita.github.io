@@ -1,0 +1,24 @@
+{
+  "id": "project:recipe-example",
+  "slug": "recipe-example",
+  "title": {
+    "zh": "示例可验证研究项目"
+  },
+  "status": "active",
+  "category": "systems",
+  "organizationIds": [
+    "org:001"
+  ],
+  "contributors": [
+    {
+      "displayName": "示例姓名",
+      "role": "contributor",
+      "order": 1,
+      "externalUrl": null
+    }
+  ],
+  "evidenceRefs": [
+    "evidence:projects"
+  ],
+  "verifiedAt": "2026-09-01"
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "aita.agent-manifest/v1",
+  "project": "AITA 官网 Demo v2",
+  "architecture": "Agent-Native 可演进静态插件架构",
+  "chapterProtocolVersion": "aita.chapter/v1",
+  "contentSchemaVersion": "aita.content/v2",
+  "operationProtocolVersion": "aita.operations/v1",
+  "defaultLocale": "zh",
+  "supportedLocales": [
+    "zh",
+    "en"
+  ],
+  "cli": {
+    "entry": "tools/aita.mjs",
+    "windowsEntry": "aita.cmd",
+    "requiresForViewing": false
+  },
+  "sourceOfTruth": {
+    "content": "content/",
+    "chapters": "plugins/",
+    "designSystem": "packages/design-system/",
+    "agentContracts": "agent/",
+    "configuration": "config/"
+  },
+  "publishedArtifact": [
+    "index.html",
+    "assets/"
+  ],
+  "generatedDirectories": [
+    "preview/",
+    "agent/generated/",
+    ".aita/"
+  ],
+  "plugins": [
+    "home",
+    "about",
+    "research",
+    "outputs",
+    "achievements",
+    "partners",
+    "activities",
+    "join"
+  ],
+  "requiredChecks": [
+    "content-schema",
+    "entity-relations",
+    "evidence",
+    "routes",
+    "internal-links",
+    "accessibility",
+    "performance-budget",
+    "agent-contract"
+  ],
+  "architectureDocument": "docs/AITA官网技术架构设计_v2_Agent-Native.md",
+  "sourceRevision": "a508eb507b86fdb3",
+  "generatedAt": "2026-09-01"
+}

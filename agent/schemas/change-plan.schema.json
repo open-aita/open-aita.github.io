@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aita.change-plan/v1",
+  "title": "AITA Change Plan",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "planId",
+    "operation",
+    "operationVersion",
+    "baseRevision",
+    "risk",
+    "changes",
+    "affectedRoutes",
+    "requiredChecks",
+    "planHash"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "aita.change-plan/v1"
+    },
+    "planId": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "operationVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "baseRevision": {
+      "type": "string"
+    },
+    "risk": {
+      "type": "string"
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "changes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "affectedRoutes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requiredChecks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowedWritePaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "planHash": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

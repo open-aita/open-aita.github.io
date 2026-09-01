@@ -1,0 +1,135 @@
+{
+  "ok": true,
+  "scope": "full",
+  "summary": {
+    "passed": 14,
+    "failed": 0,
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  "checks": [
+    {
+      "id": "repository-layout",
+      "status": "passed",
+      "missing": []
+    },
+    {
+      "id": "chapter-contract",
+      "status": "passed",
+      "expected": [
+        "home",
+        "about",
+        "research",
+        "outputs",
+        "achievements",
+        "partners",
+        "activities",
+        "join"
+      ],
+      "actual": [
+        "about",
+        "achievements",
+        "activities",
+        "home",
+        "join",
+        "outputs",
+        "partners",
+        "research"
+      ]
+    },
+    {
+      "id": "content-identity",
+      "status": "passed",
+      "duplicateIds": [],
+      "peopleEntities": []
+    },
+    {
+      "id": "entity-relations",
+      "status": "passed",
+      "unresolved": []
+    },
+    {
+      "id": "evidence",
+      "status": "passed",
+      "missing": []
+    },
+    {
+      "id": "source-material-counts",
+      "status": "passed",
+      "counts": {
+        "listedPartners": 33,
+        "allOrganizations": 35,
+        "projects": 16,
+        "papers": 7,
+        "ipRecords": 12,
+        "nationalInnovationProjects": 6,
+        "provincialInnovationProjects": 5,
+        "competitionRecords": 77,
+        "events": 7
+      },
+      "mismatches": []
+    },
+    {
+      "id": "agent-contract",
+      "status": "passed",
+      "operationCount": 21,
+      "duplicateOperations": [],
+      "forbiddenOperations": [],
+      "schemasMissing": [],
+      "undeclaredTasks": []
+    },
+    {
+      "id": "component-registry",
+      "status": "passed",
+      "componentCount": 12,
+      "missingSchemas": []
+    },
+    {
+      "id": "html-structure",
+      "status": "passed",
+      "duplicateHtmlIds": [],
+      "brokenAnchors": [],
+      "missingAnchors": []
+    },
+    {
+      "id": "accessibility-baseline",
+      "status": "passed",
+      "imagesWithoutAlt": 0
+    },
+    {
+      "id": "offline-runtime",
+      "status": "passed",
+      "missingAssets": [],
+      "remoteRuntime": false,
+      "networkApis": false
+    },
+    {
+      "id": "performance-budget",
+      "status": "passed",
+      "cssGzipKb": 11.08,
+      "baseJsGzipKb": 2.96,
+      "limits": {
+        "cssGzipKb": 35,
+        "baseJsGzipKb": 10
+      }
+    },
+    {
+      "id": "media-metadata",
+      "status": "passed",
+      "errors": []
+    },
+    {
+      "id": "recipe-tests",
+      "status": "passed",
+      "total": 5,
+      "passed": 5,
+      "failures": []
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "nextActions": [
+    "review-preview",
+    "package-immutable-artifact"
+  ]
+}

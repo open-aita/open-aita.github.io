@@ -1,0 +1,496 @@
+[
+  {
+    "id": "project:001",
+    "slug": "project-001",
+    "title": {
+      "zh": "SIGHTpro——基于视觉语言模型的青光眼诊疗系统"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "multimodal",
+    "organizationIds": [
+      "org:018",
+      "org:012"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "何昊锦",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "李奥多",
+        "role": "contributor",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "featured": true,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:002",
+    "slug": "project-002",
+    "title": {
+      "zh": "基于图RAG与知识图谱的中医抑郁症预诊大模型"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "agents",
+    "organizationIds": [
+      "org:026"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:003",
+    "slug": "project-003",
+    "title": {
+      "zh": "物理信息驱动的幼儿盆骨异位检测"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:020"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "黎炜轩",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:004",
+    "slug": "project-004",
+    "title": {
+      "zh": "硫化氢泄漏风险动态监测平台（北京区域已投产）"
+    },
+    "status": "deployed",
+    "statusLabel": "DEPLOYED",
+    "category": "systems",
+    "organizationIds": [
+      "org:014"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "蔡俊杰",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "郑上",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:005",
+    "slug": "project-005",
+    "title": {
+      "zh": "VLM监督的3D因果自编码器与Transformer架构视频生成框架"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "multimodal",
+    "organizationIds": [
+      "org:011"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:006",
+    "slug": "project-006",
+    "title": {
+      "zh": "高空遥感香蕉树监测与种植情况分析"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "multimodal",
+    "organizationIds": [
+      "org:021",
+      "org:017"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "陈云飞",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "钟广祺",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:007",
+    "slug": "project-007",
+    "title": {
+      "zh": "多尺度油气泄漏自动检测系统"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "systems",
+    "organizationIds": [
+      "org:014"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "简灿",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "苏致泓",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:008",
+    "slug": "project-008",
+    "title": {
+      "zh": "基于半监督学习的多指标肠癌数据挖掘与检测"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:025"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "谷岩",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:009",
+    "slug": "project-009",
+    "title": {
+      "zh": "医学引导下的专病数据治理与脑科机器学习科研平台"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:023"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:010",
+    "slug": "project-010",
+    "title": {
+      "zh": "心理咨询与自杀风险预警多模态智能体"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "agents",
+    "organizationIds": [
+      "org:024",
+      "org:supplemental-01",
+      "org:015"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "李奥多",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "周俊桦",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "李嘉",
+        "role": "contributor",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:011",
+    "slug": "project-011",
+    "title": {
+      "zh": "医学黑盒检测"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:031"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:012",
+    "slug": "project-012",
+    "title": {
+      "zh": "基于超像素与注意力机制的鼻咽癌图像内部聚类分析"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:031"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "黎炜轩",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:013",
+    "slug": "project-013",
+    "title": {
+      "zh": "基于改进Mamba网络的肿瘤分割"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "medical",
+    "organizationIds": [
+      "org:031"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:014",
+    "slug": "project-014",
+    "title": {
+      "zh": "DataFactory——大语言模型训练数据生成Pipline"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "agents",
+    "organizationIds": [],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "李奥多",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "周俊桦",
+        "role": "contributor",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:015",
+    "slug": "project-015",
+    "title": {
+      "zh": "高效视频异常检测框架"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "multimodal",
+    "organizationIds": [
+      "org:002",
+      "org:supplemental-02"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "何昊锦",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "project:016",
+    "slug": "project-016",
+    "title": {
+      "zh": "自动驾驶车辆多模态事故预测"
+    },
+    "status": "unspecified",
+    "statusLabel": "SOURCE RECORD",
+    "category": "multimodal",
+    "organizationIds": [
+      "org:001"
+    ],
+    "unresolvedOrganizationLabels": [],
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "featured": false,
+    "evidenceRefs": [
+      "evidence:projects"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

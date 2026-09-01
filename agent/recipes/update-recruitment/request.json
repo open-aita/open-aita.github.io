@@ -1,0 +1,12 @@
+{
+  "id": "recruitment:general",
+  "patch": {
+    "status": "draft",
+    "summary": {
+      "zh": "示例更新；联系方式仍保持为空。"
+    }
+  },
+  "evidenceRefs": [
+    "evidence:source-introduction"
+  ]
+}

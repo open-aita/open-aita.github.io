@@ -1,0 +1,24 @@
+schemaVersion: aita.policies/v1
+riskLevels:
+  routine-content:
+    action: create-pr
+    autoMerge: conditional
+    examples: [correct-typo, update-project-description, replace-verified-image]
+  reviewed-content:
+    action: require-human-review
+    autoMerge: false
+    examples: [add-publication, change-publication-status, publish-partnership, add-award, change-permanent-route]
+  structural:
+    action: require-code-review
+    autoMerge: false
+    examples: [modify-design-system, upgrade-plugin-framework, add-production-dependency, change-content-schema, change-operation-contract]
+  privileged:
+    action: explicit-approval
+    autoMerge: false
+    examples: [production-release, delete-public-content, modify-domain-or-dns, modify-secrets, change-security-policy]
+nonNegotiable:
+  - important-facts-require-evidence
+  - plans-bind-base-revision
+  - generated-artifacts-are-read-only
+  - no-person-entity-or-people-plugin
+  - no-autonomous-production-release

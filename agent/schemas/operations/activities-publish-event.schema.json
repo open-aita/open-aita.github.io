@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Publish event",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^event:"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "kind": {
+      "type": "string"
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mediaAssetIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^media:"
+      }
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "displayName",
+          "role",
+          "order"
+        ],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "externalUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    },
+    "verifiedAt": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

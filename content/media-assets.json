@@ -1,0 +1,50 @@
+[
+  {
+    "id": "media:ijcai-2025",
+    "path": "assets/images/ijcai-2025.webp",
+    "fallbackPath": "assets/images/ijcai-2025.jpg",
+    "alt": {
+      "zh": "AITA 项目资料中的 IJCAI 活动合影"
+    },
+    "source": "AITA 项目介绍资料包",
+    "width": 1440,
+    "height": 1080,
+    "copyrightStatus": "provided-for-site-demo",
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "media:ai-summer-camp",
+    "path": "assets/images/ai-summer-camp.webp",
+    "fallbackPath": "assets/images/ai-summer-camp.jpg",
+    "alt": {
+      "zh": "AITA 项目资料中的 AI 夏令营海报"
+    },
+    "source": "AITA 项目介绍资料包",
+    "width": 1100,
+    "height": 2336,
+    "copyrightStatus": "provided-for-site-demo",
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "media:ascend-developer-day",
+    "path": "assets/images/ascend-developer-day.webp",
+    "fallbackPath": "assets/images/ascend-developer-day.jpg",
+    "alt": {
+      "zh": "AITA 项目资料中的昇腾开发者活动照片"
+    },
+    "source": "AITA 项目介绍资料包",
+    "width": 1635,
+    "height": 1094,
+    "copyrightStatus": "provided-for-site-demo",
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

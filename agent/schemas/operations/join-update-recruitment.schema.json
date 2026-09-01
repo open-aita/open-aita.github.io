@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Update recruitment",
+  "type": "object",
+  "required": [
+    "id",
+    "patch",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^recruitment:"
+    },
+    "patch": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^evidence:"
+      }
+    }
+  },
+  "additionalProperties": false
+}

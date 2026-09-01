@@ -1,0 +1,18 @@
+[
+  {
+    "id": "recruitment:general",
+    "status": "draft",
+    "title": {
+      "zh": "加入 AITA"
+    },
+    "summary": {
+      "zh": "面向愿意把算法、系统与真实问题连接起来的同学开放交流。"
+    },
+    "contactEmail": null,
+    "formUrl": null,
+    "evidenceRefs": [
+      "evidence:source-introduction"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

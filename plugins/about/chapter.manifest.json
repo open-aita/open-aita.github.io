@@ -1,0 +1,45 @@
+{
+  "apiVersion": "aita.chapter/v1",
+  "id": "about",
+  "version": "1.0.0",
+  "routeBase": "/about",
+  "renderer": "astro",
+  "demoEntry": "#about",
+  "routes": [
+    "/about"
+  ],
+  "navigation": {
+    "label": {
+      "zh": "实验室介绍",
+      "en": "About"
+    },
+    "order": 10
+  },
+  "consumes": [
+    "siteSettings",
+    "projects",
+    "organizations",
+    "evidence"
+  ],
+  "contributes": {
+    "home": [],
+    "footer": []
+  },
+  "operations": [
+    "about.update-overview",
+    "about.update-direction"
+  ],
+  "capabilities": [
+    "responsive-images",
+    "search"
+  ],
+  "performance": {
+    "contentPageInitialJsKb": 0,
+    "interactiveRouteJsKb": 80
+  },
+  "constraints": {
+    "globalStyleMutation": false,
+    "crossPluginImports": false,
+    "peopleEntities": false
+  }
+}

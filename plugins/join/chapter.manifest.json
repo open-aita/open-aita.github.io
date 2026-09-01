@@ -1,0 +1,43 @@
+{
+  "apiVersion": "aita.chapter/v1",
+  "id": "join",
+  "version": "1.0.0",
+  "routeBase": "/join",
+  "renderer": "astro",
+  "demoEntry": "#join",
+  "routes": [
+    "/join"
+  ],
+  "navigation": {
+    "label": {
+      "zh": "加入 AITA",
+      "en": "Join"
+    },
+    "order": 70
+  },
+  "consumes": [
+    "recruitment",
+    "mediaAssets",
+    "siteSettings",
+    "evidence"
+  ],
+  "contributes": {
+    "home": [],
+    "footer": []
+  },
+  "operations": [
+    "join.update-recruitment"
+  ],
+  "capabilities": [
+    "responsive-images"
+  ],
+  "performance": {
+    "contentPageInitialJsKb": 0,
+    "interactiveRouteJsKb": 80
+  },
+  "constraints": {
+    "globalStyleMutation": false,
+    "crossPluginImports": false,
+    "peopleEntities": false
+  }
+}

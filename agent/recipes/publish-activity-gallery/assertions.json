@@ -1,0 +1,13 @@
+{
+  "operation": "activities.publish-event",
+  "changeType": "create-entity",
+  "mustRequireEvidence": true,
+  "requiredChecksInclude": [
+    "content-schema"
+  ],
+  "affectedPathsExclude": [
+    "dist/",
+    "preview/",
+    "plugins/people/"
+  ]
+}

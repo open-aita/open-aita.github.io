@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "aita.site-config/v1",
+  "name": "AITA Intelligence Lab",
+  "defaultLanguage": "zh",
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "deploymentMode": "immutable-static-artifact",
+  "offlineDemo": true,
+  "publicArtifactRoot": "./",
+  "searchAdapter": "pagefind-extended-production-target",
+  "mediaAdapter": "local-static-demo",
+  "formsAdapter": "not-configured",
+  "analyticsAdapter": "not-configured"
+}

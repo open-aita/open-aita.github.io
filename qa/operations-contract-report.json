@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "schemaVersion": "aita.operations-qa/v1",
+  "canonicalSourceUntouched": true,
+  "planDryRun": {
+    "ok": true,
+    "operation": "outputs.change-status",
+    "planId": "plan-0a79239381aae1f9",
+    "risk": "reviewed-content",
+    "allowedWritePaths": [
+      "content/outputs.json"
+    ],
+    "dryRun": true
+  },
+  "idempotencyInIsolatedCopy": {
+    "firstApplyOk": true,
+    "firstAlreadyApplied": false,
+    "secondApplyOk": true,
+    "secondAlreadyApplied": true,
+    "planId": "plan-23a3a733feb9dfd6",
+    "semanticDiff": {
+      "ok": true,
+      "planId": "plan-23a3a733feb9dfd6",
+      "operation": "research.add-project",
+      "risk": "reviewed-content",
+      "entityChange": {
+        "entityId": "project:recipe-example",
+        "type": "created",
+        "fields": [
+          "category",
+          "contributors",
+          "evidenceRefs",
+          "id",
+          "organizationIds",
+          "slug",
+          "status",
+          "title",
+          "verifiedAt"
+        ]
+      },
+      "pageChanges": [
+        "/research",
+        "/research/recipe-example"
+      ],
+      "sourcePath": "content/projects.json",
+      "checksRequired": [
+        "content-schema",
+        "entity-relations",
+        "evidence",
+        "routes",
+        "search-index"
+      ],
+      "revisions": {
+        "before": "a508eb507b86fdb3",
+        "after": "8ef4c376ce09ebbb"
+      }
+    }
+  },
+  "stalePlanInIsolatedCopy": {
+    "exitCode": 3,
+    "ok": false,
+    "errorCode": "AITA_PLAN_BASE_REVISION_MISMATCH",
+    "expectedErrorCode": "AITA_PLAN_BASE_REVISION_MISMATCH"
+  }
+}

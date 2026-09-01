@@ -1,0 +1,5 @@
+URL=http://127.0.0.1:8123/index.html
+DESKTOP={'w': 1440, 'h': 15262, 'vw': 1440}
+MOBILE={'w': 390, 'h': 27440, 'vw': 390}
+ERRORS=[]
+MOBILE_ERRORS=[]

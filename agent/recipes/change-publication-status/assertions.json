@@ -1,0 +1,13 @@
+{
+  "operation": "outputs.change-status",
+  "changeType": "update-status",
+  "mustRequireEvidence": true,
+  "requiredChecksInclude": [
+    "content-schema"
+  ],
+  "affectedPathsExclude": [
+    "dist/",
+    "preview/",
+    "plugins/people/"
+  ]
+}

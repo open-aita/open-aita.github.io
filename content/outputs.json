@@ -1,0 +1,516 @@
+[
+  {
+    "id": "output:paper-001",
+    "type": "paper",
+    "title": {
+      "en": "Eventvad: Training-free event-aware video anomaly detection"
+    },
+    "citation": "Shao Y, He H, Li S, et al. Eventvad: Training-free event-aware video anomaly detection. arXiv preprint arXiv:2504.13092, 2025.",
+    "year": 2025,
+    "status": "preprint",
+    "labels": [
+      "J",
+      "CCF-A"
+    ],
+    "url": "https://doi.org/10.48550/arXiv.2504.13092",
+    "contributors": [
+      {
+        "displayName": "何昊锦",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:paper-002",
+    "type": "paper",
+    "title": {
+      "en": "DPPAD-IE: Dynamic Polyhedra Permutating and Arnold Diffusing Medical Image Encryption Using 2D Cross Gaussian Hyperchaotic Map."
+    },
+    "citation": "Quanju, Li, et al. \"DPPAD-IE: Dynamic Polyhedra Permutating and Arnold Diffusing Medical Image Encryption Using 2D Cross Gaussian Hyperchaotic Map.\" (https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=30)(2025).",
+    "year": 2025,
+    "status": "recorded",
+    "labels": [
+      "IEEE Transactions on Consumer Electronics",
+      "SCI Q2"
+    ],
+    "url": "https://ieeexplore.ieee.org/document/10909287",
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:paper-003",
+    "type": "paper",
+    "title": {
+      "en": "AccidentBlip: Agent of Accident Warning based on MA-former"
+    },
+    "citation": "Shao Y, Xu Y, Long X, et al. AccidentBlip: Agent of Accident Warning based on MA-former//2025 IEEE Intelligent Vehicles Symposium (IV). IEEE, 2025: 2156-2161",
+    "year": 2025,
+    "status": "recorded",
+    "labels": [
+      "C",
+      "智能交通Top"
+    ],
+    "url": "https://ieeexplore.ieee.org/document/11097578/",
+    "contributors": [
+      {
+        "displayName": "徐烨灵",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:paper-004",
+    "type": "paper",
+    "title": {
+      "en": "Medical image encryption system based on a simultaneous permutation and diffusion framework utilizing a new chaotic map."
+    },
+    "citation": "Le, Zhen, et al. \"Medical image encryption system based on a simultaneous permutation and diffusion framework utilizing a new chaotic map.\" *Physica Scripta* 99.5 (2024): 055249.",
+    "year": 2024,
+    "status": "recorded",
+    "labels": [
+      "SCI Q3"
+    ],
+    "url": "https://iopscience.iop.org/article/10.1088/1402-4896/ad3bf4",
+    "contributors": [
+      {
+        "displayName": "乐桢",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "李权俊",
+        "role": "author",
+        "order": 2,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:paper-005",
+    "type": "paper",
+    "title": {
+      "en": "GWQ: Gradient-aware Weight Quantization for Large Language Models"
+    },
+    "citation": "Shao Y, Gu Y, Chen S, et al. Gwq: Gradient-aware weight quantization for large language models. arXiv preprint arXiv:2411.00850, 2024.",
+    "year": 2024,
+    "status": "preprint",
+    "labels": [
+      "J"
+    ],
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "谷岩",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01",
+    "sourceTitle": "Gwq: Gradient-aware weight quantization for large language models"
+  },
+  {
+    "id": "output:paper-006",
+    "type": "paper",
+    "title": {
+      "en": "Image Encryption Based on 2D-CPHM Hyperchaotic Map Using Cross-plane Grouping Permutation and Cipher Diffusion"
+    },
+    "citation": "Zhong G, Chu Y, Li Q, et al. Image encryption based on 2D-CPHM hyperchaotic map using cross-plane grouping permutation and cipher diffusion: G. Zhong et al. Nonlinear Dynamics, 2025: 1-36.",
+    "year": 2025,
+    "status": "recorded",
+    "labels": [
+      "J"
+    ],
+    "url": "https://doi.org/10.1007/s11071-025-11526-0",
+    "contributors": [
+      {
+        "displayName": "钟广祺",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01",
+    "sourceTitle": "Image encryption based on 2D-CPHM hyperchaotic map using cross-plane grouping permutation and cipher diffusion: G. Zhong et al"
+  },
+  {
+    "id": "output:paper-007",
+    "type": "paper",
+    "title": {
+      "en": "Gradient Enhancement Task Aware Post-training Quantization"
+    },
+    "citation": "Shao Y, Gu Y, Yan M, et al. Gradient Enhancement Task Aware Post-training Quantization//35th International Joint Conference on Artificial Intelligence (IJCAI 2026). 2026.",
+    "year": 2026,
+    "status": "recorded",
+    "labels": [
+      "C",
+      "CCF-B"
+    ],
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "谷岩",
+        "role": "author",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-001",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《基于虹膜特征验证的一维混沌映射的医学图像保护方法》已授权"
+    },
+    "status": "authorized",
+    "url": "https://pss-system.cponline.cnipa.gov.cn/documents/detail?prevPageTit=changgui",
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-002",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《基于一维混沌系统的图像保护系统、方法》已授权"
+    },
+    "status": "authorized",
+    "url": "https://www.patentguru.com/cn/CN118200458A",
+    "contributors": [
+      {
+        "displayName": "储悦",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-003",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《基于掌纹验证的二维混沌映射的无人机遥感图像保护方法》已受理"
+    },
+    "status": "accepted",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-004",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《一种适用于边缘计算设备的视频加密方法》已受理"
+    },
+    "status": "accepted",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "李权俊",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-005",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《基于改进的YOLOv8 模型的风力涡轮机表面损伤和腐蚀检测方法》已受理"
+    },
+    "status": "accepted",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "钟广祺",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-006",
+    "type": "patent",
+    "title": {
+      "zh": "发明专利《基于混沌系统的无人机巡检交通控制系统、方法》已授权"
+    },
+    "status": "authorized",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "邵婷婷",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-007",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软件著作权《云集千翼无人机飞控软件[简称：云集千翼]V1.0》已登记"
+    },
+    "status": "registered",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "夏涵",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-008",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软件著作权《新型一维混沌系统的遥感图像加密系统》已登记"
+    },
+    "status": "registered",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "储悦",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-009",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软件著作权《志愿服务报名系统V1.0》已登记"
+    },
+    "status": "registered",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "吴梦淇",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      },
+      {
+        "displayName": "周永波",
+        "role": "contributor",
+        "order": 2,
+        "externalUrl": null
+      },
+      {
+        "displayName": "何昊锦",
+        "role": "contributor",
+        "order": 3,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-010",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软件著作权《智能机器人AI监护系统v1.0》已受理"
+    },
+    "status": "accepted",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "吕浩然",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-011",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软著著作权《基于RT-DETR的智能果树管理系统》已登记"
+    },
+    "status": "registered",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:ip-012",
+    "type": "softwareCopyright",
+    "title": {
+      "zh": "软著著作权《基于多模态情感分析与RAG的心理危机干预系统》已登记"
+    },
+    "status": "registered",
+    "url": null,
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "role": "contributor",
+        "order": 1,
+        "externalUrl": null
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:system-001",
+    "type": "openSystem",
+    "title": {
+      "zh": "AI竞赛平台"
+    },
+    "status": "recorded",
+    "statusLabel": "已落地",
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:system-002",
+    "type": "openSystem",
+    "title": {
+      "zh": "新一代人工智能应用研究院Atlas800-9000训练中心系统升级与大模型国产化适配"
+    },
+    "status": "recorded",
+    "statusLabel": "已交付",
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:system-003",
+    "type": "openSystem",
+    "title": {
+      "zh": "DataForge多智能体协作数据合成与优化平台"
+    },
+    "status": "recorded",
+    "statusLabel": "开发中",
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "output:system-004",
+    "type": "openSystem",
+    "title": {
+      "zh": "端侧心理咨询大模型"
+    },
+    "status": "recorded",
+    "statusLabel": "Huggingface下载次数800+",
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "verifiedAt": "2026-09-01"
+  }
+]

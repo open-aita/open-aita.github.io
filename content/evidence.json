@@ -1,0 +1,37 @@
+[
+  {
+    "id": "evidence:source-introduction",
+    "type": "local-document",
+    "title": "AITA 项目介绍原始资料",
+    "path": "docs/AITA项目介绍_原始资料.md",
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "evidence:projects",
+    "type": "document-section",
+    "title": "AITA 项目介绍 / 对外合作项目",
+    "path": "docs/AITA项目介绍_原始资料.md#1对外合作项目",
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "evidence:outputs",
+    "type": "document-section",
+    "title": "AITA 项目介绍 / 专利软著与论文",
+    "path": "docs/AITA项目介绍_原始资料.md#3专利与软著",
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "evidence:achievements",
+    "type": "document-section",
+    "title": "AITA 项目介绍 / 创新项目与竞赛获奖",
+    "path": "docs/AITA项目介绍_原始资料.md#6优秀竞赛项目与获奖",
+    "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "evidence:activities",
+    "type": "document-and-media",
+    "title": "AITA 项目介绍 / 对外交流与活动",
+    "path": "docs/AITA项目介绍_原始资料.md#三对外交流与活动",
+    "verifiedAt": "2026-09-01"
+  }
+]

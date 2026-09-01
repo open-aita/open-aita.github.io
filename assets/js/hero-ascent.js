@@ -10,7 +10,8 @@
   const css = getComputedStyle(root);
   const ink = css.getPropertyValue("--text-soft").trim() || "#b9bbb4";
   const white = css.getPropertyValue("--text").trim() || "#f4f4f2";
-  const green = css.getPropertyValue("--green").trim() || "#78e772";
+  const green = css.getPropertyValue("--status-success").trim() || "#78e772"; // 仅峰顶信标
+  const brand = css.getPropertyValue("--brand-accent").trim() || "#9aa7b8";
 
   const style = doc.createElement("style");
   style.textContent = `
@@ -317,7 +318,7 @@
     ctx.save();
     ctx.translate(point.x, point.y - 2.5 * s);
     ctx.rotate(angle * .22);
-    ctx.strokeStyle = ctx.fillStyle = accent ? green : white;
+    ctx.strokeStyle = ctx.fillStyle = accent ? brand : white;
     ctx.globalAlpha = inheritedAlpha * (accent ? .94 : .73);
     ctx.lineWidth = Math.max(.7, s * .82);
     ctx.beginPath(); ctx.arc(0, -6.8 * s, 1.42 * s, 0, Math.PI * 2); ctx.fill();
@@ -414,7 +415,7 @@
       const nearBoost = .80 + near * .34;
       const lit = smooth(.02, .88, glyph.light + .18);
       ctx.globalAlpha = Math.min(.68, glyph.alpha * visible * nearBoost * (glyph.accent ? 1.38 : 1));
-      ctx.fillStyle = glyph.accent ? green : (lit > .55 ? white : ink);
+      ctx.fillStyle = glyph.accent || lit > .55 ? white : ink;
       ctx.fillText(glyph.char, glyph.x, glyph.y);
     });
     ctx.restore();
@@ -463,7 +464,7 @@
   const drawIntro = (ms) => {
     intro.clearRect(0,0,iw,ih);const scatter=clamp((ms-280)/700),cx=iw/2,cy=ih*.48;
     intro.globalCompositeOperation="lighter";
-    particles.forEach(q=>{const local=clamp((scatter-q.d)/Math.max(.01,1-q.d)),e=ease(local),zoom=1+e*2.55,drift=e*e*Math.min(iw,ih)*q.s,sh=scatter<.08?Math.sin(ms*.018+q.p)*.65:0,alpha=Math.pow(1-e,1.35)*(.62+q.z*.23);if(alpha<.012)return;intro.globalAlpha=Math.min(q.g ? .96 : .88,alpha);intro.fillStyle=q.g?green:white;const z=q.z*(1+e*.65);intro.fillRect(cx+(q.x-cx)*zoom+Math.cos(q.a)*drift+sh,cy+(q.y-cy)*zoom+Math.sin(q.a)*drift+sh*.4,z,z)});
+    particles.forEach(q=>{const local=clamp((scatter-q.d)/Math.max(.01,1-q.d)),e=ease(local),zoom=1+e*2.55,drift=e*e*Math.min(iw,ih)*q.s,sh=scatter<.08?Math.sin(ms*.018+q.p)*.65:0,alpha=Math.pow(1-e,1.35)*(.62+q.z*.23);if(alpha<.012)return;intro.globalAlpha=Math.min(q.g ? .96 : .88,alpha);intro.fillStyle=q.g?brand:white;const z=q.z*(1+e*.65);intro.fillRect(cx+(q.x-cx)*zoom+Math.cos(q.a)*drift+sh,cy+(q.y-cy)*zoom+Math.sin(q.a)*drift+sh*.4,z,z)});
     intro.globalAlpha=1;intro.globalCompositeOperation="source-over";
   };
   const release = () => {

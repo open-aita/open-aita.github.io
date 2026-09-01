@@ -181,7 +181,7 @@
 
         const alpha = Math.min(0.8, 0.05 + z * 0.52);
         const radius = point.size * (0.35 + z * 1.25);
-        const hue = point.band < 5 ? "120, 231, 114" : "224, 228, 220";
+        const hue = point.band === 0 ? "143, 169, 180" : "224, 228, 220";
         context.fillStyle = `rgba(${hue}, ${alpha})`;
         context.fillRect(px, py, radius, radius);
       });
@@ -250,7 +250,7 @@
       for (let y = 0; y < dh; y += gap) {
         for (let x = 0; x < dw; x += gap) {
           if (pixels[(y * dw + x) * 4 + 3] > 110) {
-            dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0, green: Math.random() < 0.13 });
+            dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0 });
           }
         }
       }
@@ -284,7 +284,7 @@
         dot.vy *= 0.86;
         dot.x += dot.vx;
         dot.y += dot.vy;
-        dctx.fillStyle = dot.green ? "rgba(120, 231, 114, .92)" : "rgba(228, 232, 224, .6)";
+        dctx.fillStyle = "rgba(228, 232, 224, .6)";
         dctx.fillRect(dot.x, dot.y, 2, 2);
       });
       if (!reduceMotion && dotsVisible) dotsFrame = requestAnimationFrame(drawDots);

@@ -77,8 +77,8 @@
     context.scale(scale, scale);
     context.lineCap = "round";
     context.lineJoin = "round";
-    context.strokeStyle = accent ? "rgba(120,231,114,.90)" : "rgba(232,235,228,.76)";
-    context.fillStyle = accent ? "rgba(120,231,114,.90)" : "rgba(232,235,228,.78)";
+    context.strokeStyle = accent ? "rgba(154,167,184,.90)" : "rgba(232,235,228,.76)";
+    context.fillStyle = accent ? "rgba(154,167,184,.90)" : "rgba(232,235,228,.78)";
     context.lineWidth = 1.05;
 
     context.beginPath();
@@ -97,7 +97,7 @@
     context.lineTo(3.4, 5.5);
     context.stroke();
 
-    context.strokeStyle = "rgba(120,231,114,.45)";
+    context.strokeStyle = accent ? "rgba(154,167,184,.45)" : "rgba(185,187,180,.34)";
     context.strokeRect(-3.0, -2.8, 2.4, 3.8);
     context.restore();
 
@@ -139,15 +139,15 @@
       mountainContext.closePath();
     };
 
-    // Sparse atmosphere above the ridge.
+    // Sparse atmosphere above the ridge; strictly gray-white.
     const skyCount = Math.round(Math.min(170, Math.max(66, width / 7)));
     for (let i = 0; i < skyCount; i += 1) {
       const x = width * (.22 + (random() * .82));
       const y = height * (.05 + (random() * .57));
       if (pointInPolygon(x, y, polygon)) continue;
-      const green = random() > .92;
-      mountainContext.fillStyle = green
-        ? `rgba(120,231,114,${.08 + (random() * .16)})`
+      const bright = random() > .92;
+      mountainContext.fillStyle = bright
+        ? `rgba(232,235,228,${.08 + (random() * .16)})`
         : `rgba(226,230,222,${.025 + (random() * .075)})`;
       const size = random() > .88 ? 1.5 : 1;
       mountainContext.fillRect(x, y, size, size);
@@ -160,7 +160,7 @@
     const faceGradient = mountainContext.createLinearGradient(0, height * .12, width, height);
     faceGradient.addColorStop(0, "rgba(255,255,255,.005)");
     faceGradient.addColorStop(.58, "rgba(255,255,255,.018)");
-    faceGradient.addColorStop(.76, "rgba(120,231,114,.024)");
+      faceGradient.addColorStop(.76, "rgba(226,230,222,.022)");
     faceGradient.addColorStop(1, "rgba(255,255,255,.008)");
     mountainContext.fillStyle = faceGradient;
     mountainContext.fillRect(0, 0, width, height);
@@ -179,7 +179,7 @@
         else mountainContext.lineTo(x, py);
       }
       mountainContext.strokeStyle = row % 4 === 0
-        ? "rgba(120,231,114,.105)"
+        ? "rgba(205,209,201,.105)"
         : "rgba(205,209,201,.070)";
       mountainContext.stroke();
     }
@@ -194,7 +194,7 @@
       const controlY = mix(peak[1], target[1], .50) + (index % 2 ? 26 : -8);
       mountainContext.quadraticCurveTo(controlX, controlY, target[0], target[1]);
       mountainContext.strokeStyle = index === 3
-        ? "rgba(120,231,114,.13)"
+        ? "rgba(224,228,220,.11)"
         : "rgba(224,228,220,.055)";
       mountainContext.stroke();
     });
@@ -211,7 +211,7 @@
       const signal = random() > .93;
       const alpha = .055 + (random() * (signal ? .29 : .16));
       mountainContext.fillStyle = signal
-        ? `rgba(120,231,114,${alpha})`
+        ? `rgba(238,241,234,${alpha})`
         : `rgba(225,229,221,${alpha})`;
       const size = random() > .86 ? 1.45 : .9;
       mountainContext.fillRect(x, y, size, size);
@@ -231,9 +231,9 @@
         const jitterY = y + ((random() - .5) * 4);
         if (!pointInPolygon(jitterX, jitterY, polygon) || random() < .29) continue;
         const character = characters[Math.floor(random() * characters.length)];
-        const green = random() > .955;
-        mountainContext.fillStyle = green
-          ? `rgba(120,231,114,${.16 + (random() * .19)})`
+        const bright = random() > .955;
+        mountainContext.fillStyle = bright
+          ? `rgba(232,235,228,${.16 + (random() * .19)})`
           : `rgba(215,219,211,${.055 + (random() * .085)})`;
         mountainContext.fillText(character, jitterX, jitterY);
       }
@@ -247,7 +247,7 @@
     const ridgeGradient = mountainContext.createLinearGradient(width * .2, 0, width * .92, 0);
     ridgeGradient.addColorStop(0, "rgba(224,228,220,.08)");
     ridgeGradient.addColorStop(.55, "rgba(224,228,220,.28)");
-    ridgeGradient.addColorStop(.68, "rgba(120,231,114,.44)");
+    ridgeGradient.addColorStop(.68, "rgba(154,167,184,.44)");
     ridgeGradient.addColorStop(1, "rgba(224,228,220,.12)");
     mountainContext.strokeStyle = ridgeGradient;
     mountainContext.lineWidth = 1.1;
@@ -261,7 +261,7 @@
     mountainContext.moveTo(route[0][0], route[0][1]);
     route.slice(1).forEach(([x, y]) => mountainContext.lineTo(x, y));
     mountainContext.setLineDash([3, 6]);
-    mountainContext.strokeStyle = "rgba(120,231,114,.28)";
+    mountainContext.strokeStyle = "rgba(154,167,184,.30)";
     mountainContext.lineWidth = .9;
     mountainContext.stroke();
     mountainContext.setLineDash([]);
@@ -385,7 +385,7 @@
         burstY: Math.sin(angle) * (44 + (random() * 150)),
         size: .72 + (random() * 1.25),
         phase: random() * Math.PI * 2,
-        green: random() > .84
+        brand: random() > .84
       });
     }
 
@@ -399,7 +399,7 @@
         speed: 12 + (random() * 42),
         size: random() > .82 ? 1.4 : .8,
         alpha: .035 + (random() * .16),
-        green: random() > .87
+        brand: random() > .87
       };
     });
   };
@@ -434,8 +434,8 @@
       const x = particle.x + (Math.cos(particle.angle) * particle.speed * drift * drift * 2.4);
       const y = particle.y + (Math.sin(particle.angle) * particle.speed * drift * drift * 2.4);
       const alpha = particle.alpha * Math.max(0, 1 - burst);
-      introContext.fillStyle = particle.green
-        ? `rgba(120,231,114,${alpha})`
+      introContext.fillStyle = particle.brand
+        ? `rgba(154,167,184,${alpha})`
         : `rgba(226,230,222,${alpha})`;
       introContext.fillRect(x, y, particle.size, particle.size);
     });
@@ -449,8 +449,8 @@
       const y = centerY + ((settledY - centerY) * scale) + (particle.burstY * burst * burst);
       const alpha = Math.max(0, Math.min(1, elapsed / 145)) * Math.pow(Math.max(0, 1 - burst), 1.22);
       const size = particle.size * (1 + (burst * 1.8));
-      introContext.fillStyle = particle.green
-        ? `rgba(120,231,114,${alpha * .96})`
+      introContext.fillStyle = particle.brand
+        ? `rgba(154,167,184,${alpha * .96})`
         : `rgba(238,241,234,${alpha * .77})`;
       introContext.fillRect(x, y, size, size);
     });
@@ -459,9 +459,9 @@
     const flare = Math.max(0, 1 - Math.abs((elapsed - 690) / 185));
     if (flare > 0) {
       const gradient = introContext.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.min(viewportWidth, viewportHeight) * .36);
-      gradient.addColorStop(0, `rgba(120,231,114,${flare * .10})`);
-      gradient.addColorStop(.35, `rgba(120,231,114,${flare * .028})`);
-      gradient.addColorStop(1, "rgba(120,231,114,0)");
+      gradient.addColorStop(0, `rgba(154,167,184,${flare * .10})`);
+      gradient.addColorStop(.35, `rgba(154,167,184,${flare * .028})`);
+      gradient.addColorStop(1, "rgba(154,167,184,0)");
       introContext.fillStyle = gradient;
       introContext.fillRect(0, 0, viewportWidth, viewportHeight);
     }

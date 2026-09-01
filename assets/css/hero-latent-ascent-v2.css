@@ -70,7 +70,7 @@
     content: "";
     width: 42px;
     height: 1px;
-    background: rgba(120, 231, 114, .34);
+    background: rgba(197, 199, 192, .3);
   }
 
   .latent-ascent__coordinates {
@@ -87,7 +87,7 @@
   }
 
   .latent-ascent__coordinates b {
-    color: rgba(120, 231, 114, .54);
+    color: rgba(120, 231, 114, .54); /* ∞ FRONTIER 峰顶信标：唯一保留的状态绿 */
     font-weight: 500;
   }
 }
@@ -126,7 +126,7 @@
 
   .aita-intro::after {
     background:
-      radial-gradient(circle at 50% 50%, rgba(120,231,114,.055), transparent 36%),
+      radial-gradient(circle at 50% 50%, rgba(154,167,184,.055), transparent 36%),
       radial-gradient(circle at 50% 50%, transparent 28%, rgba(0,0,0,.62) 78%, rgba(0,0,0,.93) 100%);
   }
 
@@ -167,7 +167,7 @@
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(120,231,114,.78), transparent);
+    background: linear-gradient(90deg, transparent, rgba(154,167,184,.78), transparent);
     animation: aita-intro-scan 1.05s cubic-bezier(.2,.7,.2,1) .16s both;
   }
 

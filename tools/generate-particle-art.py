@@ -3,9 +3,11 @@
 
 Renders deterministic point-cloud artwork:
   1. particle-infinity.png — lemniscate (∞) formed by dense dot-matrix
-     particles with scattered ambient noise, green/white palette.
+     particles with scattered ambient noise, gray-white body (96%) with a
+     sparse brand steel-blue fraction (4%).
   2. particle-ribbon.png — vertical dot-stripes forming a flowing ribbon
-     wave (compute-bg style), white/green with chromatic fringes.
+     wave (compute-bg style), gray-white body (98%) with a sparse brand
+     steel-blue fraction (2%).
 
 Output: assets/images/. Deterministic (fixed seed). Requires Pillow.
 """
@@ -18,21 +20,21 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "images"
 
-GREEN = (120, 231, 114)
-GREEN_SOFT = (88, 200, 120)
-PALE = (214, 220, 210)
-WHITE = (236, 244, 236)
+BRAND = (154, 167, 184)  # #9aa7b8 steel blue-gray, the only non-neutral hue
+WHITE = (236, 238, 234)
+PALE = (206, 209, 202)
+GRAY = (158, 161, 154)
 
 
-def pick_color(rng, hot=False):
+def pick_color(rng, hot=False, brand_ratio=0.04):
     r = rng.random()
     if hot or r > 0.965:
         return WHITE
     if r > 0.72:
         return PALE
-    if r > 0.30:
-        return GREEN
-    return GREEN_SOFT
+    if r > brand_ratio:
+        return GRAY
+    return BRAND
 
 
 def dash(draw, x, y, color, alpha, rng, scale=1.0):
@@ -123,11 +125,7 @@ def generate_ribbon():
             if rng.random() < edge * 0.42:  # ragged edges
                 continue
             alpha = int(120 * (1 - edge * 0.75) + rng.uniform(6, 46))
-            color = pick_color(rng)
-            # Chromatic fringe: offset faint red/blue twins on sparse dots.
-            if rng.random() < 0.06:
-                dr.rectangle([x - 1, y, x, y + 1], fill=(255, 92, 92, 54))
-                dr.rectangle([x + 2, y, x + 3, y + 1], fill=(92, 160, 255, 54))
+            color = pick_color(rng, brand_ratio=0.02)
             dr.rectangle([x, y, x + 1, y + 1], fill=(*color, min(255, alpha)))
         x += rng.uniform(5.5, 9.5) if col % 3 else rng.uniform(9, 16)
         col += 1
@@ -135,7 +133,7 @@ def generate_ribbon():
     # Sparse ambient specks outside the ribbon.
     for _ in range(500):
         x, y = rng.uniform(0, W), rng.uniform(0, H)
-        dr.rectangle([x, y, x + 1, y + 1], fill=(*pick_color(rng), int(rng.uniform(10, 60))))
+        dr.rectangle([x, y, x + 1, y + 1], fill=(*pick_color(rng, brand_ratio=0.02), int(rng.uniform(10, 60))))
 
     img.save(OUT / "particle-ribbon.png", optimize=True)
 

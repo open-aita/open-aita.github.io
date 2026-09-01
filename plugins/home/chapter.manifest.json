@@ -1,7 +1,7 @@
 {
   "apiVersion": "aita.chapter/v1",
   "id": "home",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "routeBase": "/",
   "renderer": "astro",
   "demoEntry": "#top",
@@ -31,7 +31,9 @@
     "home.feature-content"
   ],
   "capabilities": [
-    "responsive-images"
+    "responsive-images",
+    "particle-wordmark-intro",
+    "ascii-mountain-illustration"
   ],
   "performance": {
     "contentPageInitialJsKb": 0,

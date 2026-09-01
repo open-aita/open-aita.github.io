@@ -233,6 +233,24 @@
         "交互元素具备可访问名称",
         "图片必须包含替代文本或明确标记为装饰"
       ]
+    },
+    "LatentAscentHero": {
+      "purpose": "首页首访粒子字标与 ASCII 点阵科研攀登山体",
+      "propsSchema": "agent/schemas/ui/latent-ascent-hero.schema.json",
+      "allowedVariants": [
+        "default",
+        "reduced-motion"
+      ],
+      "allowedContexts": [
+        "home"
+      ],
+      "clientJavaScriptKb": 8,
+      "accessibilityRules": [
+        "视觉层必须标记为装饰，不进入可访问性树",
+        "prefers-reduced-motion 下跳过首访粒子动效",
+        "脚本异常时必须在 2.4 秒内恢复正文可见性",
+        "关闭 JavaScript 后正文与导航仍完整可用"
+      ]
     }
   }
 }

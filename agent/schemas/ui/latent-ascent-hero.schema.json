@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LatentAscentHero props",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "variant": {
+      "type": "string",
+      "enum": [
+        "default",
+        "reduced-motion"
+      ]
+    },
+    "introDurationMs": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2400,
+      "default": 1510
+    },
+    "climberCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 3
+    }
+  }
+}

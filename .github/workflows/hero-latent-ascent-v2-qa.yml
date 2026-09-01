@@ -1,0 +1,81 @@
+name: Latent Ascent one-time visual QA
+
+on:
+  push:
+    branches:
+      - feat/hero-latent-ascent
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-capture:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Apply deterministic homepage wiring
+        run: node tools/apply-hero-latent-ascent-v2.mjs
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/js/hero-latent-ascent-v2.js
+          node --check assets/js/main.js
+
+      - name: Run repository verifier
+        run: |
+          mkdir -p hero-qa
+          node tools/aita.mjs verify --changed --json | tee hero-qa/verify.json
+
+      - name: Install isolated screenshot runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start static preview
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > hero-qa/server.log 2>&1 &
+          echo $! > hero-qa/server.pid
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4173/ > /dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+
+      - name: Capture intro, transition, final and reduced-motion states
+        run: node tools/capture-hero-latent-ascent-v2.mjs
+        env:
+          AITA_QA_URL: http://127.0.0.1:4173/
+
+      - name: Upload visual QA artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hero-latent-ascent-v2-qa
+          path: hero-qa/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Remove one-time QA harness and commit implementation
+        if: success()
+        run: |
+          rm -f tools/apply-hero-latent-ascent-v2.mjs
+          rm -f tools/capture-hero-latent-ascent-v2.mjs
+          rm -f .github/workflows/hero-latent-ascent-v2-qa.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html agent/component-registry.json agent/schemas/ui/latent-ascent-hero.schema.json plugins/home/chapter.manifest.json
+          git add -u tools/apply-hero-latent-ascent-v2.mjs tools/capture-hero-latent-ascent-v2.mjs .github/workflows/hero-latent-ascent-v2-qa.yml
+          git commit -m "feat(home): wire Latent Ascent hero and verify visuals [skip ci]"
+          git push origin HEAD:feat/hero-latent-ascent

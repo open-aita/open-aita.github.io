@@ -1,0 +1,273 @@
+/*
+  AITA homepage — Latent Ascent.
+  A transient particle wordmark yields to a static ASCII / dot-matrix mountain.
+  The effect is decorative, dependency-free and motion-safe.
+*/
+@layer sections {
+  .hero {
+    isolation: isolate;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg,
+        rgba(14, 14, 14, .96) 0%,
+        rgba(14, 14, 14, .80) 28%,
+        rgba(14, 14, 14, .30) 51%,
+        rgba(14, 14, 14, .02) 73%);
+  }
+
+  .latent-ascent {
+    position: absolute;
+    z-index: 1;
+    inset: 2% -2% 78px 21%;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(.985);
+    transform-origin: 72% 72%;
+    filter: blur(5px);
+    transition:
+      opacity 1.05s cubic-bezier(.16, 1, .3, 1),
+      transform 1.25s cubic-bezier(.16, 1, .3, 1),
+      filter 1.05s cubic-bezier(.16, 1, .3, 1);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.28) 17%, #000 36%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.28) 17%, #000 36%, #000 100%);
+  }
+
+  .latent-ascent.is-visible {
+    opacity: .92;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  .latent-ascent__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .latent-ascent__readout {
+    position: absolute;
+    top: clamp(14px, 2vw, 26px);
+    right: clamp(14px, 2.3vw, 36px);
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: rgba(185, 187, 180, .42);
+    font: 9px/1 var(--mono);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  .latent-ascent__readout::before {
+    content: "";
+    width: 42px;
+    height: 1px;
+    background: rgba(120, 231, 114, .34);
+  }
+
+  .latent-ascent__coordinates {
+    position: absolute;
+    right: clamp(14px, 2.3vw, 36px);
+    bottom: clamp(24px, 4vw, 62px);
+    display: grid;
+    justify-items: end;
+    gap: 7px;
+    color: rgba(137, 139, 133, .36);
+    font: 8px/1.15 var(--mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .latent-ascent__coordinates b {
+    color: rgba(120, 231, 114, .54);
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .aita-intro {
+    position: fixed;
+    z-index: 1200;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    pointer-events: none;
+    background: #0e0e0e;
+    opacity: 1;
+    will-change: opacity;
+  }
+
+  .aita-intro::before,
+  .aita-intro::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .aita-intro::before {
+    opacity: .42;
+    background-image:
+      linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(circle at center, #000 0%, rgba(0,0,0,.62) 42%, transparent 76%);
+    mask-image: radial-gradient(circle at center, #000 0%, rgba(0,0,0,.62) 42%, transparent 76%);
+  }
+
+  .aita-intro::after {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(120,231,114,.055), transparent 36%),
+      radial-gradient(circle at 50% 50%, transparent 28%, rgba(0,0,0,.62) 78%, rgba(0,0,0,.93) 100%);
+  }
+
+  .aita-intro__canvas {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .aita-intro__status {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: clamp(30px, 6vh, 70px);
+    width: min(430px, calc(100vw - 48px));
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 13px;
+    color: rgba(185, 187, 180, .43);
+    font: 8px/1 var(--mono);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  .aita-intro__status i {
+    position: relative;
+    height: 1px;
+    overflow: hidden;
+    background: rgba(255,255,255,.10);
+  }
+
+  .aita-intro__status i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(120,231,114,.78), transparent);
+    animation: aita-intro-scan 1.05s cubic-bezier(.2,.7,.2,1) .16s both;
+  }
+
+  @keyframes aita-intro-scan {
+    to { transform: translateX(100%); }
+  }
+
+  html.hero-intro-pending,
+  html.hero-intro-pending body {
+    overflow: hidden;
+  }
+
+  html.hero-intro-pending .site-header,
+  html.hero-intro-pending .hero-copy,
+  html.hero-intro-pending .hero-meta {
+    opacity: 0;
+  }
+
+  .site-header,
+  .hero-copy,
+  .hero-meta {
+    transition-property: opacity, transform, border-color, background;
+    transition-duration: .72s, .72s, .2s, .2s;
+    transition-timing-function: cubic-bezier(.16,1,.3,1), cubic-bezier(.16,1,.3,1), ease, ease;
+  }
+
+  html.hero-intro-pending .hero-copy {
+    transform: translate3d(0, 10px, 0);
+  }
+
+  html.hero-intro-pending .hero-meta {
+    transform: translate3d(0, 7px, 0);
+  }
+}
+
+@media (max-width: 900px) {
+  @layer sections {
+    .hero::after {
+      background:
+        linear-gradient(180deg,
+          rgba(14,14,14,.05) 0%,
+          rgba(14,14,14,.10) 38%,
+          rgba(14,14,14,.80) 69%,
+          rgba(14,14,14,.98) 91%);
+    }
+
+    .latent-ascent {
+      inset: 1% -45% 142px -18%;
+      opacity: 0;
+      transform-origin: 70% 56%;
+      -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+      mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+    }
+
+    .latent-ascent.is-visible { opacity: .80; }
+    .latent-ascent__readout { top: 18px; right: 34%; }
+    .latent-ascent__coordinates { right: 34%; bottom: 48px; }
+  }
+}
+
+@media (max-width: 560px) {
+  @layer sections {
+    .latent-ascent {
+      inset: 2% -72% 215px -40%;
+    }
+
+    .latent-ascent.is-visible { opacity: .74; }
+    .latent-ascent__readout,
+    .latent-ascent__coordinates { display: none; }
+  }
+
+  @layer components {
+    .aita-intro__status {
+      bottom: 34px;
+      width: calc(100vw - 36px);
+      gap: 9px;
+      font-size: 7px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @layer sections {
+    .latent-ascent,
+    .latent-ascent.is-visible {
+      opacity: .86;
+      transform: none;
+      filter: none;
+      transition: none;
+    }
+  }
+
+  @layer components {
+    .aita-intro { display: none !important; }
+    .aita-intro__status i::after { animation: none; }
+    html.hero-intro-pending .site-header,
+    html.hero-intro-pending .hero-copy,
+    html.hero-intro-pending .hero-meta {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

@@ -137,14 +137,14 @@
     let points = [];
 
     const makePoints = () => {
-      const count = Math.max(160, Math.min(520, Math.round((width * height) / 3200)));
+      const count = Math.max(220, Math.min(680, Math.round((width * height) / 2200)));
       points = Array.from({ length: count }, (_, index) => {
-        const band = index % 7;
+        const band = index % 13;
         return {
           x: Math.random() * 2 - 1,
           y: Math.random() * 1.5 - 0.75,
           z: Math.random() * 1.05 + 0.02,
-          size: Math.random() * 1.25 + 0.45,
+          size: Math.random() * 1.35 + 0.55,
           band
         };
       });
@@ -174,21 +174,29 @@
       points.forEach((point) => {
         const z = reduceMotion ? point.z : ((point.z - time * speed) % 1.05 + 1.05) % 1.05 + 0.015;
         const perspective = 0.12 + z * z;
-        const curve = Math.sin((point.y * 2.8) + (point.x * 1.6)) * 0.12;
+        const curve = Math.sin((point.y * 2.8) + (point.x * 1.6)) * 0.13 - point.x * 0.16;
         const px = centerX + point.x * spread * perspective;
         const py = centerY + (point.y + curve * z) * spread * perspective * 0.58;
         if (px < -20 || px > width + 20 || py < -20 || py > height + 20) return;
 
-        const alpha = Math.min(0.8, 0.05 + z * 0.52);
-        const radius = point.size * (0.35 + z * 1.25);
+        const alpha = Math.min(0.88, 0.09 + z * 0.64);
+        const radius = point.size * (0.42 + z * 1.3);
         const hue = point.band === 0 ? "143, 169, 180" : "224, 228, 220";
         context.fillStyle = `rgba(${hue}, ${alpha})`;
         context.fillRect(px, py, radius, radius);
       });
       context.restore();
 
+      // One restrained research ridge makes the field readable as a system path.
+      context.beginPath();
+      context.moveTo(width * 0.43, height * 0.72);
+      context.quadraticCurveTo(width * 0.72, height * 0.58, width * 1.03, height * 0.2);
+      context.strokeStyle = "rgba(143, 169, 180, .18)";
+      context.lineWidth = 1;
+      context.stroke();
+
       // Technical horizon lines.
-      context.strokeStyle = "rgba(190, 196, 188, .07)";
+      context.strokeStyle = "rgba(190, 196, 188, .1)";
       context.lineWidth = 1;
       for (let i = 0; i < 5; i += 1) {
         context.beginPath();
@@ -243,6 +251,10 @@
       octx.textBaseline = "middle";
       octx.fillStyle = "#ffffff";
       octx.fillText(DOT_TEXT, dw / 2, dh / 2 + fontSize * 0.04);
+      const textWidth = octx.measureText(DOT_TEXT).width;
+      const textStart = (dw - textWidth) / 2;
+      const accentStart = textStart + textWidth / 3;
+      const accentEnd = textStart + textWidth * 2 / 3;
       const pixels = octx.getImageData(0, 0, dw, dh).data;
 
       dots = [];
@@ -250,7 +262,9 @@
       for (let y = 0; y < dh; y += gap) {
         for (let x = 0; x < dw; x += gap) {
           if (pixels[(y * dw + x) * 4 + 3] > 110) {
-            dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0 });
+            const signature = (Math.round(x / gap) * 17) + (Math.round(y / gap) * 31);
+            const accent = x >= accentStart && x < accentEnd && signature % 37 === 0;
+            dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0, accent });
           }
         }
       }
@@ -284,7 +298,7 @@
         dot.vy *= 0.86;
         dot.x += dot.vx;
         dot.y += dot.vy;
-        dctx.fillStyle = "rgba(228, 232, 224, .6)";
+        dctx.fillStyle = dot.accent ? "rgba(154, 167, 184, .78)" : "rgba(228, 232, 224, .6)";
         dctx.fillRect(dot.x, dot.y, 2, 2);
       });
       if (!reduceMotion && dotsVisible) dotsFrame = requestAnimationFrame(drawDots);

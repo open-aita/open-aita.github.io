@@ -50,6 +50,42 @@
     revealItems.forEach((item) => revealObserver.observe(item));
   }
 
+  // Load the self-contained Outputs WebGL artwork only when the section is near view.
+  const outputCloudFrame = doc.querySelector("[data-output-cloud-frame]");
+  let outputCloudVisible = false;
+  const setOutputCloudActive = () => {
+    outputCloudFrame?.contentWindow?.postMessage({
+      type: "aita:output-cloud-active",
+      active: outputCloudVisible
+    }, "*");
+  };
+  const loadOutputCloud = () => {
+    if (!(outputCloudFrame instanceof HTMLIFrameElement) || outputCloudFrame.hasAttribute("src")) return;
+    const source = outputCloudFrame.dataset.src;
+    if (!source) return;
+    const revealOutputCloud = (event) => {
+      if (event.source !== outputCloudFrame.contentWindow || event.data !== "aita:output-cloud-ready") return;
+      outputCloudFrame.classList.add("is-loaded");
+      outputCloudFrame.closest(".output-art")?.classList.add("has-live-cloud");
+      setOutputCloudActive();
+      window.removeEventListener("message", revealOutputCloud);
+    };
+    window.addEventListener("message", revealOutputCloud);
+    outputCloudFrame.src = source;
+  };
+  if (outputCloudFrame instanceof HTMLIFrameElement && !reduceMotion) {
+    if ("IntersectionObserver" in window) {
+      const outputCloudObserver = new IntersectionObserver(([entry], observer) => {
+        outputCloudVisible = entry.isIntersecting;
+        if (outputCloudVisible) loadOutputCloud();
+        if (outputCloudFrame.hasAttribute("src")) setOutputCloudActive();
+      }, { rootMargin: "25% 0px", threshold: 0 });
+      outputCloudObserver.observe(outputCloudFrame);
+    } else {
+      loadOutputCloud();
+    }
+  }
+
   // Project filtering.
   const filterButtons = [...doc.querySelectorAll("[data-filter]")];
   const projectCards = [...doc.querySelectorAll("[data-project-grid] .project-card")];

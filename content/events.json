@@ -114,5 +114,21 @@
       "evidence:activities"
     ],
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "id": "event:aiy-hackathon-2026",
+    "kind": "hackathon",
+    "mediaAssetIds": [
+      "media:aiy-hackathon-2026"
+    ],
+    "slug": "aiy-hackathon-2026",
+    "title": {
+      "zh": "AIY 黑客松 2026"
+    },
+    "verifiedAt": "2026-09-02"
   }
 ]

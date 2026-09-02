@@ -129,7 +129,7 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
     competitionRecords: (byName.achievements ?? []).filter((item) => item.type === 'competition').length,
     events: (byName.events ?? []).length,
   };
-  const expectedCounts = { listedPartners:33, projects:16, papers:7, ipRecords:12, nationalInnovationProjects:6, provincialInnovationProjects:5, competitionRecords:77, events:7 };
+  const expectedCounts = { listedPartners:33, projects:16, papers:7, ipRecords:12, nationalInnovationProjects:6, provincialInnovationProjects:5, competitionRecords:77, events:8 };
   const countMismatches = Object.entries(expectedCounts).filter(([key, expected]) => countSummary[key] !== expected).map(([key, expected]) => ({ key, expected, actual: countSummary[key] }));
   checks.push(result('source-material-counts', countMismatches.length === 0, { counts: countSummary, mismatches: countMismatches }));
   if (countMismatches.length) errors.push(error('AITA_CONTENT_COUNT_MISMATCH', '结构化内容数量与资料迁移基线不一致', { countMismatches }));

@@ -46,5 +46,20 @@
       "evidence:activities"
     ],
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "alt": {
+      "zh": "AIY 黑客松 2026 活动现场背景板与银奖证书展示"
+    },
+    "copyrightStatus": "provided-for-site-demo",
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "fallbackPath": "assets/images/hackathon1.png",
+    "height": 2456,
+    "id": "media:aiy-hackathon-2026",
+    "path": "assets/images/hackathon1.webp",
+    "source": "用户提供的活动图片",
+    "width": 3275
   }
 ]

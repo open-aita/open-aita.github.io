@@ -126,27 +126,94 @@
     trackedSections.forEach((section) => navObserver.observe(section));
   }
 
-  // Lightweight 3D research field inspired by scientific visualization rather than a video asset.
+  // Research field: a restrained latent-space passage built from particles, warped rings and type.
   const canvas = doc.getElementById("research-field");
   if (canvas instanceof HTMLCanvasElement) {
     const context = canvas.getContext("2d", { alpha: true });
+    const keywordBuffer = doc.createElement("canvas");
+    const keywordContext = keywordBuffer.getContext("2d", { willReadFrequently: true });
+    const keywords = [
+      "FOUNDATION MODELS",
+      "DATA",
+      "PERCEPTION",
+      "SIMULATION",
+      "PLANNING",
+      "GENERATION",
+      "EVOLUTION"
+    ];
+    const cycleDuration = 30000;
+    const keywordStart = 2400;
+    const keywordSpacing = 3200;
+    const keywordLife = 4400;
     let width = 1;
     let height = 1;
     let dpr = 1;
     let animationFrame = 0;
     let points = [];
+    let keywordMaps = [];
+    let travel = 0;
+    let lastTime = 0;
+    let animationStart = 0;
+    let fieldVisible = false;
+
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+    const smoothstep = (start, end, value) => {
+      const t = clamp((value - start) / (end - start), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
+    const fieldHash = (x, y, seed = 0) => {
+      const value = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
+      return value - Math.floor(value);
+    };
 
     const makePoints = () => {
-      const count = Math.max(220, Math.min(680, Math.round((width * height) / 2200)));
+      const count = Math.max(320, Math.min(1000, Math.round((width * height) / 1500)));
       points = Array.from({ length: count }, (_, index) => {
         const band = index % 13;
         return {
-          x: Math.random() * 2 - 1,
-          y: Math.random() * 1.5 - 0.75,
-          z: Math.random() * 1.05 + 0.02,
-          size: Math.random() * 1.35 + 0.55,
-          band
+          x: fieldHash(index, 1, 3) * 2 - 1,
+          y: fieldHash(index, 2, 5) * 1.5 - 0.75,
+          z: fieldHash(index, 3, 7) * 1.05 + 0.02,
+          size: fieldHash(index, 4, 11) * 1.35 + 0.55,
+          band,
+          layer: index % 3
         };
+      });
+    };
+
+    const makeKeywordMaps = () => {
+      if (!keywordContext) return;
+      const fontSize = 72;
+      const font = `650 ${fontSize}px "ABC Favorit Mono", "Geist Mono", "Cascadia Mono", Consolas, monospace`;
+
+      keywordMaps = keywords.map((label, keywordIndex) => {
+        keywordContext.font = font;
+        const textWidth = Math.ceil(keywordContext.measureText(label).width);
+        keywordBuffer.width = textWidth + 36;
+        keywordBuffer.height = 116;
+        keywordContext.clearRect(0, 0, keywordBuffer.width, keywordBuffer.height);
+        keywordContext.font = font;
+        keywordContext.textAlign = "center";
+        keywordContext.textBaseline = "middle";
+        keywordContext.fillStyle = "#ffffff";
+        keywordContext.fillText(label, keywordBuffer.width / 2, keywordBuffer.height / 2);
+
+        const pixels = keywordContext.getImageData(0, 0, keywordBuffer.width, keywordBuffer.height).data;
+        const sampleStep = textWidth > 580 ? 3 : 2;
+        const mapPoints = [];
+        for (let y = 0; y < keywordBuffer.height; y += sampleStep) {
+          for (let x = 0; x < keywordBuffer.width; x += sampleStep) {
+            const alpha = pixels[((y * keywordBuffer.width) + x) * 4 + 3];
+            if (alpha < 96 || fieldHash(x, y, keywordIndex + 17) < 0.035) continue;
+            mapPoints.push({
+              x: x - (keywordBuffer.width / 2),
+              y: y - (keywordBuffer.height / 2),
+              seed: fieldHash(x, y, keywordIndex + 29)
+            });
+          }
+        }
+
+        return { label, width: textWidth, points: mapPoints };
       });
     };
 
@@ -159,62 +226,231 @@
       canvas.height = Math.round(height * dpr);
       context?.setTransform(dpr, 0, 0, dpr, 0, 0);
       makePoints();
+      makeKeywordMaps();
     };
 
     const drawField = (time = 0) => {
       if (!context) return;
       context.clearRect(0, 0, width, height);
-      const centerX = width * 0.74;
-      const centerY = height * 0.58;
+      const narrow = width < 720;
+      if (!animationStart && time) animationStart = time;
+      const elapsed = animationStart ? Math.max(0, time - animationStart) : 0;
+      const cycle = reduceMotion ? keywordStart + (keywordLife * 0.42) : elapsed % cycleDuration;
+      const warpIn = smoothstep(1200, 2200, cycle);
+      const warpOut = 1 - smoothstep(26400, 28700, cycle);
+      const warp = warpIn * warpOut;
+      const centerX = width * (narrow ? 0.56 : 0.76);
+      const centerY = height * (narrow ? 0.72 : 0.54);
       const spread = Math.min(width, height) * 1.05;
-      const speed = reduceMotion ? 0 : 0.000055;
+      const delta = lastTime ? Math.min(48, Math.max(0, time - lastTime)) : 16;
+      lastTime = time;
+      if (!reduceMotion) travel += delta * (0.000055 + warp * 0.00015);
+
+      const lift = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width * 0.34, height * 0.72));
+      lift.addColorStop(0, `rgba(143, 169, 180, ${0.025 + warp * 0.035})`);
+      lift.addColorStop(0.44, "rgba(71, 83, 88, .014)");
+      lift.addColorStop(1, "rgba(14, 14, 14, 0)");
+      context.fillStyle = lift;
+      context.fillRect(0, 0, width, height);
 
       context.save();
       context.globalCompositeOperation = "lighter";
       points.forEach((point) => {
-        const z = reduceMotion ? point.z : ((point.z - time * speed) % 1.05 + 1.05) % 1.05 + 0.015;
+        const z = reduceMotion ? point.z : ((point.z - travel) % 1.05 + 1.05) % 1.05 + 0.015;
         const perspective = 0.12 + z * z;
-        const curve = Math.sin((point.y * 2.8) + (point.x * 1.6)) * 0.13 - point.x * 0.16;
-        const px = centerX + point.x * spread * perspective;
-        const py = centerY + (point.y + curve * z) * spread * perspective * 0.58;
+        const layerDepth = 0.92 + point.layer * 0.065;
+        const curve = Math.sin((point.y * 2.8) + (point.x * 1.6) + point.layer * 0.72)
+          * (0.11 + point.layer * 0.018) - point.x * (0.145 + point.layer * 0.012);
+        const px = centerX + point.x * spread * perspective * layerDepth;
+        const py = centerY + (point.y + curve * z + (point.layer - 1) * 0.018) * spread * perspective * 0.58;
         if (px < -20 || px > width + 20 || py < -20 || py > height + 20) return;
 
-        const alpha = Math.min(0.88, 0.09 + z * 0.64);
+        const alpha = Math.min(0.9, 0.08 + z * 0.61 + warp * z * 0.12);
         const radius = point.size * (0.42 + z * 1.3);
         const hue = point.band === 0 ? "143, 169, 180" : "224, 228, 220";
+
+        if (!reduceMotion && warp > 0.02) {
+          const radialX = px - centerX;
+          const radialY = py - centerY;
+          const radialLength = Math.max(1, Math.hypot(radialX, radialY));
+          const trailLength = warp * (2 + z * 18) * point.size;
+          const parallelCount = narrow ? 2 : 3;
+          const perpendicularX = -radialY / radialLength;
+          const perpendicularY = radialX / radialLength;
+          for (let trailLayer = 0; trailLayer < parallelCount; trailLayer += 1) {
+            const offset = (trailLayer - (parallelCount - 1) / 2) * (0.7 + z * 1.35);
+            const lengthScale = 0.76 + trailLayer * 0.2;
+            context.beginPath();
+            context.moveTo(
+              px + (radialX / radialLength) * trailLength * lengthScale + perpendicularX * offset,
+              py + (radialY / radialLength) * trailLength * lengthScale + perpendicularY * offset
+            );
+            context.lineTo(px + perpendicularX * offset * 0.28, py + perpendicularY * offset * 0.28);
+            context.strokeStyle = `rgba(${hue}, ${alpha * (0.1 + warp * 0.22) * (trailLayer === 1 ? 1 : 0.64)})`;
+            context.lineWidth = Math.max(0.42, radius * (trailLayer === 1 ? 0.38 : 0.25));
+            context.stroke();
+          }
+        }
+
         context.fillStyle = `rgba(${hue}, ${alpha})`;
         context.fillRect(px, py, radius, radius);
       });
       context.restore();
 
-      // One restrained research ridge makes the field readable as a system path.
+      const keywordStates = keywordMaps.map((map, index) => {
+        const local = (cycle - (keywordStart + index * keywordSpacing)) / keywordLife;
+        const visibility = local >= 0 && local <= 1
+          ? smoothstep(0, 0.34, local) * (1 - smoothstep(0.56, 1, local))
+          : 0;
+        return { map, index, local, visibility };
+      }).filter((state) => state.visibility > 0.002);
+      const activePulse = keywordStates.reduce((peak, state) => Math.max(peak, state.visibility), 0);
+
+      // A dark core and broken particle rings bend the field without becoming a literal black hole.
+      const ringCount = narrow ? 3 : 5;
+      const outerRadius = Math.min(width * (narrow ? 0.38 : 0.19), height * (narrow ? 0.34 : 0.58));
+      const rotation = -0.17;
+      context.save();
+      context.translate(centerX, centerY);
+      context.rotate(rotation);
       context.beginPath();
-      context.moveTo(width * 0.43, height * 0.72);
-      context.quadraticCurveTo(width * 0.72, height * 0.58, width * 1.03, height * 0.2);
-      context.strokeStyle = "rgba(143, 169, 180, .18)";
+      context.ellipse(0, 0, outerRadius * 0.17, outerRadius * 0.065, 0, 0, Math.PI * 2);
+      context.fillStyle = `rgba(5, 6, 6, ${0.68 + warp * 0.22})`;
+      context.fill();
+      context.strokeStyle = `rgba(143, 169, 180, ${0.04 + warp * 0.1})`;
       context.lineWidth = 1;
       context.stroke();
+      context.restore();
 
-      // Technical horizon lines.
-      context.strokeStyle = "rgba(190, 196, 188, .1)";
-      context.lineWidth = 1;
-      for (let i = 0; i < 5; i += 1) {
+      context.save();
+      context.globalCompositeOperation = "lighter";
+      for (let ring = 0; ring < ringCount; ring += 1) {
+        const progress = ringCount === 1 ? 1 : ring / (ringCount - 1);
+        const radiusX = outerRadius * (0.3 + progress * 0.7);
+        const radiusY = radiusX * (0.19 + progress * 0.055);
+        const particleCount = narrow ? 48 : 96;
+        const orbit = reduceMotion ? 0 : elapsed * (ring % 2 ? -0.000018 : 0.000014);
+
+        context.save();
+        context.translate(centerX, centerY);
+        context.rotate(rotation);
         context.beginPath();
-        const y = centerY + i * 42;
-        context.moveTo(width * 0.44, y);
-        context.quadraticCurveTo(width * 0.74, y + i * 16, width * 1.04, y - 20 + i * 28);
+        context.ellipse(0, 0, radiusX, radiusY, 0, 0.12 + progress * 0.18, Math.PI * 1.75);
+        context.setLineDash([2 + progress * 2, 12 + progress * 8]);
+        context.strokeStyle = `rgba(143, 169, 180, ${(0.022 + warp * 0.055 + activePulse * 0.025) * (1 - progress * 0.25)})`;
+        context.lineWidth = 1;
         context.stroke();
-      }
+        context.restore();
 
-      if (!reduceMotion) animationFrame = requestAnimationFrame(drawField);
+        for (let index = 0; index < particleCount; index += 1) {
+          const seed = fieldHash(index, ring, 47);
+          if (seed < 0.16 || Math.sin(index * 0.31 + ring * 1.7) > 0.92) continue;
+          const angle = (index / particleCount) * Math.PI * 2 + orbit;
+          const ripple = 1 + Math.sin(angle * 3 + ring * 0.8 + elapsed * 0.0002) * (reduceMotion ? 0.012 : 0.02 + warp * 0.018);
+          const rawX = Math.cos(angle) * radiusX * ripple;
+          const rawY = Math.sin(angle) * radiusY * (1 + Math.cos(angle * 2 + ring) * 0.06);
+          const px = centerX + rawX * Math.cos(rotation) - rawY * Math.sin(rotation);
+          const py = centerY + rawX * Math.sin(rotation) + rawY * Math.cos(rotation);
+          const particleAlpha = (0.055 + warp * 0.22 + activePulse * 0.08) * (0.48 + seed * 0.52) * (1 - progress * 0.14);
+          const particleSize = 0.55 + seed * 1.15 + warp * 0.35;
+          context.fillStyle = seed > 0.86
+            ? `rgba(224, 232, 230, ${particleAlpha})`
+            : `rgba(143, 169, 180, ${particleAlpha})`;
+          context.fillRect(px, py, particleSize * (1 + warp * 0.65), particleSize);
+        }
+      }
+      context.setLineDash([]);
+      context.restore();
+
+      // Each concept assembles in depth, holds briefly, then dissolves back into the field.
+      context.save();
+      context.globalCompositeOperation = "lighter";
+      const verticalOffsets = [-0.055, 0.055, -0.025, 0.075, -0.065, 0.035, 0];
+      keywordStates.forEach(({ map, index, local, visibility }) => {
+        const approach = smoothstep(0, 0.38, local);
+        const maxTargetWidth = narrow ? width * 0.84 : Math.min(width * 0.54, 1300);
+        const minTargetWidth = narrow ? Math.min(200, width * 0.56) : 440;
+        const targetWidth = clamp(map.width * (narrow ? 1 : 1.65), minTargetWidth, maxTargetWidth);
+        const finalScale = targetWidth / map.width;
+        const scale = finalScale * (0.32 + approach * 0.82);
+        const assembleScatter = (1 - smoothstep(0, 0.34, local)) * (narrow ? 13 : 21);
+        const dissolveScatter = smoothstep(0.54, 1, local) * (narrow ? 44 : 80);
+        const scatter = assembleScatter + dissolveScatter;
+        const wordCenterX = centerX - (narrow ? width * 0.055 : width * 0.068);
+        const wordCenterY = centerY + height * verticalOffsets[index] * (narrow ? 0.55 : 1);
+
+        map.points.forEach((point) => {
+          const angle = point.seed * Math.PI * 2;
+          const jitterX = Math.cos(angle) * scatter * (0.35 + point.seed * 0.65);
+          const jitterY = Math.sin(angle) * scatter * (0.35 + point.seed * 0.65);
+          const echoScale = scale * (0.88 + point.seed * 0.02);
+          const midScale = scale * (0.955 + point.seed * 0.018);
+          const echoX = wordCenterX + point.x * echoScale + jitterX * 0.55;
+          const echoY = wordCenterY + point.y * echoScale + jitterY * 0.55 + 2.2;
+          const midX = wordCenterX + point.x * midScale + jitterX * 0.78 - 0.6;
+          const midY = wordCenterY + point.y * midScale + jitterY * 0.78 + 0.9;
+          const coreX = wordCenterX + point.x * scale + jitterX;
+          const coreY = wordCenterY + point.y * scale + jitterY;
+          const size = (0.86 + point.seed * 1.08) * clamp(scale + 0.42, 0.7, 1.35);
+
+          context.fillStyle = `rgba(65, 105, 118, ${visibility * 0.16})`;
+          context.fillRect(echoX - 1.2, echoY, Math.max(0.5, size * 0.72), Math.max(0.5, size * 0.72));
+          context.fillStyle = `rgba(106, 151, 164, ${visibility * (0.22 + point.seed * 0.12)})`;
+          context.fillRect(midX, midY, Math.max(0.55, size * 0.88), Math.max(0.55, size * 0.88));
+          context.fillStyle = point.seed > 0.78
+            ? `rgba(143, 187, 199, ${visibility * (0.56 + point.seed * 0.24)})`
+            : `rgba(224, 228, 220, ${visibility * (0.48 + point.seed * 0.32)})`;
+          context.fillRect(coreX, coreY, size, size);
+
+          if (point.seed > 0.74 && dissolveScatter > 1) {
+            const debrisDistance = dissolveScatter * (0.34 + point.seed * 0.66);
+            context.fillStyle = `rgba(143, 169, 180, ${visibility * 0.28})`;
+            context.fillRect(
+              coreX + Math.cos(angle) * debrisDistance,
+              coreY + Math.sin(angle) * debrisDistance,
+              Math.max(0.5, size * 0.62),
+              Math.max(0.5, size * 0.62)
+            );
+          }
+        });
+      });
+      context.restore();
+
+      if (!reduceMotion && fieldVisible) animationFrame = requestAnimationFrame(drawField);
     };
 
     resizeCanvas();
     drawField();
-    window.addEventListener("resize", resizeCanvas, { passive: true });
+    if (!reduceMotion) {
+      if ("IntersectionObserver" in window) {
+        const fieldObserver = new IntersectionObserver(([entry]) => {
+          fieldVisible = entry.isIntersecting;
+          cancelAnimationFrame(animationFrame);
+          if (!fieldVisible) return;
+          animationStart = 0;
+          lastTime = 0;
+          travel = 0;
+          animationFrame = requestAnimationFrame(drawField);
+        }, { rootMargin: "10% 0px", threshold: 0.08 });
+        fieldObserver.observe(canvas);
+      } else {
+        fieldVisible = true;
+        animationFrame = requestAnimationFrame(drawField);
+      }
+    }
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      if (reduceMotion) drawField();
+    }, { passive: true });
     doc.addEventListener("visibilitychange", () => {
-      if (doc.hidden) cancelAnimationFrame(animationFrame);
-      else if (!reduceMotion) animationFrame = requestAnimationFrame(drawField);
+      if (doc.hidden) {
+        cancelAnimationFrame(animationFrame);
+      } else if (!reduceMotion && fieldVisible) {
+        animationStart = 0;
+        lastTime = 0;
+        travel = 0;
+        animationFrame = requestAnimationFrame(drawField);
+      }
     });
   }
 

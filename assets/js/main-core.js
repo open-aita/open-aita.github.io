@@ -50,7 +50,7 @@
     revealItems.forEach((item) => revealObserver.observe(item));
   }
 
-  // Load the self-contained Outputs WebGL artwork only when the section is near view.
+  // Preload the Outputs WebGL artwork, then pause it whenever the section is offscreen.
   const outputCloudFrame = doc.querySelector("[data-output-cloud-frame]");
   let outputCloudVisible = false;
   const setOutputCloudActive = () => {
@@ -66,7 +66,6 @@
     const revealOutputCloud = (event) => {
       if (event.source !== outputCloudFrame.contentWindow || event.data !== "aita:output-cloud-ready") return;
       outputCloudFrame.classList.add("is-loaded");
-      outputCloudFrame.closest(".output-art")?.classList.add("has-live-cloud");
       setOutputCloudActive();
       window.removeEventListener("message", revealOutputCloud);
     };
@@ -74,6 +73,11 @@
     outputCloudFrame.src = source;
   };
   if (outputCloudFrame instanceof HTMLIFrameElement && !reduceMotion) {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(loadOutputCloud, { timeout: 900 });
+    } else {
+      window.setTimeout(loadOutputCloud, 200);
+    }
     if ("IntersectionObserver" in window) {
       const outputCloudObserver = new IntersectionObserver(([entry], observer) => {
         outputCloudVisible = entry.isIntersecting;
@@ -83,6 +87,42 @@
       outputCloudObserver.observe(outputCloudFrame);
     } else {
       loadOutputCloud();
+    }
+  }
+
+  // Load the self-contained About WebGL field only near its panel and pause it offscreen.
+  const aboutFieldFrame = doc.querySelector("[data-about-field-frame]");
+  let aboutFieldVisible = false;
+  const setAboutFieldActive = () => {
+    aboutFieldFrame?.contentWindow?.postMessage({
+      type: "aita:about-field-active",
+      active: aboutFieldVisible
+    }, "*");
+  };
+  const loadAboutField = () => {
+    if (!(aboutFieldFrame instanceof HTMLIFrameElement) || aboutFieldFrame.hasAttribute("src")) return;
+    const source = aboutFieldFrame.dataset.src;
+    if (!source) return;
+    const revealAboutField = (event) => {
+      if (event.source !== aboutFieldFrame.contentWindow || event.data !== "aita:about-field-ready") return;
+      aboutFieldFrame.classList.add("is-loaded");
+      setAboutFieldActive();
+      window.removeEventListener("message", revealAboutField);
+    };
+    window.addEventListener("message", revealAboutField);
+    aboutFieldFrame.src = source;
+  };
+  if (aboutFieldFrame instanceof HTMLIFrameElement && !reduceMotion) {
+    if ("IntersectionObserver" in window) {
+      const aboutFieldObserver = new IntersectionObserver(([entry]) => {
+        aboutFieldVisible = entry.isIntersecting;
+        if (aboutFieldVisible) loadAboutField();
+        if (aboutFieldFrame.hasAttribute("src")) setAboutFieldActive();
+      }, { rootMargin: "30% 0px", threshold: 0 });
+      aboutFieldObserver.observe(aboutFieldFrame);
+    } else {
+      aboutFieldVisible = true;
+      loadAboutField();
     }
   }
 

@@ -549,6 +549,7 @@
     border-left: 1px solid var(--border);
   }
   .about-copy {
+    position: relative;
     min-height: 520px;
     display: flex;
     flex-direction: column;
@@ -556,8 +557,34 @@
     padding: clamp(28px, 4vw, 62px);
     border-right: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    isolation: isolate;
     background: var(--surface);
   }
+  .about-copy::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, var(--surface) 0%, var(--surface) 18%, transparent 84%),
+      linear-gradient(to bottom, transparent 55%, var(--surface) 100%);
+  }
+  .about-copy > :not(.about-field-frame) { position: relative; z-index: 2; }
+  .about-field-frame {
+    position: absolute;
+    inset: -4%;
+    z-index: 0;
+    width: 108%;
+    height: 108%;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    filter: contrast(1.08) brightness(.86);
+    transition: opacity .9s ease;
+  }
+  .about-field-frame.is-loaded { opacity: .64; }
   .about-copy h2 {
     max-width: 620px;
     margin: 56px 0 22px;
@@ -974,19 +1001,6 @@
     z-index: 3;
     background: linear-gradient(90deg, var(--bg-deep) 3%, rgba(10, 10, 10, .96) 22%, rgba(10, 10, 10, .54) 43%, transparent 68%);
   }
-  .output-art-fallback {
-    position: absolute;
-    right: -4%;
-    top: 50%;
-    translate: 0 -50%;
-    height: 116%;
-    width: auto;
-    max-width: none;
-    opacity: 1;
-    mask-image: linear-gradient(90deg, transparent 0, #000 30%);
-    transition: opacity .7s ease;
-  }
-  .output-art.has-live-cloud .output-art-fallback { opacity: 0; }
   .output-art-frame {
     position: absolute;
     right: -2%;
@@ -1356,7 +1370,6 @@
     .project-feature { grid-template-columns: 1fr; }
     .project-feature-copy { min-height: 430px; border-right: 0; border-bottom: 1px solid var(--border); }
     .outputs-banner { grid-template-columns: 1fr; }
-    .output-art-fallback { right: -18%; height: 96%; opacity: .6; }
     .output-art-frame { right: -12%; width: 82%; opacity: 0; }
     .output-art-frame.is-loaded { opacity: .78; }
     .ip-layout { grid-template-columns: 1fr; }
@@ -1413,6 +1426,17 @@
     .unit-copy ol { grid-column: 1; grid-row: auto; }
 
     .about-copy { min-height: 480px; padding: 24px 20px; }
+    .about-copy::after {
+      background:
+        linear-gradient(to bottom, var(--surface) 0%, var(--surface) 38%, transparent 76%, var(--surface) 100%),
+        linear-gradient(90deg, var(--surface) 0%, transparent 80%);
+    }
+    .about-field-frame {
+      inset: auto -16% -2%;
+      width: 132%;
+      height: 74%;
+    }
+    .about-field-frame.is-loaded { opacity: .58; }
     .about-copy h2 { margin-top: 44px; font-size: 27px; }
     .about-system { min-height: 400px; }
     .about-system svg { min-height: 300px; }
@@ -1443,7 +1467,6 @@
 
     .outputs-banner { min-height: 460px; padding: 28px 20px; align-items: end; }
     .output-art::after { background: linear-gradient(180deg, transparent 0, rgba(10, 10, 10, .18) 42%, var(--bg-deep) 76%); }
-    .output-art-fallback { right: -46%; height: 72%; opacity: .5; }
     .output-art-frame { right: -34%; top: -8%; width: 136%; height: 74%; mask-image: linear-gradient(180deg, #000 0, #000 62%, transparent 100%); }
     .output-art-frame.is-loaded { opacity: .72; }
     .publication-row { grid-template-columns: 32px 1fr; gap: 14px; padding: 18px 14px; }
@@ -1502,6 +1525,7 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     .reveal { opacity: 1; transform: none; }
+    .about-field-frame { display: none; }
   }
 
   @media print {

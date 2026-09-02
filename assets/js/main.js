@@ -4,7 +4,7 @@
   const currentUrl = current?.src ? new URL(current.src) : null;
   const base = currentUrl ? new URL(".", currentUrl) : new URL("assets/js/", document.baseURI);
   const version = currentUrl?.searchParams.get("v");
-  ["hero-ascent.js", "main-core.js"].forEach((file) => {
+  ["hero-ascent.js", "research-galaxy.js", "main-core.js"].forEach((file) => {
     const script = document.createElement("script");
     const source = new URL(file, base);
     if (version) source.searchParams.set("v", version);

@@ -313,10 +313,11 @@
     trackedSections.forEach((section) => navObserver.observe(section));
   }
 
-  // Research field: a restrained latent-space passage built from particles, warped rings and type.
+  // Research field: layered galaxy behind the existing inward passage and particle type.
   const canvas = doc.getElementById("research-field");
   if (canvas instanceof HTMLCanvasElement) {
     const context = canvas.getContext("2d", { alpha: true });
+    const galaxy = window.createAitaResearchGalaxy?.();
     const keywordBuffer = doc.createElement("canvas");
     const keywordContext = keywordBuffer.getContext("2d", { willReadFrequently: true });
     const keywords = [
@@ -339,6 +340,7 @@
     let points = [];
     let keywordMaps = [];
     let travel = 0;
+    let galaxyTime = 0;
     let lastTime = 0;
     let animationStart = 0;
     let fieldVisible = false;
@@ -371,15 +373,24 @@
     const makeKeywordMaps = () => {
       if (!keywordContext) return;
       const fontSize = 72;
-      const font = `650 ${fontSize}px "ABC Favorit Mono", "Geist Mono", "Cascadia Mono", Consolas, monospace`;
+      const fontFamily = '"ABC Favorit Mono", "Geist Mono", "Cascadia Mono", Consolas, monospace';
+      const font = `650 ${fontSize}px ${fontFamily}`;
+      const narrow = width < 720;
+      const normalScale = narrow ? 1 : 1.65;
+      const maxTargetWidth = narrow ? width * 0.84 : Math.min(width * 0.54, 1300);
+      const minTargetWidth = narrow ? Math.min(200, width * 0.56) : 440;
 
       keywordMaps = keywords.map((label, keywordIndex) => {
         keywordContext.font = font;
         const textWidth = Math.ceil(keywordContext.measureText(label).width);
-        keywordBuffer.width = textWidth + 36;
-        keywordBuffer.height = 116;
+        const targetWidth = clamp(textWidth * normalScale, minTargetWidth, maxTargetWidth);
+        // Short words such as DATA are enlarged more. Resample their glyphs
+        // at that extra scale so particle spacing does not grow with the word.
+        const samplingScale = Math.max(1, targetWidth / textWidth / normalScale);
+        keywordBuffer.width = Math.ceil((textWidth + 36) * samplingScale);
+        keywordBuffer.height = Math.ceil(116 * samplingScale);
         keywordContext.clearRect(0, 0, keywordBuffer.width, keywordBuffer.height);
-        keywordContext.font = font;
+        keywordContext.font = `650 ${fontSize * samplingScale}px ${fontFamily}`;
         keywordContext.textAlign = "center";
         keywordContext.textBaseline = "middle";
         keywordContext.fillStyle = "#ffffff";
@@ -392,15 +403,22 @@
           for (let x = 0; x < keywordBuffer.width; x += sampleStep) {
             const alpha = pixels[((y * keywordBuffer.width) + x) * 4 + 3];
             if (alpha < 96 || fieldHash(x, y, keywordIndex + 17) < 0.035) continue;
+            const seed = fieldHash(x, y, keywordIndex + 29);
+            const directionX = Math.cos(seed * Math.PI * 2);
+            const directionY = Math.sin(seed * Math.PI * 2);
             mapPoints.push({
-              x: x - (keywordBuffer.width / 2),
-              y: y - (keywordBuffer.height / 2),
-              seed: fieldHash(x, y, keywordIndex + 29)
+              x: (x - (keywordBuffer.width / 2)) / samplingScale,
+              y: (y - (keywordBuffer.height / 2)) / samplingScale,
+              seed,
+              scatterX: directionX * (0.35 + seed * 0.65),
+              scatterY: directionY * (0.35 + seed * 0.65),
+              debrisX: directionX * (0.42 + seed * 0.85),
+              debrisY: directionY * (0.42 + seed * 0.85)
             });
           }
         }
 
-        return { label, width: textWidth, points: mapPoints };
+        return { label, width: textWidth, targetWidth, points: mapPoints };
       });
     };
 
@@ -431,7 +449,10 @@
       const spread = Math.min(width, height) * 1.05;
       const delta = lastTime ? Math.min(48, Math.max(0, time - lastTime)) : 16;
       lastTime = time;
-      if (!reduceMotion) travel += delta * (0.000055 + warp * 0.00015);
+      if (!reduceMotion) {
+        travel += delta * (0.000055 + warp * 0.00015);
+        galaxyTime += delta;
+      }
 
       const lift = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width * 0.34, height * 0.72));
       lift.addColorStop(0, `rgba(143, 169, 180, ${0.025 + warp * 0.035})`);
@@ -493,60 +514,10 @@
       }).filter((state) => state.visibility > 0.002);
       const activePulse = keywordStates.reduce((peak, state) => Math.max(peak, state.visibility), 0);
 
-      // A dark core and broken particle rings bend the field without becoming a literal black hole.
-      const ringCount = narrow ? 3 : 5;
-      const outerRadius = Math.min(width * (narrow ? 0.38 : 0.19), height * (narrow ? 0.34 : 0.58));
-      const rotation = -0.17;
+      // Composite below the unchanged inflow; keep particle words in front.
       context.save();
-      context.translate(centerX, centerY);
-      context.rotate(rotation);
-      context.beginPath();
-      context.ellipse(0, 0, outerRadius * 0.17, outerRadius * 0.065, 0, 0, Math.PI * 2);
-      context.fillStyle = `rgba(5, 6, 6, ${0.68 + warp * 0.22})`;
-      context.fill();
-      context.strokeStyle = `rgba(143, 169, 180, ${0.04 + warp * 0.1})`;
-      context.lineWidth = 1;
-      context.stroke();
-      context.restore();
-
-      context.save();
-      context.globalCompositeOperation = "lighter";
-      for (let ring = 0; ring < ringCount; ring += 1) {
-        const progress = ringCount === 1 ? 1 : ring / (ringCount - 1);
-        const radiusX = outerRadius * (0.3 + progress * 0.7);
-        const radiusY = radiusX * (0.19 + progress * 0.055);
-        const particleCount = narrow ? 48 : 96;
-        const orbit = reduceMotion ? 0 : elapsed * (ring % 2 ? -0.000018 : 0.000014);
-
-        context.save();
-        context.translate(centerX, centerY);
-        context.rotate(rotation);
-        context.beginPath();
-        context.ellipse(0, 0, radiusX, radiusY, 0, 0.12 + progress * 0.18, Math.PI * 1.75);
-        context.setLineDash([2 + progress * 2, 12 + progress * 8]);
-        context.strokeStyle = `rgba(143, 169, 180, ${(0.022 + warp * 0.055 + activePulse * 0.025) * (1 - progress * 0.25)})`;
-        context.lineWidth = 1;
-        context.stroke();
-        context.restore();
-
-        for (let index = 0; index < particleCount; index += 1) {
-          const seed = fieldHash(index, ring, 47);
-          if (seed < 0.16 || Math.sin(index * 0.31 + ring * 1.7) > 0.92) continue;
-          const angle = (index / particleCount) * Math.PI * 2 + orbit;
-          const ripple = 1 + Math.sin(angle * 3 + ring * 0.8 + elapsed * 0.0002) * (reduceMotion ? 0.012 : 0.02 + warp * 0.018);
-          const rawX = Math.cos(angle) * radiusX * ripple;
-          const rawY = Math.sin(angle) * radiusY * (1 + Math.cos(angle * 2 + ring) * 0.06);
-          const px = centerX + rawX * Math.cos(rotation) - rawY * Math.sin(rotation);
-          const py = centerY + rawX * Math.sin(rotation) + rawY * Math.cos(rotation);
-          const particleAlpha = (0.055 + warp * 0.22 + activePulse * 0.08) * (0.48 + seed * 0.52) * (1 - progress * 0.14);
-          const particleSize = 0.55 + seed * 1.15 + warp * 0.35;
-          context.fillStyle = seed > 0.86
-            ? `rgba(224, 232, 230, ${particleAlpha})`
-            : `rgba(143, 169, 180, ${particleAlpha})`;
-          context.fillRect(px, py, particleSize * (1 + warp * 0.65), particleSize);
-        }
-      }
-      context.setLineDash([]);
+      context.globalCompositeOperation = "destination-over";
+      galaxy?.draw(context, width, height, dpr, galaxyTime, centerX, centerY, activePulse);
       context.restore();
 
       // Each concept assembles in depth, holds briefly, then dissolves back into the field.
@@ -555,46 +526,72 @@
       const verticalOffsets = [-0.055, 0.055, -0.025, 0.075, -0.065, 0.035, 0];
       keywordStates.forEach(({ map, index, local, visibility }) => {
         const approach = smoothstep(0, 0.38, local);
-        const maxTargetWidth = narrow ? width * 0.84 : Math.min(width * 0.54, 1300);
-        const minTargetWidth = narrow ? Math.min(200, width * 0.56) : 440;
-        const targetWidth = clamp(map.width * (narrow ? 1 : 1.65), minTargetWidth, maxTargetWidth);
-        const finalScale = targetWidth / map.width;
+        const finalScale = map.targetWidth / map.width;
         const scale = finalScale * (0.32 + approach * 0.82);
         const assembleScatter = (1 - smoothstep(0, 0.34, local)) * (narrow ? 13 : 21);
-        const dissolveScatter = smoothstep(0.54, 1, local) * (narrow ? 44 : 80);
+        const dissolveScatter = smoothstep(0.54, 1, local) * (narrow ? 70 : 128);
         const scatter = assembleScatter + dissolveScatter;
         const wordCenterX = centerX - (narrow ? width * 0.055 : width * 0.068);
         const wordCenterY = centerY + height * verticalOffsets[index] * (narrow ? 0.55 : 1);
+        const depthOffset = narrow ? 0.55 : 1;
 
         map.points.forEach((point) => {
-          const angle = point.seed * Math.PI * 2;
-          const jitterX = Math.cos(angle) * scatter * (0.35 + point.seed * 0.65);
-          const jitterY = Math.sin(angle) * scatter * (0.35 + point.seed * 0.65);
-          const echoScale = scale * (0.88 + point.seed * 0.02);
+          const jitterX = point.scatterX * scatter;
+          const jitterY = point.scatterY * scatter;
+          const farScale = scale * (0.73 + point.seed * 0.035);
+          const deepScale = scale * (0.83 + point.seed * 0.025);
+          const echoScale = scale * (0.905 + point.seed * 0.014);
           const midScale = scale * (0.955 + point.seed * 0.018);
-          const echoX = wordCenterX + point.x * echoScale + jitterX * 0.55;
-          const echoY = wordCenterY + point.y * echoScale + jitterY * 0.55 + 2.2;
+          const farX = wordCenterX + point.x * farScale + jitterX * 0.30 - 12 * depthOffset;
+          const farY = wordCenterY + point.y * farScale + jitterY * 0.30 + 13 * depthOffset;
+          const deepX = wordCenterX + point.x * deepScale + jitterX * 0.42 - 7 * depthOffset;
+          const deepY = wordCenterY + point.y * deepScale + jitterY * 0.42 + 8 * depthOffset;
+          const echoX = wordCenterX + point.x * echoScale + jitterX * 0.55 - 3 * depthOffset;
+          const echoY = wordCenterY + point.y * echoScale + jitterY * 0.55 + 4 * depthOffset;
           const midX = wordCenterX + point.x * midScale + jitterX * 0.78 - 0.6;
           const midY = wordCenterY + point.y * midScale + jitterY * 0.78 + 0.9;
           const coreX = wordCenterX + point.x * scale + jitterX;
           const coreY = wordCenterY + point.y * scale + jitterY;
           const size = (0.86 + point.seed * 1.08) * clamp(scale + 0.42, 0.7, 1.35);
 
-          context.fillStyle = `rgba(65, 105, 118, ${visibility * 0.16})`;
+          // Five depth samples, with incomplete back layers and independent
+          // bright grains so the volume stays broken up rather than solid.
+          // Keep colors constant: numeric alpha avoids allocating and parsing
+          // thousands of new CSS color strings on every animation frame.
+          if (point.seed < 0.64) {
+            context.fillStyle = point.seed < 0.10
+              ? "#afdbeb" : "#3f6f8f";
+            context.globalAlpha = visibility * (point.seed < 0.10 ? 0.48 : 0.13 + point.seed * 0.16);
+            context.fillRect(farX, farY, Math.max(0.55, size * 0.66), Math.max(0.55, size * 0.66));
+          }
+          if (point.seed > 0.22) {
+            context.fillStyle = "#5c97b5";
+            context.globalAlpha = visibility * (0.18 + point.seed * 0.13);
+            context.fillRect(deepX, deepY, Math.max(0.55, size * 0.74), Math.max(0.55, size * 0.74));
+          }
+          context.fillStyle = "#518191";
+          context.globalAlpha = visibility * 0.22;
           context.fillRect(echoX - 1.2, echoY, Math.max(0.5, size * 0.72), Math.max(0.5, size * 0.72));
-          context.fillStyle = `rgba(106, 151, 164, ${visibility * (0.22 + point.seed * 0.12)})`;
+          const midGlint = point.seed > 0.12 && point.seed < 0.28;
+          context.fillStyle = midGlint ? "#c4e3ed" : "#6a97a4";
+          context.globalAlpha = visibility * (midGlint ? 0.60 : 0.22 + point.seed * 0.12);
           context.fillRect(midX, midY, Math.max(0.55, size * 0.88), Math.max(0.55, size * 0.88));
-          context.fillStyle = point.seed > 0.78
-            ? `rgba(143, 187, 199, ${visibility * (0.56 + point.seed * 0.24)})`
-            : `rgba(224, 228, 220, ${visibility * (0.48 + point.seed * 0.32)})`;
-          context.fillRect(coreX, coreY, size, size);
+          const glint = point.seed > 0.74;
+          const lifted = point.seed > 0.50 && point.seed < 0.70;
+          const shimmer = glint ? 0.5 + Math.sin(time * 0.00065 + point.seed * 53.4) * 0.5 : 0;
+          const coreSize = glint ? size * (1.10 + shimmer * 0.16) : size;
+          context.fillStyle = glint
+            ? (point.seed > 0.90 ? "#f6faf2" : "#c8e9f5") : "#e0e4dc";
+          context.globalAlpha = visibility * (glint ? 0.85 + shimmer * 0.15
+            : lifted ? 0.65 + point.seed * 0.20 : 0.48 + point.seed * 0.32);
+          context.fillRect(coreX, coreY, coreSize, coreSize);
 
           if (point.seed > 0.74 && dissolveScatter > 1) {
-            const debrisDistance = dissolveScatter * (0.34 + point.seed * 0.66);
-            context.fillStyle = `rgba(143, 169, 180, ${visibility * 0.28})`;
+            context.fillStyle = "#8fa9b4";
+            context.globalAlpha = visibility * 0.28;
             context.fillRect(
-              coreX + Math.cos(angle) * debrisDistance,
-              coreY + Math.sin(angle) * debrisDistance,
+              coreX + point.debrisX * dissolveScatter,
+              coreY + point.debrisY * dissolveScatter,
               Math.max(0.5, size * 0.62),
               Math.max(0.5, size * 0.62)
             );

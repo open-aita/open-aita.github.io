@@ -379,19 +379,32 @@
   // The cloud is static: draw only near the viewport and after an actual resize.
   let started = false;
   let resizeTimer = 0;
-  const ro = new ResizeObserver(() => {
+  const scheduleRender = () => {
     if (!started) return;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(renderAll, 90);
-  });
-  ro.observe($('#main-map-frame'));
-  ro.observe($('#gba-panel'));
+  };
+  if (typeof ResizeObserver === 'function') {
+    const ro = new ResizeObserver(scheduleRender);
+    ro.observe($('#main-map-frame'));
+    ro.observe($('#gba-panel'));
+  } else {
+    window.addEventListener('resize', scheduleRender);
+  }
   updateUI();
-  const observer = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting)) return;
+  const startRendering = () => {
+    if (started) return;
     started = true;
     renderAll();
-    observer.disconnect();
-  }, { rootMargin: '400px' });
-  observer.observe(root);
+  };
+  if (typeof IntersectionObserver === 'function') {
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      startRendering();
+      observer.disconnect();
+    }, { rootMargin: '400px' });
+    observer.observe(root);
+  } else {
+    startRendering();
+  }
 })();

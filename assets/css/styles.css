@@ -1342,8 +1342,6 @@
 
   /* -------------------------------------------------------------- footer */
   .site-footer { background: var(--bg-deep); border-top: 1px solid var(--border); }
-  .footer-dots { position: relative; height: 230px; border-bottom: 1px solid var(--border); cursor: crosshair; }
-  .footer-dots canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
   .footer-cta { min-height: 220px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-bottom: 1px solid var(--border); }
   .footer-wordmark { display: flex; align-items: center; gap: 14px; }
   .footer-wordmark img { width: 46px; }
@@ -1595,7 +1593,6 @@
     .join-system b { font-size: 64px; }
     .join-system li { font-size: 8px; }
 
-    .footer-dots { height: 150px; }
     .footer-cta { min-height: 200px; align-items: flex-start; justify-content: center; flex-direction: column; }
     .footer-wordmark span { flex-direction: column; align-items: flex-start; gap: 2px; }
     .footer-wordmark b { font-size: 30px; }

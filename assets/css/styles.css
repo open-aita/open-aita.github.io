@@ -644,24 +644,31 @@
     justify-content: space-between;
     padding: 0 14px;
     border-bottom: 1px solid var(--border);
-    color: var(--muted-2);
-    font: 10px/1 var(--mono);
-    letter-spacing: .06em;
+    color: rgba(255, 255, 255, .45);
+    font: 9px/1 var(--mono);
+    letter-spacing: .18em;
   }
   .about-system-foot {
     justify-content: center;
-    gap: 16px;
+    gap: 10px;
     border-top: 1px solid var(--border);
     border-bottom: 0;
   }
   .about-system-foot i { width: 34px; height: 1px; background: var(--border-light); }
   .about-system svg { width: 100%; height: 100%; min-height: 400px; }
-  .about-grid-lines { fill: none; stroke: rgba(255,255,255,.05); stroke-width: 1; }
-  .about-loop-lines { fill: none; stroke: var(--border-light); stroke-width: 1; stroke-dasharray: 5 8; }
-  .about-loop-nodes circle { fill: var(--bg); stroke: rgba(255, 255, 255, .4); stroke-width: 1.5; }
-  .about-loop-nodes .about-loop-core { fill: var(--accent-about); stroke: var(--accent-about); }
-  .about-loop-labels { fill: var(--muted); font: 10px var(--mono); letter-spacing: .08em; }
-  .about-loop-labels .accent { fill: #0e0e0e; font-weight: 700; letter-spacing: 0; }
+  .about-loop-step {
+    stroke: var(--border-light);
+    animation: about-loop-highlight 8s linear infinite both;
+    animation-play-state: paused;
+  }
+  .about-loop-step:nth-child(2) { animation-delay: 2s; }
+  .about-loop-step:nth-child(3) { animation-delay: 4s; }
+  .about-loop-step:nth-child(4) { animation-delay: 6s; }
+  .about-system.is-loop-active .about-loop-step { animation-play-state: running; }
+  @keyframes about-loop-highlight {
+    0%, 25%, 100% { stroke: var(--border-light); }
+    4%, 22% { stroke: var(--heading-accent-about); }
+  }
   .about-facts {
     grid-column: 1 / -1;
     display: grid;
@@ -1602,6 +1609,8 @@
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     .reveal { opacity: 1; transform: none; }
     .about-field-frame { display: none; }
+    .about-loop-step { animation: none; }
+    .about-loop-step:first-child { stroke: var(--heading-accent-about); }
     .award-code-window { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
     .award-code-track { animation: none; transform: none; }
     .award-stream-meta button { display: none; }

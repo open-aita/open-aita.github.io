@@ -126,6 +126,21 @@
     }
   }
 
+  // Keep the four-phase SVG loop paused outside the viewport and in background tabs.
+  const aboutLoop = doc.querySelector(".about-system");
+  if (aboutLoop && "IntersectionObserver" in window) {
+    let aboutLoopVisible = false;
+    const syncAboutLoop = () => {
+      aboutLoop.classList.toggle("is-loop-active", aboutLoopVisible && !doc.hidden);
+    };
+    const aboutLoopObserver = new IntersectionObserver(([entry]) => {
+      aboutLoopVisible = entry.isIntersecting;
+      syncAboutLoop();
+    });
+    aboutLoopObserver.observe(aboutLoop);
+    doc.addEventListener("visibilitychange", syncAboutLoop);
+  }
+
   // Competition archive stream. Reuse the complete source records while omitting contributors.
   const awardStream = doc.querySelector("[data-award-stream]");
   if (awardStream) {

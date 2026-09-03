@@ -9,8 +9,8 @@
 <meta content="AITA 人工智能技术创新团队官网演示：实验室介绍、研究方向、合作项目、科研成果、荣誉、合作网络与活动。" name="description"/>
 <title>AITA — Toward Infinite Intelligence</title>
 <link href="assets/images/favicon.svg" rel="icon" type="image/svg+xml"/>
-<link href="assets/css/styles.css?v=20260903-11" rel="stylesheet"/>
-<script defer="" src="assets/js/main.js?v=20260903-9"></script>
+<link href="assets/css/styles.css?v=20260903-13" rel="stylesheet"/>
+<script defer="" src="assets/js/main.js?v=20260903-10"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳到正文</a>
@@ -85,12 +85,86 @@
 </div>
 <div aria-label="AITA 研究到真实场景的反馈循环示意图" class="about-system reveal">
 <div class="about-system-head"><span>FIG.0 / OPERATING LOOP</span><span>EVIDENCE-BOUND</span></div>
-<svg aria-labelledby="about-loop-title" role="img" viewbox="0 0 760 430">
-<title id="about-loop-title">研究、系统、部署和反馈构成的循环</title>
-<g class="about-grid-lines"><path d="M0 86H760M0 172H760M0 258H760M0 344H760M152 0V430M304 0V430M456 0V430M608 0V430"></path></g>
-<g class="about-loop-lines"><path d="M140 215C140 105 260 70 380 70s240 35 240 145-120 145-240 145S140 325 140 215Z"></path><path d="M204 215c0-64 78-92 176-92s176 28 176 92-78 92-176 92-176-28-176-92Z"></path></g>
-<g class="about-loop-nodes"><circle cx="140" cy="215" r="12"></circle><circle cx="380" cy="70" r="12"></circle><circle cx="620" cy="215" r="12"></circle><circle cx="380" cy="360" r="12"></circle><circle class="about-loop-core" cx="380" cy="215" r="18"></circle></g>
-<g class="about-loop-labels"><text x="72" y="219">RESEARCH</text><text x="347" y="42">BUILD</text><text x="642" y="219">DEPLOY</text><text x="337" y="400">FEEDBACK</text><text class="accent" text-anchor="middle" x="380" y="220">AITA</text></g>
+<!-- Operating-loop artwork adapted from the user-provided Direction A mockup. -->
+<svg aria-labelledby="about-loop-title" aria-describedby="about-loop-desc" role="img" viewBox="0 0 760 430" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace">
+<title id="about-loop-title">研究、构建、部署和反馈构成的运行闭环</title>
+<desc id="about-loop-desc">以 AITA 为中心，四段箭头按 RESEARCH → BUILD → DEPLOY → FEEDBACK → RESEARCH 的顺序循环亮起，未亮起的线段为灰色；对应输入、系统、场景和反馈四个阶段。</desc>
+<g fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1">
+<path d="M0 86H760M0 172H760M0 258H760M0 344H760M152 0V430M304 0V430M456 0V430M608 0V430"></path>
+</g>
+<g fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".75" stroke-dasharray="12 5 2 5">
+<path d="M60 215H700M380 35V398"></path>
+</g>
+<g fill="none" stroke="#2a2a2a" stroke-width=".75">
+<ellipse cx="380" cy="215" rx="300" ry="170" opacity=".9"></ellipse>
+<ellipse cx="380" cy="215" rx="190" ry="105" opacity=".6"></ellipse>
+</g>
+<g class="about-loop-segments" fill="none" stroke="var(--border-light)" stroke-width="1.8" opacity=".92">
+<g class="about-loop-step">
+<defs><marker id="about-loop-arrow-1" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L8 5L0 9" stroke-width="1.6"></path></marker></defs>
+<path d="M142.3 194.8A240 145 0 0 1 346.5 71.4" marker-end="url(#about-loop-arrow-1)"></path>
+</g>
+<g class="about-loop-step">
+<defs><marker id="about-loop-arrow-2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L8 5L0 9" stroke-width="1.6"></path></marker></defs>
+<path d="M413.5 71.4A240 145 0 0 1 617.7 194.8" marker-end="url(#about-loop-arrow-2)"></path>
+</g>
+<g class="about-loop-step">
+<defs><marker id="about-loop-arrow-3" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L8 5L0 9" stroke-width="1.6"></path></marker></defs>
+<path d="M617.7 235.2A240 145 0 0 1 413.5 358.6" marker-end="url(#about-loop-arrow-3)"></path>
+</g>
+<g class="about-loop-step">
+<defs><marker id="about-loop-arrow-4" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L8 5L0 9" stroke-width="1.6"></path></marker></defs>
+<path d="M346.5 358.6A240 145 0 0 1 142.3 235.2" marker-end="url(#about-loop-arrow-4)"></path>
+</g>
+</g>
+<path d="M151 215H129M380 81V59M609 215H631M380 349V371" fill="none" stroke="var(--heading-accent-about)" stroke-width="2" opacity=".9"></path>
+<g fill="var(--bg)" stroke="var(--accent-about)" stroke-width="1.5">
+<circle cx="140" cy="215" r="5.5"></circle>
+<circle cx="380" cy="70" r="5.5"></circle>
+<circle cx="620" cy="215" r="5.5"></circle>
+<circle cx="380" cy="360" r="5.5"></circle>
+</g>
+<circle cx="380" cy="215" r="7" fill="var(--accent-about)"></circle>
+<circle cx="380" cy="215" r="13" fill="none" stroke="rgba(179,170,153,.35)" stroke-width="1"></circle>
+<text x="380" y="248" font-size="10" fill="var(--accent-about)" text-anchor="middle" letter-spacing="2" font-weight="700">AITA</text>
+<g fill="#6d6f69">
+<circle cx="140" cy="215" r="1.6"></circle>
+<circle cx="380" cy="70" r="1.6"></circle>
+<circle cx="620" cy="215" r="1.6"></circle>
+<circle cx="380" cy="360" r="1.6"></circle>
+</g>
+<g fill="none" stroke="rgba(255,255,255,.30)" stroke-width=".75">
+<polyline points="140,215 86,152 40,152"></polyline>
+<path d="M40 166V152"></path>
+<polyline points="380,70 428,38 472,38"></polyline>
+<path d="M428 52L472 38"></path>
+<polyline points="620,215 700,178 744,178"></polyline>
+<path d="M700 178H744"></path>
+<polyline points="380,360 428,392 472,392"></polyline>
+<path d="M428 406L472 392"></path>
+</g>
+<g fill="rgba(255,255,255,.85)" font-size="10.5" letter-spacing="1.5" font-weight="600">
+<text x="40" y="145">RESEARCH</text>
+<text x="428" y="31">BUILD</text>
+<text x="744" y="171" text-anchor="end">DEPLOY</text>
+<text x="428" y="385">FEEDBACK</text>
+</g>
+<g fill="rgba(255,255,255,.42)" font-size="7.5" letter-spacing="1" font-weight="400">
+<text x="40" y="178">PHASE 01 / INPUT</text>
+<text x="428" y="64">PHASE 02 / SYSTEM</text>
+<text x="744" y="190" text-anchor="end">PHASE 03 / FIELD</text>
+<text x="428" y="418">PHASE 04 / RETURN</text>
+</g>
+<g fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1">
+<path d="M40 0V5M40 430V425M90 0V5M90 430V425M140 0V5M140 430V425M190 0V5M190 430V425M240 0V5M240 430V425M290 0V5M290 430V425M340 0V5M340 430V425M390 0V5M390 430V425M440 0V5M440 430V425M490 0V5M490 430V425M540 0V5M540 430V425M590 0V5M590 430V425M640 0V5M640 430V425M690 0V5M690 430V425"></path>
+<path d="M0 40H5M760 40H755M0 88H5M760 88H755M0 136H5M760 136H755M0 184H5M760 184H755M0 232H5M760 232H755M0 280H5M760 280H755M0 328H5M760 328H755M0 376H5M760 376H755"></path>
+</g>
+<path d="M10 24V10H24M750 24V10H736M10 406V420H24M750 406V420H736" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1"></path>
+<g fill="rgba(255,255,255,.32)" font-size="7" letter-spacing="1.5" font-weight="400">
+<text x="16" y="20">DWG AITA-F0-001</text>
+<text x="744" y="20" text-anchor="end">REV 2026-09</text>
+<text x="16" y="422">SCALE NONE / EVIDENCE-BOUND</text>
+</g>
 </svg>
 <div class="about-system-foot"><span>MODEL</span><i></i><span>DATA</span><i></i><span>SYSTEM</span><i></i><span>SCENARIO</span></div>
 </div>
@@ -100,7 +174,7 @@
 <article><small>RECORDED PAPERS</small><strong>07</strong><p>论文记录</p></article>
 <article><small>IP RECORDS</small><strong>12</strong><p>专利与软件著作权</p></article>
 </div>
-<div class="source-note reveal"><span>EVIDENCE / 001</span><p>内容依据《AITA 项目介绍》及随附图片整理。原始材料未提供的信息保持空缺；姓名仅在相关项目、论文、奖项或活动条目中作为 contributors 展示。</p><b>VERIFIED 2026.09.01</b></div>
+<div class="source-note reveal"><span>EVIDENCE / 001</span><p>当前信息展示不完全，数据持续更新中</p><b>VERIFIED 2026.09.01</b></div>
 </div>
 </section>
 <section class="stack-section shell" data-plugin="research" id="research">

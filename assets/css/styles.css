@@ -429,7 +429,6 @@
 
   .network-section .section-heading h2 .heading-chapter,
   .network-section .section-kicker,
-  .network-section .network-table > div > span,
   .activities-section .section-heading h2 .heading-chapter,
   .activities-section .section-kicker,
   .activities-section .activity-index li span { color: var(--brand-accent); }
@@ -1222,33 +1221,6 @@
 
   /* ------------------------------------------------------------- network */
   .network-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
-  .network-table { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: repeat(3, 1fr); border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
-  .network-table::before {
-    content: "";
-    position: absolute;
-    z-index: -2;
-    inset: 0;
-    background: var(--decorative-neutral);
-    opacity: .09;
-    mask: url("../images/network-constellation.svg") center / cover no-repeat;
-  }
-  .network-table::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    pointer-events: none;
-    opacity: .34;
-    background:
-      radial-gradient(circle at 28% 34%, var(--brand-accent) 0 2px, transparent 3px),
-      radial-gradient(circle at 58% 58%, var(--brand-accent) 0 2px, transparent 3px),
-      radial-gradient(circle at 82% 24%, var(--brand-accent) 0 2px, transparent 3px);
-  }
-  .network-table > div { position: relative; min-height: 72px; display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(14,14,14,.5); transition: background .15s ease; }
-  .network-table > div:hover { background: rgba(22,22,22,.94); }
-  .network-table span, .network-table small { color: var(--text-micro); font: 10px/1.3 var(--mono); }
-  .network-table strong { color: rgba(255, 255, 255, .75); font: 500 13px/1.45 var(--sans); }
-  .network-table small { text-align: right; color: var(--text-micro); letter-spacing: .05em; }
 
   /* ---------------------------------------------------------- activities */
   .activities-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
@@ -1366,7 +1338,6 @@
     .gallery-grid { grid-template-columns: 1.4fr .68fr .92fr; grid-template-rows: 370px 330px auto; }
     .activity-index { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .9fr); gap: 40px; align-items: start; }
     .activity-index ul { margin: 0; }
-    .network-table { grid-template-columns: repeat(2, 1fr); }
     .about-copy h2 { margin-top: 42px; }
     .metric-grid { grid-template-columns: repeat(3, 1fr); }
     .systems-index > div:last-child { grid-template-columns: repeat(2, 1fr); }
@@ -1571,11 +1542,6 @@
     .innovation-layout section > div { grid-template-columns: 1fr; }
     .innovation-layout article { min-height: 170px; border-right: 0; }
 
-    .network-table { grid-template-columns: 1fr; }
-    .network-table::before { opacity: .045; -webkit-mask-size: auto 560px; mask-size: auto 560px; -webkit-mask-repeat: repeat-y; mask-repeat: repeat-y; }
-    .network-table::after { opacity: .18; }
-    .network-table > div { grid-template-columns: 26px 1fr auto; }
-    .network-table strong { font-size: 12px; }
 
     .gallery-grid { display: block; border-top: 0; }
     .gallery-card, .gallery-card--wide, .gallery-card--tall { width: 100%; height: 380px; border-top: 1px solid var(--border); }

@@ -348,6 +348,7 @@
     const keywordStart = 2400;
     const keywordSpacing = 3200;
     const keywordLife = 4400;
+    const fieldFrameInterval = 1000 / 30;
     let width = 1;
     let height = 1;
     let dpr = 1;
@@ -357,6 +358,7 @@
     let travel = 0;
     let galaxyTime = 0;
     let lastTime = 0;
+    let nextFieldDraw = 0;
     let animationStart = 0;
     let fieldVisible = false;
 
@@ -373,14 +375,19 @@
     const makePoints = () => {
       const count = Math.max(320, Math.min(1000, Math.round((width * height) / 1500)));
       points = Array.from({ length: count }, (_, index) => {
-        const band = index % 13;
+        const x = fieldHash(index, 1, 3) * 2 - 1;
+        const y = fieldHash(index, 2, 5) * 1.5 - 0.75;
+        const layer = index % 3;
         return {
-          x: fieldHash(index, 1, 3) * 2 - 1,
-          y: fieldHash(index, 2, 5) * 1.5 - 0.75,
+          x,
+          y,
           z: fieldHash(index, 3, 7) * 1.05 + 0.02,
           size: fieldHash(index, 4, 11) * 1.35 + 0.55,
-          band,
-          layer: index % 3
+          color: index % 13 === 0 ? "#8fa9b4" : "#e0e4dc",
+          layerDepth: 0.92 + layer * 0.065,
+          layerOffset: (layer - 1) * 0.018,
+          curve: Math.sin(y * 2.8 + x * 1.6 + layer * 0.72)
+            * (0.11 + layer * 0.018) - x * (0.145 + layer * 0.012)
         };
       });
     };
@@ -441,7 +448,8 @@
       const rect = canvas.getBoundingClientRect();
       width = Math.max(1, rect.width);
       height = Math.max(1, rect.height);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Match the galaxy's pixel budget without changing CSS size or particle counts.
+      dpr = Math.min(window.devicePixelRatio || 1, 1.75, Math.sqrt(2200000 / (width * height)));
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       context?.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -451,6 +459,15 @@
 
     const drawField = (time = 0) => {
       if (!context) return;
+      if (!reduceMotion && time > 0) {
+        if (!fieldVisible || doc.hidden) return;
+        if (time < nextFieldDraw) {
+          animationFrame = requestAnimationFrame(drawField);
+          return;
+        }
+        // Carry the remainder so high-refresh screens average 30 draws/s.
+        nextFieldDraw = time + fieldFrameInterval - ((time - nextFieldDraw) % fieldFrameInterval);
+      }
       context.clearRect(0, 0, width, height);
       const narrow = width < 720;
       if (!animationStart && time) animationStart = time;
@@ -481,16 +498,14 @@
       points.forEach((point) => {
         const z = reduceMotion ? point.z : ((point.z - travel) % 1.05 + 1.05) % 1.05 + 0.015;
         const perspective = 0.12 + z * z;
-        const layerDepth = 0.92 + point.layer * 0.065;
-        const curve = Math.sin((point.y * 2.8) + (point.x * 1.6) + point.layer * 0.72)
-          * (0.11 + point.layer * 0.018) - point.x * (0.145 + point.layer * 0.012);
-        const px = centerX + point.x * spread * perspective * layerDepth;
-        const py = centerY + (point.y + curve * z + (point.layer - 1) * 0.018) * spread * perspective * 0.58;
+        const px = centerX + point.x * spread * perspective * point.layerDepth;
+        const py = centerY + (point.y + point.curve * z + point.layerOffset) * spread * perspective * 0.58;
         if (px < -20 || px > width + 20 || py < -20 || py > height + 20) return;
 
         const alpha = Math.min(0.9, 0.08 + z * 0.61 + warp * z * 0.12);
         const radius = point.size * (0.42 + z * 1.3);
-        const hue = point.band === 0 ? "143, 169, 180" : "224, 228, 220";
+        context.fillStyle = point.color;
+        context.strokeStyle = point.color;
 
         if (!reduceMotion && warp > 0.02) {
           const radialX = px - centerX;
@@ -498,24 +513,28 @@
           const radialLength = Math.max(1, Math.hypot(radialX, radialY));
           const trailLength = warp * (2 + z * 18) * point.size;
           const parallelCount = narrow ? 2 : 3;
-          const perpendicularX = -radialY / radialLength;
-          const perpendicularY = radialX / radialLength;
-          for (let trailLayer = 0; trailLayer < parallelCount; trailLayer += 1) {
-            const offset = (trailLayer - (parallelCount - 1) / 2) * (0.7 + z * 1.35);
-            const lengthScale = 0.76 + trailLayer * 0.2;
+          const directionX = radialX / radialLength;
+          const directionY = radialY / radialLength;
+          const trailAlpha = alpha * (0.1 + warp * 0.22);
+          // Both outer trails share a stroke; the brighter center stays separate.
+          for (let pass = 0; pass < 2; pass += 1) {
             context.beginPath();
-            context.moveTo(
-              px + (radialX / radialLength) * trailLength * lengthScale + perpendicularX * offset,
-              py + (radialY / radialLength) * trailLength * lengthScale + perpendicularY * offset
-            );
-            context.lineTo(px + perpendicularX * offset * 0.28, py + perpendicularY * offset * 0.28);
-            context.strokeStyle = `rgba(${hue}, ${alpha * (0.1 + warp * 0.22) * (trailLayer === 1 ? 1 : 0.64)})`;
-            context.lineWidth = Math.max(0.42, radius * (trailLayer === 1 ? 0.38 : 0.25));
+            for (let trailLayer = pass; trailLayer < parallelCount; trailLayer += 2) {
+              const offset = (trailLayer - (parallelCount - 1) / 2) * (0.7 + z * 1.35);
+              const lengthScale = 0.76 + trailLayer * 0.2;
+              context.moveTo(
+                px + directionX * trailLength * lengthScale - directionY * offset,
+                py + directionY * trailLength * lengthScale + directionX * offset
+              );
+              context.lineTo(px - directionY * offset * 0.28, py + directionX * offset * 0.28);
+            }
+            context.globalAlpha = trailAlpha * (pass === 1 ? 1 : 0.64);
+            context.lineWidth = Math.max(0.42, radius * (pass === 1 ? 0.38 : 0.25));
             context.stroke();
           }
         }
 
-        context.fillStyle = `rgba(${hue}, ${alpha})`;
+        context.globalAlpha = alpha;
         context.fillRect(px, py, radius, radius);
       });
       context.restore();
@@ -615,7 +634,7 @@
       });
       context.restore();
 
-      if (!reduceMotion && fieldVisible) animationFrame = requestAnimationFrame(drawField);
+      if (!reduceMotion && fieldVisible && !doc.hidden) animationFrame = requestAnimationFrame(drawField);
     };
 
     resizeCanvas();
@@ -625,9 +644,10 @@
         const fieldObserver = new IntersectionObserver(([entry]) => {
           fieldVisible = entry.isIntersecting;
           cancelAnimationFrame(animationFrame);
-          if (!fieldVisible) return;
+          if (!fieldVisible || doc.hidden) return;
           animationStart = 0;
           lastTime = 0;
+          nextFieldDraw = 0;
           travel = 0;
           animationFrame = requestAnimationFrame(drawField);
         }, { rootMargin: "10% 0px", threshold: 0.08 });
@@ -647,6 +667,7 @@
       } else if (!reduceMotion && fieldVisible) {
         animationStart = 0;
         lastTime = 0;
+        nextFieldDraw = 0;
         travel = 0;
         animationFrame = requestAnimationFrame(drawField);
       }
@@ -871,6 +892,7 @@
     let joinDpr = 1;
     let joinAnimationFrame = 0;
     let joinLastDraw = 0;
+    let joinVisible = false;
 
     const joinHash = (x, y, seed = 0) => {
       const value = Math.sin(x * 127.1 + y * 311.7 + seed * 71.9) * 43758.5453;
@@ -890,6 +912,7 @@
 
     const drawJoinField = (time = 0) => {
       if (!joinContext) return;
+      if (!reduceMotion && time > 0 && (!joinVisible || doc.hidden)) return;
       if (!reduceMotion && joinLastDraw && time - joinLastDraw < 32) {
         joinAnimationFrame = requestAnimationFrame(drawJoinField);
         return;
@@ -1009,19 +1032,32 @@
       }
       joinContext.restore();
 
-      if (!reduceMotion) joinAnimationFrame = requestAnimationFrame(drawJoinField);
+      if (!reduceMotion && joinVisible && !doc.hidden) joinAnimationFrame = requestAnimationFrame(drawJoinField);
     };
 
     resizeJoinCanvas();
     drawJoinField();
     window.addEventListener("resize", resizeJoinCanvas, { passive: true });
-    doc.addEventListener("visibilitychange", () => {
-      if (doc.hidden) cancelAnimationFrame(joinAnimationFrame);
-      else if (!reduceMotion) {
+    const syncJoinAnimation = () => {
+      cancelAnimationFrame(joinAnimationFrame);
+      if (!reduceMotion && joinVisible && !doc.hidden) {
         joinLastDraw = 0;
         joinAnimationFrame = requestAnimationFrame(drawJoinField);
       }
-    });
+    };
+    if (!reduceMotion) {
+      if ("IntersectionObserver" in window) {
+        const joinObserver = new IntersectionObserver(([entry]) => {
+          joinVisible = entry.isIntersecting;
+          syncJoinAnimation();
+        });
+        joinObserver.observe(joinCanvas);
+      } else {
+        joinVisible = true;
+        syncJoinAnimation();
+      }
+    }
+    doc.addEventListener("visibilitychange", syncJoinAnimation);
   }
 
   // Dot-matrix footer wordmark; particles spring home and scatter around the pointer.

@@ -136,10 +136,10 @@
     // outer stars and a warm inner rim. Black gaps are left between clusters.
     const layers = [
       { count: 12000, color: [0.20, 0.055, 0.94], size: 8.0, alpha: 0.42, min: 0.36, max: 2.12, speed: 0.84, depth: 0.040, shape: 1, clumps: 0.94 },
-      { count: 36000, color: [0.16, 0.055, 1.00], size: 2.2, alpha: 0.85, min: 0.29, max: 2.23, speed: 0.96, depth: 0.025, shape: 0, clumps: 0.77 },
-      { count: 20000, color: [0.46, 0.13, 1.00], size: 2.9, alpha: 0.75, min: 0.28, max: 1.94, speed: 1.04, depth: 0.038, shape: 0, clumps: 0.88 },
+      { count: 36000, color: [0.16, 0.055, 1.00], size: 2.2, alpha: 0.85, min: 0.29, max: 2.23, speed: 0.96, depth: 0.025, shape: 0, clumps: 0.77, mergeDust: true },
+      { count: 20000, color: [0.46, 0.13, 1.00], size: 2.9, alpha: 0.75, min: 0.28, max: 1.94, speed: 1.04, depth: 0.038, shape: 0, clumps: 0.88, mergeDust: true },
       { count: 17000, color: [0.32, 0.13, 0.94], size: 4.6, alpha: 0.54, min: 0.34, max: 2.12, speed: 0.91, depth: 0.045, shape: 1, clumps: 0.94 },
-      { count: 16000, color: [0.63, 0.44, 1.00], size: 1.8, alpha: 0.80, min: 0.26, max: 1.73, speed: 1.10, depth: 0.026, shape: 0, clumps: 0.83 },
+      { count: 16000, color: [0.63, 0.44, 1.00], size: 1.8, alpha: 0.80, min: 0.26, max: 1.73, speed: 1.10, depth: 0.026, shape: 0, clumps: 0.83, mergeDust: true },
       { count: 9200, color: [0.30, 0.90, 1.00], size: 3.3, alpha: 0.90, min: 1.16, max: 2.44, speed: 0.77, depth: 0.065, shape: 0, clumps: 0.52 },
       { count: 7600, color: [1.00, 0.79, 0.34], size: 3.2, alpha: 0.90, min: 0.215, max: 0.56, speed: 0.94, depth: 0.018, shape: 0, clumps: 0.38 },
       { count: 2200, color: [0.92, 0.97, 1.00], size: 4.8, alpha: 0.97, min: 0.28, max: 2.40, speed: 0.85, depth: 0.050, shape: 2, clumps: 0.65 }
@@ -180,6 +180,51 @@
       }
     });
 
+    // Compact only nearby purple dust, once at initialization. Keep the seeded
+    // clouds and all accent layers; no clustering or buffer uploads per frame.
+    cursor = 0;
+    const averagedFields = [0, 1, 2, 5, 7, 8, 9, 10];
+    layers.forEach((layer) => {
+      const sourceFirst = layer.first;
+      const sourceCount = layer.count;
+      layer.first = cursor / stride;
+      if (!layer.mergeDust) {
+        particles.copyWithin(cursor, sourceFirst * stride, (sourceFirst + sourceCount) * stride);
+        cursor += sourceCount * stride;
+        return;
+      }
+      const cells = new Map();
+      for (let index = sourceFirst; index < sourceFirst + sourceCount; index += 1) {
+        const source = index * stride;
+        const radius = Math.hypot(particles[source], particles[source + 2]);
+        let key;
+        // Preserve bright grains, the inner rim and the sparse outer silhouette.
+        if (particles[source + 4] < 0.9 && radius > 0.34 && radius < 2.04) {
+          // Local position, depth and speed bands prevent unrelated orbits merging.
+          key = `${Math.floor(particles[source] / 0.055)},${Math.floor(particles[source + 2] / 0.055)},${Math.floor(particles[source + 1] / 0.08)},${Math.floor(particles[source + 4] * 2)}`;
+        }
+        const group = key === undefined ? undefined : cells.get(key);
+        const area = particles[source + 3] ** 2;
+        if (group && group.count < 4) {
+          group.area += area;
+          group.count += 1;
+          const weight = area / group.area;
+          for (const field of averagedFields) {
+            particles[group.offset + field] += (particles[source + field] - particles[group.offset + field]) * weight;
+          }
+          // Flecks cover more of their square than soft dust: normalize coverage
+          // instead of multiplying diameter/brightness by the number of grains.
+          particles[group.offset + 3] = Math.sqrt(group.area) * 0.75;
+          particles[group.offset + 6] = 1;
+          continue;
+        }
+        particles.copyWithin(cursor, source, source + stride);
+        if (key !== undefined) cells.set(key, { offset: cursor, area, count: 1 });
+        cursor += stride;
+      }
+      layer.count = cursor / stride - layer.first;
+    });
+
     let program;
     let buffer;
     let uniforms;
@@ -208,7 +253,7 @@
       gl.useProgram(program);
       buffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, particles, gl.STATIC_DRAW);
+      gl.bufferData(gl.ARRAY_BUFFER, particles.subarray(0, cursor), gl.STATIC_DRAW);
       [["aPosition", 3, 0], ["aParticle", 4, 3], ["aColor", 4, 7]].forEach(([name, size, offset]) => {
         const location = gl.getAttribLocation(program, name);
         gl.enableVertexAttribArray(location);

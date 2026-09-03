@@ -29,7 +29,7 @@
   menuButton?.addEventListener("click", () => {
     setMenu(menuButton.getAttribute("aria-expanded") !== "true");
   });
-  mobileMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)));
+  doc.querySelectorAll(".mobile-menu a, .header-cta").forEach((link) => link.addEventListener("click", () => setMenu(false)));
   doc.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setMenu(false);
   });

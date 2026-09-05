@@ -34,6 +34,7 @@ yarn-error.log*
 .vscode/
 .idea/
 *.swp
+.agents
 
 # ===== 包管理器缓存 =====
 .pnpm-store/

@@ -50,81 +50,86 @@
     revealItems.forEach((item) => revealObserver.observe(item));
   }
 
-  // Preload the Outputs WebGL artwork, then pause it whenever the section is offscreen.
-  const outputCloudFrame = doc.querySelector("[data-output-cloud-frame]");
-  let outputCloudVisible = false;
-  const setOutputCloudActive = () => {
-    outputCloudFrame?.contentWindow?.postMessage({
-      type: "aita:output-cloud-active",
-      active: outputCloudVisible
-    }, "*");
+  // Queue nearby WebGL startup; loading is separate from visibility and playback.
+  const effectJobs = [];
+  let effectBusy = false, effectScheduled = false, pageActive = true;
+  const effectSync = [];
+  const runEffectJob = () => {
+    effectScheduled = false;
+    if (effectBusy || doc.hidden || !pageActive || !effectJobs.length) return;
+    effectBusy = true;
+    Promise.resolve(effectJobs.shift()()).finally(() => {
+      effectBusy = false;
+      scheduleEffectJob();
+    });
   };
-  const loadOutputCloud = () => {
-    if (!(outputCloudFrame instanceof HTMLIFrameElement) || outputCloudFrame.hasAttribute("src")) return;
-    const source = outputCloudFrame.dataset.src;
-    if (!source) return;
-    const revealOutputCloud = (event) => {
-      if (event.source !== outputCloudFrame.contentWindow || event.data !== "aita:output-cloud-ready") return;
-      outputCloudFrame.classList.add("is-loaded");
-      setOutputCloudActive();
-      window.removeEventListener("message", revealOutputCloud);
+  const scheduleEffectJob = () => {
+    if (effectBusy || effectScheduled || !effectJobs.length || doc.hidden || !pageActive) return;
+    effectScheduled = true;
+    if ('requestIdleCallback' in window) window.requestIdleCallback(runEffectJob, { timeout: 1200 });
+    else window.setTimeout(runEffectJob, 100);
+  };
+  const prepareEffect = (selector, prefix) => {
+    const frame = doc.querySelector(selector);
+    if (!(frame instanceof HTMLIFrameElement) || reduceMotion) return;
+    let visible = false, queued = false;
+    const sync = () => {
+      if (!frame.hasAttribute('src')) return;
+      frame.contentWindow?.postMessage({
+        type: `${prefix}-active`, active: visible && !doc.hidden && pageActive
+      }, '*');
     };
-    window.addEventListener("message", revealOutputCloud);
-    outputCloudFrame.src = source;
-  };
-  if (outputCloudFrame instanceof HTMLIFrameElement && !reduceMotion) {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(loadOutputCloud, { timeout: 900 });
-    } else {
-      window.setTimeout(loadOutputCloud, 200);
-    }
-    if ("IntersectionObserver" in window) {
-      const outputCloudObserver = new IntersectionObserver(([entry], observer) => {
-        outputCloudVisible = entry.isIntersecting;
-        if (outputCloudVisible) loadOutputCloud();
-        if (outputCloudFrame.hasAttribute("src")) setOutputCloudActive();
-      }, { rootMargin: "25% 0px", threshold: 0 });
-      outputCloudObserver.observe(outputCloudFrame);
-    } else {
-      loadOutputCloud();
-    }
-  }
-
-  // Load the self-contained About WebGL field only near its panel and pause it offscreen.
-  const aboutFieldFrame = doc.querySelector("[data-about-field-frame]");
-  let aboutFieldVisible = false;
-  const setAboutFieldActive = () => {
-    aboutFieldFrame?.contentWindow?.postMessage({
-      type: "aita:about-field-active",
-      active: aboutFieldVisible
-    }, "*");
-  };
-  const loadAboutField = () => {
-    if (!(aboutFieldFrame instanceof HTMLIFrameElement) || aboutFieldFrame.hasAttribute("src")) return;
-    const source = aboutFieldFrame.dataset.src;
-    if (!source) return;
-    const revealAboutField = (event) => {
-      if (event.source !== aboutFieldFrame.contentWindow || event.data !== "aita:about-field-ready") return;
-      aboutFieldFrame.classList.add("is-loaded");
-      setAboutFieldActive();
-      window.removeEventListener("message", revealAboutField);
+    effectSync.push(sync);
+    const enqueue = () => {
+      if (queued || !frame.dataset.src) return;
+      queued = true;
+      effectJobs.push(() => new Promise(resolve => {
+        let released = false;
+        const release = () => {
+          if (released) return;
+          released = true;
+          clearTimeout(timeout);
+          resolve();
+        };
+        const ready = event => {
+          if (event.source !== frame.contentWindow || event.data !== `${prefix}-ready`) return;
+          frame.classList.add('is-loaded');
+          sync();
+          window.removeEventListener('message', ready);
+          release();
+        };
+        window.addEventListener('message', ready);
+        // An unavailable effect must not hold up the next chapter's startup.
+        const timeout = window.setTimeout(release, 5000);
+        frame.addEventListener('load', sync, { once: true });
+        frame.addEventListener('error', release, { once: true });
+        frame.src = frame.dataset.src;
+      }));
+      scheduleEffectJob();
     };
-    window.addEventListener("message", revealAboutField);
-    aboutFieldFrame.src = source;
-  };
-  if (aboutFieldFrame instanceof HTMLIFrameElement && !reduceMotion) {
-    if ("IntersectionObserver" in window) {
-      const aboutFieldObserver = new IntersectionObserver(([entry]) => {
-        aboutFieldVisible = entry.isIntersecting;
-        if (aboutFieldVisible) loadAboutField();
-        if (aboutFieldFrame.hasAttribute("src")) setAboutFieldActive();
-      }, { rootMargin: "30% 0px", threshold: 0 });
-      aboutFieldObserver.observe(aboutFieldFrame);
+    if ('IntersectionObserver' in window) {
+      const preload = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        enqueue();
+        preload.disconnect();
+      }, { rootMargin: '400px 0px' });
+      preload.observe(frame);
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) enqueue();
+        sync();
+      }, { threshold: 0 }).observe(frame);
     } else {
-      aboutFieldVisible = true;
-      loadAboutField();
+      visible = true;
+      enqueue();
     }
-  }
+  };
+  prepareEffect('[data-about-field-frame]', 'aita:about-field');
+  prepareEffect('[data-output-cloud-frame]', 'aita:output-cloud');
+  const syncEffects = () => { effectSync.forEach(sync => sync()); scheduleEffectJob(); };
+  doc.addEventListener('visibilitychange', syncEffects);
+  window.addEventListener('pagehide', () => { pageActive = false; syncEffects(); });
+  window.addEventListener('pageshow', () => { pageActive = true; syncEffects(); });
 
   // Keep the four-phase SVG loop paused outside the viewport and in background tabs.
   const aboutLoop = doc.querySelector(".about-system");

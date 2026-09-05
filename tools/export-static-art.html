@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AITA 静态画面导出</title>
+<style>body{max-width:1100px;margin:40px auto;padding:0 24px;background:#101010;color:#eee;font:16px/1.7 system-ui}button,a{font:inherit;padding:10px 16px;margin:5px}a{color:#8df}canvas{display:block;max-width:100%;height:auto;margin-top:20px;background:#010504}iframe{position:absolute;width:3200px;height:640px;left:-4000px;top:0;border:0}output{display:block}small{color:#aaa}</style>
+<h1>AITA 静态画面导出</h1>
+<p>使用浏览器原始 Canvas 绘制，保持与原页面相同的颜色与合成方式。请通过本地 HTTP 预览打开本页。</p>
+<button id="knight">生成骑士图 · 1920 × 384</button><button id="network">生成两张地图</button>
+<output id="status">选择要生成的画面。完整源代码和地图点云数据仍保留在 assets/effects/。</output>
+<div id="downloads"></div><div id="previews"></div>
+<script>
+const status=document.querySelector('#status'),downloads=document.querySelector('#downloads'),previews=document.querySelector('#previews');
+async function publish(canvas,name){
+ const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',.95));
+ if(!blob)throw new Error('浏览器无法导出 WebP');
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.textContent=`下载 ${name}（${Math.round(blob.size/1024)} KB）`;
+ downloads.append(a);previews.append(canvas);
+}
+document.querySelector('#knight').onclick=async()=>{
+ const button=document.querySelector('#knight');button.disabled=true;status.textContent='正在用原始绘图代码生成骑士图…';
+ const frame=document.createElement('iframe');frame.title='骑士图原始绘制';frame.src='../assets/effects/projects-knight-particles.html';document.body.append(frame);
+ try{
+  const source=await new Promise((resolve,reject)=>{
+   const start=performance.now();const timer=setInterval(()=>{
+    const art=frame.contentDocument?.querySelector('#art');
+    if(art?.dataset.particles){clearInterval(timer);resolve(art)}
+    else if(performance.now()-start>15000){clearInterval(timer);reject(new Error('原始画面未能完成绘制'))}
+   },50);
+  });
+  const output=document.createElement('canvas');output.width=1920;output.height=384;
+  const ctx=output.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(source,0,0,1920,384);
+  await publish(output,'aita-knight-1920.webp');status.textContent='骑士图已生成，点击下载后替换 assets/images/projects-knight-1920.webp。';
+ }catch(error){status.textContent=String(error)}finally{frame.remove();button.disabled=false}
+};
+document.querySelector('#network').onclick=async()=>{
+ const button=document.querySelector('#network');button.disabled=true;status.textContent='正在绘制原始地图点云…';
+ try{
+  const response=await fetch('../assets/effects/network-cloud-source.json');if(!response.ok)throw new Error('地图源数据加载失败');
+  const clouds=await response.json();
+  for(const [key,cloud] of Object.entries(clouds)){
+   const cssWidth=key==='main'?960:680,cssHeight=cssWidth*cloud.size[1]/cloud.size[0];
+   const canvas=document.createElement('canvas');canvas.width=cssWidth*2;canvas.height=Math.round(cssHeight*2);
+   const ctx=canvas.getContext('2d');ctx.scale(2,2);
+   const raw=atob(cloud.data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0)),view=new DataView(bytes.buffer);
+   if(bytes.length!==cloud.count*8)throw new Error('地图点数不匹配');
+   const palette=[[174,178,176],[154,167,184],[238,240,235]],scale=cssWidth/cloud.size[0],alpha=key==='main'?1.28:1.32;
+   for(let pass=0;pass<2;pass++){
+    ctx.save();if(pass){ctx.globalCompositeOperation='lighter';ctx.shadowBlur=4;ctx.shadowColor='rgba(168,185,255,.38)'}
+    for(let offset=0;offset<bytes.length;offset+=8){
+     const ux=view.getUint16(offset,true),uy=view.getUint16(offset+2,true),ur=bytes[offset+4],ua=bytes[offset+5],tone=bytes[offset+6],phase=bytes[offset+7];
+     if(pass&&(ua<128||phase%7!==0))continue;
+     const c=palette[tone]||palette[0],a=pass?Math.min(.22,ua/255*.22):Math.min(.86,ua/255*alpha);
+     ctx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.beginPath();
+     ctx.arc(ux/65535*cssWidth,uy/65535*cssHeight,Math.max(.36,ur/32*scale+(pass ? .08 : .12)),0,Math.PI*2);ctx.fill();
+    }ctx.restore();
+   }
+   await publish(canvas,`aita-network-${key}.webp`);
+  }
+  status.textContent='地图已生成，下载后分别替换 assets/images/network-main.webp 与 network-gba.webp。';
+ }catch(error){status.textContent=String(error)}finally{button.disabled=false}
+};
+</script></html>

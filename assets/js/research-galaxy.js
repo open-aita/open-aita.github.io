@@ -62,11 +62,10 @@
                          1.0 - pixel.y / uViewport.y * 2.0, 0.0, 1.0);
       gl_PointSize = clamp(aParticle.x * uDpr * perspective
                         * clamp(uScale / 175.0, 0.62, 1.9), 0.85 * uDpr, 22.0);
-      float core = smoothstep(0.205, 0.285, radius);
       float outskirts = 1.0 - smoothstep(2.06, 2.48, radius);
       float wordBand = exp(-pow((pixel.y - uCenter.y) / (uViewport.y * 0.14), 2.0));
       float flicker = 0.91 + 0.09 * sin(uTime * 0.7 + aParticle.y * 30.0);
-      vColor = vec4(aColor.rgb, aColor.a * core * outskirts * flicker
+      vColor = vec4(aColor.rgb, aColor.a * outskirts * flicker
                     * (1.0 - uWordPulse * wordBand * 0.38));
       vShape = aParticle.w;
       vSeed = aParticle.y;
@@ -121,6 +120,20 @@
     const normal = () => Math.sqrt(-2 * Math.log(Math.max(0.00001, random())))
       * Math.cos(random() * Math.PI * 2);
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+    const smooth = (min, max, value) => {
+      const t = clamp((value - min) / (max - min), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
+    const mixColor = (a, b, t) => a.map((channel, i) => channel + (b[i] - channel) * t);
+    // NGC 2336 (NASA/ESA Hubble) informs the pale stellar bulge and dusty,
+    // blue-grey overlap. Keep the site's outer violet arms, without a pink ring.
+    // https://science.nasa.gov/image-detail/big-beautiful-and-blue-2/
+    const blendedDust = (radius, angle, base) => {
+      const r = radius + Math.sin(angle * 3 + radius * 4) * 0.055;
+      const stellar = mixColor([1.00, 0.93, 0.76], [0.76, 0.79, 0.84], smooth(0.24, 0.78, r));
+      const cool = mixColor(stellar, [0.42, 0.48, 0.72], smooth(0.52, 1.04, r));
+      return mixColor(cool, base, smooth(0.74, 1.38, r));
+    };
     const clusters = Array.from({ length: 420 }, (_, index) => {
       const radius = 0.26 + random() * 2.16;
       const arm = index % 4;
@@ -133,7 +146,7 @@
     });
 
     // Eight overlapping populations: broken clouds, microdust, flecks, cold
-    // outer stars and a warm inner rim. Black gaps are left between clusters.
+    // outer stars and a pale central bulge. Black gaps are left between clusters.
     const layers = [
       { count: 12000, color: [0.20, 0.055, 0.94], size: 8.0, alpha: 0.42, min: 0.36, max: 2.12, speed: 0.84, depth: 0.040, shape: 1, clumps: 0.94 },
       { count: 36000, color: [0.16, 0.055, 1.00], size: 2.2, alpha: 0.85, min: 0.29, max: 2.23, speed: 0.96, depth: 0.025, shape: 0, clumps: 0.77, mergeDust: true },
@@ -141,7 +154,7 @@
       { count: 17000, color: [0.32, 0.13, 0.94], size: 4.6, alpha: 0.54, min: 0.34, max: 2.12, speed: 0.91, depth: 0.045, shape: 1, clumps: 0.94 },
       { count: 16000, color: [0.63, 0.44, 1.00], size: 1.8, alpha: 0.80, min: 0.26, max: 1.73, speed: 1.10, depth: 0.026, shape: 0, clumps: 0.83, mergeDust: true },
       { count: 9200, color: [0.30, 0.90, 1.00], size: 3.3, alpha: 0.90, min: 1.16, max: 2.44, speed: 0.77, depth: 0.065, shape: 0, clumps: 0.52 },
-      { count: 7600, color: [1.00, 0.79, 0.34], size: 3.2, alpha: 0.90, min: 0.215, max: 0.56, speed: 0.94, depth: 0.018, shape: 0, clumps: 0.38 },
+      { count: 7600, color: [0.46, 0.13, 1.00], size: 3.2, alpha: 0.90, min: 0.015, max: 0.90, speed: 0.94, depth: 0.035, shape: 0, clumps: 0.38, bulge: true },
       { count: 2200, color: [0.92, 0.97, 1.00], size: 4.8, alpha: 0.97, min: 0.28, max: 2.40, speed: 0.85, depth: 0.050, shape: 2, clumps: 0.65 }
     ];
     const stride = 11;
@@ -153,7 +166,11 @@
       for (let index = 0; index < layer.count; index += 1) {
         let radius;
         let angle;
-        if (knots.length && random() < layer.clumps) {
+        if (layer.bulge) {
+          // A centrally concentrated stellar population, not an annular rim.
+          radius = layer.min + (layer.max - layer.min) * Math.pow(random(), 1.65);
+          angle = random() * Math.PI * 2;
+        } else if (knots.length && random() < layer.clumps) {
           const knot = knots[Math.floor(random() * knots.length)];
           radius = clamp(knot.radius + normal() * knot.spread, layer.min, layer.max);
           angle = knot.angle + normal() * knot.spread / radius;
@@ -163,6 +180,14 @@
         }
         const grain = random();
         const light = 0.80 + random() * 0.20;
+        const color = layer.min < 0.5 && layer.shape !== 2
+          ? blendedDust(radius, angle, layer.color) : layer.color;
+        const edgeAlpha = layer.bulge ? 1 - smooth(0.24, 0.90, radius) : 1;
+        // Dust lanes interrupt the transition along curved, uneven strands.
+        const dustWave = Math.sin(angle * 3 - Math.log(radius + 0.16) * 5.3
+          + Math.sin(angle * 5 + radius * 7) * 0.38);
+        const dustAlpha = 1 - smooth(0.45, 0.92, dustWave)
+          * smooth(0.16, 0.34, radius) * (1 - smooth(0.80, 1.30, radius)) * 0.52;
         particles.set([
           Math.cos(angle) * radius,
           normal() * layer.depth,
@@ -171,10 +196,10 @@
           grain,
           layer.speed * (0.97 + grain * 0.06),
           layer.shape,
-          layer.color[0] * light,
-          layer.color[1] * light,
-          layer.color[2] * light,
-          layer.alpha * (0.72 + grain * 0.28)
+          color[0] * light,
+          color[1] * light,
+          color[2] * light,
+          layer.alpha * (0.72 + grain * 0.28) * edgeAlpha * dustAlpha
         ], cursor);
         cursor += stride;
       }

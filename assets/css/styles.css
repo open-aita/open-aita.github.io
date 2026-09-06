@@ -1353,7 +1353,6 @@
   }
   .join-system > div { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--border-light); }
   .join-system span { color: var(--text); font: 11px/1 var(--mono); letter-spacing: .06em; }
-  .join-system b { color: rgba(244, 244, 244, .62); font: 500 88px/.9 var(--sans); }
   .join-system ol { list-style: none; }
   .join-system li { min-height: 34px; display: flex; align-items: center; border-bottom: 1px solid var(--border); color: var(--text); font: 10px/1 var(--mono); letter-spacing: .07em; }
 
@@ -1597,7 +1596,6 @@
     .join-panel { min-height: 0; padding: 28px 20px; }
     .join-panel h2 { font-size: 44px; }
     .join-system { width: 78%; opacity: .76; }
-    .join-system b { font-size: 64px; }
     .join-system li { font-size: 8px; }
 
     .footer-cta { min-height: 200px; align-items: flex-start; justify-content: center; flex-direction: column; }

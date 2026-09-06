@@ -24,7 +24,11 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "venue": "VIDEO ANOMALY DETECTION",
+      "linkLabel": "ARXIV"
+    }
   },
   {
     "id": "output:paper-002",
@@ -51,7 +55,11 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "venue": "IEEE TCE",
+      "linkLabel": "PAPER"
+    }
   },
   {
     "id": "output:paper-003",
@@ -78,7 +86,11 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "venue": "IEEE IV",
+      "linkLabel": "PAPER"
+    }
   },
   {
     "id": "output:paper-004",
@@ -110,7 +122,11 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "venue": "PHYSICA SCRIPTA",
+      "linkLabel": "PAPER"
+    }
   },
   {
     "id": "output:paper-005",
@@ -137,7 +153,10 @@
       "evidence:outputs"
     ],
     "verifiedAt": "2026-09-01",
-    "sourceTitle": "Gwq: Gradient-aware weight quantization for large language models"
+    "sourceTitle": "Gwq: Gradient-aware weight quantization for large language models",
+    "display": {
+      "venue": "ARXIV"
+    }
   },
   {
     "id": "output:paper-006",
@@ -164,7 +183,11 @@
       "evidence:outputs"
     ],
     "verifiedAt": "2026-09-01",
-    "sourceTitle": "Image encryption based on 2D-CPHM hyperchaotic map using cross-plane grouping permutation and cipher diffusion: G. Zhong et al"
+    "sourceTitle": "Image encryption based on 2D-CPHM hyperchaotic map using cross-plane grouping permutation and cipher diffusion: G. Zhong et al",
+    "display": {
+      "venue": "NONLINEAR DYNAMICS",
+      "linkLabel": "DOI"
+    }
   },
   {
     "id": "output:paper-007",
@@ -191,13 +214,16 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "venue": "IJCAI"
+    }
   },
   {
     "id": "output:ip-001",
     "type": "patent",
     "title": {
-      "zh": "发明专利《基于虹膜特征验证的一维混沌映射的医学图像保护方法》已授权"
+      "zh": "发明专利《基于虹膜特征验证的一维混沌映射的医学图像保护方法》"
     },
     "status": "authorized",
     "url": "https://pss-system.cponline.cnipa.gov.cn/documents/detail?prevPageTit=changgui",
@@ -218,7 +244,7 @@
     "id": "output:ip-002",
     "type": "patent",
     "title": {
-      "zh": "发明专利《基于一维混沌系统的图像保护系统、方法》已授权"
+      "zh": "发明专利《基于一维混沌系统的图像保护系统、方法》"
     },
     "status": "authorized",
     "url": "https://www.patentguru.com/cn/CN118200458A",
@@ -239,7 +265,7 @@
     "id": "output:ip-003",
     "type": "patent",
     "title": {
-      "zh": "发明专利《基于掌纹验证的二维混沌映射的无人机遥感图像保护方法》已受理"
+      "zh": "发明专利《基于掌纹验证的二维混沌映射的无人机遥感图像保护方法》"
     },
     "status": "accepted",
     "url": null,
@@ -260,7 +286,7 @@
     "id": "output:ip-004",
     "type": "patent",
     "title": {
-      "zh": "发明专利《一种适用于边缘计算设备的视频加密方法》已受理"
+      "zh": "发明专利《一种适用于边缘计算设备的视频加密方法》"
     },
     "status": "accepted",
     "url": null,
@@ -281,7 +307,7 @@
     "id": "output:ip-005",
     "type": "patent",
     "title": {
-      "zh": "发明专利《基于改进的YOLOv8 模型的风力涡轮机表面损伤和腐蚀检测方法》已受理"
+      "zh": "发明专利《基于改进的YOLOv8 模型的风力涡轮机表面损伤和腐蚀检测方法》"
     },
     "status": "accepted",
     "url": null,
@@ -302,7 +328,7 @@
     "id": "output:ip-006",
     "type": "patent",
     "title": {
-      "zh": "发明专利《基于混沌系统的无人机巡检交通控制系统、方法》已授权"
+      "zh": "发明专利《基于混沌系统的无人机巡检交通控制系统、方法》"
     },
     "status": "authorized",
     "url": null,
@@ -323,7 +349,7 @@
     "id": "output:ip-007",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软件著作权《云集千翼无人机飞控软件[简称：云集千翼]V1.0》已登记"
+      "zh": "软件著作权《云集千翼无人机飞控软件[简称：云集千翼]V1.0》"
     },
     "status": "registered",
     "url": null,
@@ -344,7 +370,7 @@
     "id": "output:ip-008",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软件著作权《新型一维混沌系统的遥感图像加密系统》已登记"
+      "zh": "软件著作权《新型一维混沌系统的遥感图像加密系统》"
     },
     "status": "registered",
     "url": null,
@@ -365,7 +391,7 @@
     "id": "output:ip-009",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软件著作权《志愿服务报名系统V1.0》已登记"
+      "zh": "软件著作权《志愿服务报名系统V1.0》"
     },
     "status": "registered",
     "url": null,
@@ -398,7 +424,7 @@
     "id": "output:ip-010",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软件著作权《智能机器人AI监护系统v1.0》已受理"
+      "zh": "软件著作权《智能机器人AI监护系统v1.0》"
     },
     "status": "accepted",
     "url": null,
@@ -419,7 +445,7 @@
     "id": "output:ip-011",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软著著作权《基于RT-DETR的智能果树管理系统》已登记"
+      "zh": "软著著作权《基于RT-DETR的智能果树管理系统》"
     },
     "status": "registered",
     "url": null,
@@ -440,7 +466,7 @@
     "id": "output:ip-012",
     "type": "softwareCopyright",
     "title": {
-      "zh": "软著著作权《基于多模态情感分析与RAG的心理危机干预系统》已登记"
+      "zh": "软著著作权《基于多模态情感分析与RAG的心理危机干预系统》"
     },
     "status": "registered",
     "url": null,

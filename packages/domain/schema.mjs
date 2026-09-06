@@ -1,5 +1,6 @@
 const text = { type: 'string', minLength: 1 };
 const strings = { type: 'array', items: text };
+const ids = prefix => ({ type: 'array', uniqueItems: true, items: { type: 'string', pattern: `^${prefix}:` } });
 const date = { type: 'string', format: 'date' };
 const url = { type: ['string', 'null'], format: 'uri', pattern: '^https?://' };
 const local = { type: 'object', minProperties: 1, properties: { zh: text, en: text }, additionalProperties: false };
@@ -19,8 +20,8 @@ const definitions = {
   project: entity('project', {
     status: enumeration('unspecified', 'draft', 'active', 'completed', 'deployed', 'archived'),
     statusLabel: text, category: enumeration('medical', 'multimodal', 'systems', 'agents'),
-    organizationIds: strings, unresolvedOrganizationLabels: strings, featured: { type: 'boolean' },
-    archiveReason: text, summary: local, coverMediaId: text,
+    organizationIds: ids('org'), unresolvedOrganizationLabels: strings,
+    archiveReason: text, summary: local,
   }, ['title', 'slug', 'status', 'category', 'organizationIds']),
   organization: entity('org', {
     name: local, category: text, listedPartner: { type: 'boolean' }, featured: { type: 'boolean' },
@@ -33,12 +34,13 @@ const definitions = {
     citation: text, year: { type: ['integer', 'null'], minimum: 1900 },
     status: enumeration('draft', 'recorded', 'preprint', 'accepted', 'published', 'authorized', 'registered', 'archived'),
     statusLabel: text, labels: strings, url, sourceTitle: text, summary: local,
+    display: object({ venue: text, linkLabel: text }, []),
   }, ['title', 'type', 'status']),
   achievement: entity('achievement', {
     type: enumeration('nationalInnovationProject', 'provincialInnovationProject', 'competition', 'award', 'grant'), level: text,
   }, ['title', 'type']),
   event: entity('event', {
-    kind: text, mediaAssetIds: strings, summary: local, date: { ...date, type: ['string', 'null'] },
+    kind: text, mediaAssetIds: ids('media'), summary: local, date: { ...date, type: ['string', 'null'] },
     display: object({ title: text, caption: text, label: text, variant: text }, ['title']),
   }, ['title', 'kind', 'mediaAssetIds']),
   news: entity('news', {
@@ -56,16 +58,16 @@ const definitions = {
   }, ['path', 'alt', 'source', 'width', 'height']),
   evidence: object({ id: { type: 'string', pattern: '^evidence:' }, type: text, title: text, path: text, verifiedAt: date }),
   redirect: object({ id: { type: 'string', pattern: '^redirect:' }, from: { type: 'string', pattern: '^/' }, to: { type: 'string', pattern: '^/' }, statusCode: enumeration(301, 308) }),
-  direction: object({ id: { type: 'string', pattern: '^direction:' }, title: local, summary: local, topics: strings, visual: text, evidenceRefs: refs }, ['id', 'title', 'summary', 'evidenceRefs']),
+  direction: object({ id: { type: 'string', pattern: '^direction:[a-zA-Z0-9_-]+$' }, title: local, summary: local, topics: strings, visual: enumeration('tokens','medical','chaos','agents'), evidenceRefs: refs }, ['id', 'title', 'summary', 'evidenceRefs']),
   settings: object({
     schemaVersion: text,
-    brand: object({ name: text, displayName: text, slogan: text, tagline: text, logo: text }, ['name', 'displayName', 'slogan']),
+    brand: object({ name: text, displayName: text, slogan: text, tagline: text, logo: text }),
     locale: enumeration('zh-CN'), defaultLanguage: enumeration('zh'), supportedLanguages: strings,
-    counts: { type: 'object', additionalProperties: { type: 'integer', minimum: 0 } }, contentNotes: strings,
-    evidenceRefs: refs, featuredContentIds: strings, hero: object({ lead: text, stack: text }),
-    about: object({ overview: object({ value: local, evidenceRefs: refs }), directions: array({ $ref: '#/$defs/direction' }) }, []),
+    contentNotes: strings,
+    evidenceRefs: refs, hero: object({ lead: text, stack: text }),
+    about: object({ overview: object({ value: local, evidenceRefs: refs }), directions: array({ $ref: '#/$defs/direction' }) }),
     meta: object({ title: text, description: text }),
-  }, ['schemaVersion', 'brand', 'locale']),
+  }, ['schemaVersion', 'brand', 'locale', 'hero', 'about', 'meta', 'evidenceRefs']),
   paths: object({ evidenceRefs: refs, sourceSections: strings,
     careers: array(object({ organization: text, role: text })),
     furtherStudy: array(object({ organization: text, note: { type: ['string', 'null'] }, memberCount: { type: 'integer', minimum: 1 } })),

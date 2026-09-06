@@ -1,0 +1,41 @@
+:root{
+    --ink:#b7b7b7;
+    --dim:#6e6e6e;
+    --signal:#ff5900;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000;}
+  body{
+    font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"PingFang SC","Microsoft YaHei",monospace;
+    color:var(--ink);
+    cursor:crosshair;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{position:fixed;inset:0;display:block;}
+
+  /* ---- film grain : stepped analog noise ---- */
+  .grain{
+    position:fixed;inset:-100%;width:300%;height:300%;
+    pointer-events:none;z-index:30;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 7s steps(8) infinite;
+    animation-play-state:paused;
+  }
+  html[data-effect-active="true"] .grain{animation-play-state:running;}
+  @keyframes grain{
+    0%{transform:translate(0,0)} 12.5%{transform:translate(-3%,2%)}
+    25%{transform:translate(2%,-4%)} 37.5%{transform:translate(-4%,-2%)}
+    50%{transform:translate(3%,3%)} 62.5%{transform:translate(-2%,4%)}
+    75%{transform:translate(4%,-3%)} 87.5%{transform:translate(-3%,-4%)}
+    100%{transform:translate(0,0)}
+  }
+  .vignette{
+    position:fixed;inset:0;pointer-events:none;z-index:20;
+    background:radial-gradient(ellipse 90% 80% at 50% 46%, transparent 55%, rgba(0,0,0,.55) 100%);
+  }
+
+  .fallback{
+    position:fixed;inset:0;display:none;z-index:50;
+    align-items:center;justify-content:center;text-align:center;
+    font-size:12px;letter-spacing:.2em;line-height:2.2;color:#6e6e6e;padding:24px;
+  }

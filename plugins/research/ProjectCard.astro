@@ -1,0 +1,15 @@
+---
+import { text, number } from '../../packages/content-loader-git/index.mjs';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+type Content = ReturnType<typeof loadContent>;
+interface Props { project: Content['projects'][number]; index: number; organizations: Content['organizations'] }
+const { project, index, organizations } = Astro.props;
+const names = [...project.organizationIds.map(id => text(organizations.find(o => o.id === id)?.name)), ...(project.unresolvedOrganizationLabels ?? [])];
+---
+<article class="project-card reveal" data-category={project.category} data-entity-id={project.id}>
+<div class="project-card-meta"><span>{project.category.toUpperCase()} / {number(index + 1)}</span><span>{project.id.toUpperCase()}</span></div>
+<h3>{text(project.title)}</h3>
+<div class:list={['project-relations', {'project-relations--status': project.status === 'deployed'}]}>
+<p><span>PARTNERS</span>{names.join(' / ') || '—'}</p>
+{project.status === 'deployed' && <footer><span class="status-dot status-dot--live">DEPLOYED</span></footer>}
+</div></article>

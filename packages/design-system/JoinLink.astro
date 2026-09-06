@@ -1,0 +1,6 @@
+---
+interface Props { recruitment: { formUrl: string | null }[]; variant?: 'primary' | 'secondary' | 'header'; arrow?: boolean }
+const { recruitment, variant = 'primary', arrow = false } = Astro.props;
+const href = recruitment[0]?.formUrl || '#join';
+---
+<a class={variant === 'header' ? 'header-cta' : `button button-${variant}`} data-join-link="" href={href}>{variant === 'header' ? 'JOIN US' : '加入 AITA'}{(arrow || variant === 'header') && <> <span aria-hidden="true">›</span></>}</a>

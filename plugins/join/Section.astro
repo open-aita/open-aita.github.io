@@ -1,0 +1,31 @@
+---
+import { text } from '../../packages/content-loader-git/index.mjs';
+import JoinLink from '../../packages/design-system/JoinLink.astro';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+
+---
+<section class="join-section shell" data-plugin="join" id="join">
+<div class="join-panel reveal">
+<canvas aria-hidden="true" id="join-particle-field"></canvas>
+<div>
+<p class="section-kicker">JOIN / 07</p>
+<h2><span class="heading-focus">We’re</span> <span class="heading-context">building</span><br/><span class="heading-chapter">AITA.</span></h2>
+</div>
+<div class="join-copy">
+<p>{text(content.recruitment[0].summary)}</p>
+<div class="button-row">
+<JoinLink recruitment={content.recruitment} arrow />
+<a class="button button-secondary" href="#top">BACK TO TOP <span aria-hidden="true">↑</span></a>
+</div>
+</div>
+<div aria-hidden="true" class="join-system"><div><span>AITA://</span></div><ol><li>01 / RESEARCH</li><li>02 / BUILD</li><li>03 / VERIFY</li><li>04 / SHARE</li></ol></div>
+</div>
+</section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("join", () => import("./client.js"));
+</script>

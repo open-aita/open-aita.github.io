@@ -1,0 +1,66 @@
+---
+import Brand from '../../../../packages/design-system/Brand.astro';
+import JoinLink from '../../../../packages/design-system/JoinLink.astro';
+import '../../../../packages/design-system/styles.css';
+import { chapters } from '../chapters';
+const primary = chapters.filter(c => c.navigation.primaryOrder != null).sort((a,b) => a.navigation.primaryOrder! - b.navigation.primaryOrder!);
+const utility = chapters.filter(c => c.navigation.utilityLabel);
+import type { loadContent } from '../../../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+---
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="dark" name="color-scheme"/>
+<meta content="#0e0e0e" name="theme-color"/>
+<meta content={content.settings.meta.description} name="description"/>
+<title>{content.settings.meta.title}</title>
+<link href="/assets/images/favicon.svg" rel="icon" type="image/svg+xml"/>
+
+
+
+
+<link rel="canonical" href="https://open-aita.github.io/" />
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header" data-header="">
+<div class="header-inner">
+<Brand brand={content.settings.brand} />
+<nav aria-label="主要导航" class="primary-nav">{primary.map(c => <a href={c.demoEntry}><span>{c.navigation.primaryLabel}</span><small>{String(c.navigation.primaryOrder).padStart(2,'0')}</small></a>)}</nav>
+<nav aria-label="辅助导航" class="utility-nav">{utility.map(c => <a href={c.demoEntry}>{c.navigation.utilityLabel}</a>)}<a href="#about">EXPLORE</a><JoinLink recruitment={content.recruitment} variant="header" /></nav>
+<button aria-controls="mobile-menu" aria-expanded="false" class="menu-toggle" data-menu-toggle="" type="button">
+<span class="sr-only">打开导航菜单</span>
+<span></span><span></span>
+</button>
+</div>
+</header>
+<div aria-hidden="true" class="mobile-menu" data-mobile-menu="" hidden="" id="mobile-menu">
+<nav aria-label="移动端导航">{chapters.map(c => <a href={c.demoEntry}><span>{c.navigation.label}</span><small>{String(c.order).padStart(2,'0')}</small></a>)}</nav>
+<p>GDUT · ARTIFICIAL INTELLIGENCE<br/>TECHNOLOGY INNOVATION TEAM</p>
+</div>
+<main id="main-content"><slot /></main>
+<footer class="site-footer">
+<div class="footer-cta shell">
+<Brand brand={content.settings.brand} footer />
+<a class="button button-primary" href="#top">BACK TO TOP <span aria-hidden="true">↑</span></a>
+</div>
+<div class="footer-grid shell">
+<div><h3>RESEARCH</h3><a href="#about">About AITA</a><a href="#research">Research stack</a><a href="#projects">Project index</a><a href="#outputs">Publications &amp; IP</a></div>
+<div><h3>LAB</h3><a href="#achievements">Achievements</a><a href="#network">Partners</a><a href="#activities">Activities</a><a href="#join">Join AITA</a></div>
+<div><h3>BUILD</h3><p>ASTRO / STATIC WEBSITE</p><p>AGENT PROTOCOL / AITA.OPERATIONS V1</p><p>CONTENT SCHEMA / AITA.CONTENT V2</p></div>
+<div class="footer-note"><p>AITA 人工智能技术创新团队</p><p>AITA Research Lab · All runtime assets are local.</p></div>
+</div>
+<div class="footer-bottom shell"><span>© 2026 AITA</span><span>TOWARD ∞ — INFINITE INTELLIGENCE</span></div>
+</footer>
+<dialog class="lightbox" data-lightbox-dialog="">
+<button aria-label="关闭图片" data-lightbox-close="" type="button">×</button>
+<figure><img alt="" src=""/><figcaption></figcaption></figure>
+</dialog>
+<noscript><div class="noscript">页面内容无需 JavaScript 即可阅读；项目筛选、动态背景和图片放大功能需要启用 JavaScript。</div></noscript>
+
+<script>import { mountChapter } from "../../../../packages/kernel/client.js";mountChapter("main-content", () => import("../../../../packages/kernel/navigation.js"));</script>
+</body></html>

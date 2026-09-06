@@ -4,6 +4,31 @@ import { contentSchema } from './schema.mjs';
 
 // One executable schema source is shared by the CLI, verifier and Astro loader.
 export { contentSchema };
+// Operation inputs reuse the same field definitions that validate the final content.
+export function operationSchema(task) {
+  const collection = contentSchema.properties[task.target.collection];
+  const reference = collection.items?.$ref ?? collection.$ref;
+  const definition = contentSchema.$defs[reference.split('/').at(-1)];
+  const fields = definition.properties;
+  const object = (properties, required = Object.keys(properties)) => ({ type: 'object', properties, required, additionalProperties: false });
+  let schema;
+  switch (task.target.mode) {
+    case 'create': case 'upsert': schema = definition; break;
+    case 'update': {
+      const { id, ...editable } = fields;
+      schema = object({ id, patch: { ...object(editable, []), minProperties: 1 }, evidenceRefs: fields.evidenceRefs }, ['id','patch']);
+      break;
+    }
+    case 'archive': schema = object({ id: fields.id, reason: fields.archiveReason, evidenceRefs: fields.evidenceRefs }); break;
+    case 'status': schema = object({ id: fields.id, status: fields.status, evidenceRefs: fields.evidenceRefs, verifiedAt: fields.verifiedAt }); break;
+    case 'upsert-nested': schema = contentSchema.$defs.direction; break;
+    case 'set': schema = task.target.path === 'about.overview'
+      ? object({ overview: fields.about.properties.overview.properties.value, evidenceRefs: fields.evidenceRefs })
+      : object({ key: { type: 'string', minLength: 1 }, value: {} }); break;
+    default: throw new Error(`Unsupported operation mode: ${task.target.mode}`);
+  }
+  return { ...schema, $defs: contentSchema.$defs, title: task.id };
+}
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
 ajv.addSchema(contentSchema);

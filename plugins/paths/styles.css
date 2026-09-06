@@ -1,0 +1,42 @@
+
+
+@layer sections {
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .section-kicker { color: var(--brand-accent); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .heading-chapter { color: var(--heading-accent-brand); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .section-heading > p { color: var(--text-soft); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns > article { min-width: 0; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-careers { padding-right: 36px; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study { padding-left: 36px; border-left: 1px solid var(--border-light); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns header { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-block: 36px 24px; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns h3 { margin-top: 12px; font: 500 clamp(20px, 1.7vw, 27px)/1.35 var(--sans); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-category { flex: 0 0 auto; padding-bottom: 3px; color: var(--text-soft); font: 11px/1.5 var(--mono); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list { list-style: none; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list li { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start; gap: 16px; padding: 20px 0; border-top: 1px solid var(--border); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-index { padding-top: 4px; color: var(--brand-accent); font: 10px/1.5 var(--mono); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list h4 { font: 500 16px/1.5 var(--sans); overflow-wrap: anywhere; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list p { margin-top: 5px; color: var(--text-soft); font: 12px/1.7 var(--sans); }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list li { grid-template-columns: 22px minmax(0, 1fr); padding-block: 28px; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list h4 { font-size: 19px; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list p { margin-top: 12px; }
+  :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-degree { display: inline-block; margin-left: 10px; padding: 1px 7px; border: 1px solid var(--border-light); color: var(--heading-accent-brand); font-size: 11px; }
+  @media (max-width: 1000px) {
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-careers { padding-right: 24px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study { padding-left: 24px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-category { display: none; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list li { gap: 10px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list h4 { font-size: 14px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list h4 { font-size: 17px; }
+  }
+  @media (max-width: 700px) {
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns { grid-template-columns: minmax(0, 1fr); }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-careers { padding-right: 0; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study { padding-left: 0; border-left: 0; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-category { display: block; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns header { padding-block: 30px 22px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list li { grid-template-columns: 18px minmax(0, 1fr); padding-block: 18px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-list h4, :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list h4 { font-size: 16px; }
+    :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list li { grid-template-columns: 18px minmax(0, 1fr); padding-block: 22px; }
+  }
+}

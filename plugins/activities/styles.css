@@ -1,0 +1,56 @@
+
+
+@layer sections {
+
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-heading h2 .heading-chapter,
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-kicker,
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .activity-index li span { color: var(--brand-accent); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-heading h2 .heading-chapter { color: var(--heading-accent-brand); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .62fr) minmax(0, .92fr) minmax(230px, .58fr); grid-template-rows: 370px 330px; border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card { position: relative; min-width: 0; padding: 0; border: 0; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); cursor: zoom-in; overflow: hidden; text-align: left; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1 / span 2; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { grid-row: 1 / span 2; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card picture, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card img { width: 100%; height: 100%; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card img { object-fit: cover; filter: contrast(1.02) brightness(.88); transition: transform .55s ease; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall img { object-position: 50% 13%; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card:hover img,
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card:focus-visible img { transform: scale(1.015); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,.94), rgba(10,10,10,.06) 58%); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card > span { position: absolute; z-index: 2; left: 18px; right: 18px; bottom: 16px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 6px 20px; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card small { grid-column: 1 / -1; color: var(--muted); font: 10px/1 var(--mono); letter-spacing: .07em; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card strong { color: var(--text); font: 600 20px/1.25 var(--sans); letter-spacing: -.01em; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card i { color: var(--text-micro); font: normal 10px/1 var(--mono); letter-spacing: .05em; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { grid-column: 4; grid-row: 1 / span 2; padding: 20px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface-2); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index ul { margin-top: 30px; list-style: none; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index li { min-height: 48px; display: grid; grid-template-columns: 32px 1fr; align-items: center; border-top: 1px solid var(--border); color: var(--text-soft); font: 13px/1.4 var(--sans); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index li span { color: var(--muted-2); font: 10px/1 var(--mono); }
+}
+
+@layer utilities {
+
+  @media (max-width: 1260px) {
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { grid-template-columns: 1.4fr .68fr .92fr; grid-template-rows: 370px 330px auto; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .9fr); gap: 40px; align-items: start; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index ul { margin: 0; }
+  }
+
+  @media (max-width: 980px) {
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { grid-template-columns: 1.28fr .72fr; grid-template-rows: 410px 330px 300px auto; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1 / span 2; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { grid-row: 1 / span 2; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card:not(.gallery-card--wide):not(.gallery-card--tall):not(.gallery-card--hackathon) { grid-column: 1; grid-row: 3; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--hackathon { grid-column: 2; grid-row: 3; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { grid-column: 1 / -1; grid-row: 4; }
+  }
+
+  @media (max-width: 680px) {
+
+
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { display: block; border-top: 0; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { width: 100%; height: 380px; border-top: 1px solid var(--border); }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { height: 500px; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { display: block; min-height: 280px; border-top: 1px solid var(--border); }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index ul { margin-top: 30px; }
+  }
+}

@@ -1,0 +1,70 @@
+---
+import { text, number } from '../../packages/content-loader-git/index.mjs';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+import DirectionVisual from './DirectionVisual.astro';
+import ProjectCard from './ProjectCard.astro';
+const projects = content.projects.filter(p => p.status !== 'archived');
+---
+<section class="stack-section shell" data-plugin="research" id="research">
+<div class="stack-hero">
+<canvas aria-hidden="true" id="research-field"></canvas>
+<div class="stack-hero-content reveal">
+<p class="section-kicker">RESEARCH / 02</p>
+<h2><span class="heading-chapter">Research.</span> <span class="heading-context">从基础模型到</span><span class="heading-focus">真实世界智能</span></h2>
+<p>以问题驱动研究，以系统验证方法，以跨机构协作推动成果落地。</p>
+<a class="button button-primary" href="#projects">查看项目 <span aria-hidden="true">›</span></a>
+</div>
+<span class="figure-label figure-label--left">FIG.1 / AITA RESEARCH FIELD</span>
+<span class="figure-label figure-label--right">LIVE SYSTEM MAP</span>
+</div>
+<div class="research-units">
+{content.settings.about.directions.map((direction, i) => <article class="research-unit reveal" data-entity-id={direction.id}>
+<div class="unit-topline"><span>FIG.{i+2}</span><span>{number(i+1)}</span></div>
+<DirectionVisual variant={direction.visual} id={direction.id} />
+<div class="unit-copy"><h3><span>{number(i+1)}</span> {text(direction.title)}</h3><p>{text(direction.summary)}</p><ol>{(direction.topics ?? []).map(topic => <li>{topic}</li>)}</ol></div>
+</article>)}
+</div>
+</section>
+<section aria-label="AITA research principle" class="impact-band shell reveal" data-plugin-owner="research">
+<div class="impact-quote">
+<blockquote>把前沿模型带入真实场景<br/>让真实问题塑造前沿研究</blockquote>
+<div class="impact-signature"><span class="signature-mark">∞</span><p><strong>AITA</strong><br/>RESEARCH PRINCIPLE / 2026</p></div>
+</div>
+<div class="impact-stats">
+<p><strong>{projects.length}</strong><span>EXTERNAL COLLABORATION PROJECTS</span></p>
+<p><strong>{content.organizations.filter(o => o.listedPartner).length}</strong><span>PARTNER ORGANIZATIONS</span></p>
+</div>
+</section>
+<section class="projects-section shell" data-plugin-owner="research" id="projects">
+<div class="projects-banner reveal">
+<div>
+<p class="section-kicker">PROJECT INDEX / 02.1</p>
+<h2><span class="heading-chapter">Projects.</span> <span class="heading-context">在真实约束中</span><br/><span class="heading-focus">验证智能</span></h2>
+<p>与国内外多个高水平机构共同研究、开发。以下仅展示部分项目。</p>
+</div>
+<div aria-hidden="true" class="projects-art">
+<img class="projects-art-frame" src="/assets/images/projects-knight-1920.webp?v=20260905-2" width="1920" height="384" loading="lazy" decoding="async" alt=""/>
+</div>
+</div>
+<div class="project-toolbar reveal">
+<p>COMPLETE PROJECT INDEX / {projects.length} RECORDS</p>
+<div aria-label="项目筛选" class="filter-row" role="group">
+<button class="is-active" data-filter="all" type="button">ALL</button>
+<button data-filter="medical" type="button">MEDICAL</button>
+<button data-filter="multimodal" type="button">MULTIMODAL</button>
+<button data-filter="systems" type="button">SYSTEMS</button>
+<button data-filter="agents" type="button">AGENTS</button>
+<output data-project-count="">{projects.length} SHOWN</output></div>
+</div>
+<div class="project-grid" data-project-grid="">
+{projects.map((project, index) => <ProjectCard project={project} index={index} organizations={content.organizations} />)}
+</div></section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("research", () => import("./client.js"));
+mountChapter("projects", () => import("./projects.js"));
+</script>

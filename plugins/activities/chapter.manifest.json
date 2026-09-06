@@ -1,49 +1,24 @@
 {
   "apiVersion": "aita.chapter/v1",
   "id": "activities",
-  "version": "1.0.0",
-  "routeBase": "/activities",
-  "renderer": "astro",
+  "order": 6,
+  "entry": "Section.astro",
   "demoEntry": "#activities",
-  "routes": [
-    "/activities",
-    "/activities/[slug]"
-  ],
-  "navigation": {
-    "label": {
-      "zh": "活动与新闻",
-      "en": "Activities"
-    },
-    "order": 60
-  },
-  "consumes": [
-    "events",
-    "news",
-    "projects",
-    "organizations",
-    "mediaAssets",
-    "evidence"
-  ],
-  "contributes": {
-    "home": [],
-    "footer": []
-  },
   "operations": [
     "activities.publish-event",
     "activities.update-event",
-    "activities.publish-news"
+    "activities.publish-news",
+    "media.import",
+    "media.replace",
+    "media.update-metadata"
   ],
-  "capabilities": [
-    "responsive-images",
-    "search"
+  "consumes": [
+    "events",
+    "media-assets",
+    "news"
   ],
-  "performance": {
-    "contentPageInitialJsKb": 0,
-    "interactiveRouteJsKb": 80
-  },
-  "constraints": {
-    "globalStyleMutation": false,
-    "crossPluginImports": false,
-    "peopleEntities": false
+  "navigation": {
+    "label": "ACTIVITIES",
+    "utilityLabel": "EVENTS"
   }
 }

@@ -6,6 +6,7 @@ import {
   queryEntity, plan, apply, semanticDiff, sourceRevision,
 } from '../packages/operations-core/index.mjs';
 import { verifyRepository, testRecipes } from '../packages/verification/index.mjs';
+import { operationSchema } from '../packages/domain/index.mjs';
 
 const args = process.argv.slice(2);
 const jsonMode = args.includes('--json');
@@ -74,8 +75,8 @@ async function main() {
   if (command === 'task' && subcommand === 'schema') {
     if (!third) throw new AitaOperationError('AITA_OPERATION_REQUIRED', '缺少 Operation ID');
     const task = await getTask(third);
-    const schema = await readJson(task.inputSchema);
-    emit({ ok: true, operation: task.id, version: task.version, risk: task.risk, schemaPath: task.inputSchema, schema });
+    const schema = operationSchema(task);
+    emit({ ok: true, operation: task.id, version: task.version, risk: task.risk, schemaPath: 'packages/domain/schema.mjs', schema });
     return;
   }
 

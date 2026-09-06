@@ -1,3 +1,1 @@
-# Public Site Host
-
-根目录 `index.html` 与 `assets/` 是为 Windows 直接打开而预构建的静态发布物。生产站点按 v2 架构使用 Astro + TypeScript strict 在构建期组装八个章节；本离线包不携带 `node_modules`，浏览网页不依赖 Node.js。
+Astro 静态宿主。`src/pages/index.astro` 读取经过校验的内容；`src/chapters.ts` 发现本地章节并组合页面。命令、发布与验收见根 README。

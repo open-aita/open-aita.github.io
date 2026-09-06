@@ -1,4 +1,1 @@
-# AITA Design System
-
-`tokens/tokens.json` 保存 DTCG 兼容令牌。公开 Demo 的编译后 CSS 位于 `assets/css/styles.css`。
-业务章节只能使用 semantic/component token 与 `agent/component-registry.json` 中登记的模式。Prime Intellect 式工业研究视觉语言由统一黑灰底、细线网格、等宽技术标注、衬线大标题和酸性信号色构成。
+Brand.astro 和 JoinLink.astro 是实际共用组件。tokens.css 是唯一视觉令牌源；styles.css 保存 reset、排版、导航、按钮及共用基础样式。章节样式留在各自插件目录。

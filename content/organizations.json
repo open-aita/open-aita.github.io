@@ -7,9 +7,24 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "清华大学智能产业研究院",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "北京市海淀区清华科技园启迪科技大厦C座12层",
+      "pinBasis": "启迪科技大厦 C 座",
+      "precision": "BUILDING",
+      "precisionKind": "exact",
+      "lon": 116.330258,
+      "lat": 39.993408
+    },
+    "shortName": "清华大学 AIR",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:002",
@@ -19,9 +34,24 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "北京大学",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "北京市海淀区颐和园路5号",
+      "pinBasis": "北京大学燕园校区",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 116.3058739,
+      "lat": 39.986913
+    },
+    "shortName": "北京大学",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:003",
@@ -31,9 +61,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "英国贝法斯特女王大学",
+    "mapCategory": "GLOBAL",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "University Road, Belfast BT7 1NN, United Kingdom",
+      "pinBasis": "Queen’s University Belfast main campus",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": -5.9340493,
+      "lat": 54.5844087
+    }
   },
   {
     "id": "org:004",
@@ -43,9 +85,24 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "英国谢菲尔德大学",
+    "mapCategory": "GLOBAL",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "Western Bank, Sheffield S10 2TN, United Kingdom",
+      "pinBasis": "Firth Court / Western Bank campus",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": -1.4884229,
+      "lat": 53.3813502
+    },
+    "shortName": "英国谢菲尔德大学",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:005",
@@ -55,9 +112,24 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "意大利特伦托大学",
+    "mapCategory": "GLOBAL",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "Via Calepina 14, 38122 Trento, Italy",
+      "pinBasis": "Palazzo Sardagna · University Rectorate",
+      "precision": "ADMIN HQ",
+      "precisionKind": "exact",
+      "lon": 11.12306,
+      "lat": 46.06678
+    },
+    "shortName": "意大利特伦托大学",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:006",
@@ -67,9 +139,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "意大利 FBK 研究所",
+    "mapCategory": "RESEARCH",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "Via Sommarive 18, 38123 Povo, Trento, Italy",
+      "pinBasis": "Fondazione Bruno Kessler · Povo site",
+      "precision": "BUILDING",
+      "precisionKind": "exact",
+      "lon": 11.1511194,
+      "lat": 46.0677149
+    }
   },
   {
     "id": "org:007",
@@ -79,9 +163,24 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中国科学院自动化研究所",
+    "mapCategory": "INSTITUTE",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "北京市海淀区中关村东路95号",
+      "pinBasis": "中国科学院自动化研究所本部",
+      "precision": "BUILDING",
+      "precisionKind": "exact",
+      "lon": 116.333305,
+      "lat": 39.980196
+    },
+    "shortName": "中科院自动化所",
+    "stripCategory": "INSTITUTE",
+    "featured": true
   },
   {
     "id": "org:008",
@@ -91,9 +190,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中国科学院香港创新研究院",
+    "mapCategory": "INSTITUTE",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "香港新界白石角香港科学园科技大道西17号17W大楼3楼",
+      "pinBasis": "Hong Kong Science Park · Building 17W",
+      "precision": "BUILDING",
+      "precisionKind": "exact",
+      "lon": 114.2087402,
+      "lat": 22.4267787
+    }
   },
   {
     "id": "org:009",
@@ -103,9 +214,24 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "香港理工大学",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "香港九龙红磡育才道11号",
+      "pinBasis": "香港理工大学主校园",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 114.1795767,
+      "lat": 22.3045633
+    },
+    "shortName": "香港理工大学",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:010",
@@ -115,9 +241,24 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "香港科技大学（广州）",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "广州市南沙区笃学路1号",
+      "pinBasis": "香港科技大学（广州）校园",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.47916197,
+      "lat": 22.89177704
+    },
+    "shortName": "香港科技大学（广州）",
+    "stripCategory": "ACADEMIC",
+    "featured": true
   },
   {
     "id": "org:011",
@@ -127,9 +268,24 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中国科学院深圳先进技术研究院",
+    "mapCategory": "INSTITUTE",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "深圳市南山区西丽深圳大学城学苑大道1068号",
+      "pinBasis": "中国科学院深圳先进技术研究院本部",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.9915,
+      "lat": 22.5939
+    },
+    "shortName": "中科院深圳先进院",
+    "stripCategory": "INSTITUTE",
+    "featured": true
   },
   {
     "id": "org:012",
@@ -139,9 +295,24 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "鹏城实验室",
+    "mapCategory": "INSTITUTE",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "深圳市南山区沙河西路6001号石壁龙园区",
+      "pinBasis": "鹏城实验室石壁龙园区东门",
+      "precision": "CAMPUS GATE",
+      "precisionKind": "exact",
+      "lon": 113.93274632,
+      "lat": 22.62891777
+    },
+    "shortName": "中科院鹏城实验室",
+    "stripCategory": "INSTITUTE",
+    "featured": true
   },
   {
     "id": "org:013",
@@ -151,9 +322,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州人工智能公共算力中心",
+    "mapCategory": "COMPUTE",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "广州市天河区平云路163号广电平云广场",
+      "pinBasis": "平云路163号地址点",
+      "precision": "ADDRESS",
+      "precisionKind": "exact",
+      "lon": 113.35165,
+      "lat": 23.11975
+    }
   },
   {
     "id": "org:014",
@@ -163,9 +346,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中国石油集团安全环保技术研究院",
+    "mapCategory": "INDUSTRY",
+    "mapFamily": "INDUSTRY",
+    "mapLocation": {
+      "address": "北京市昌平区黄河北街1号院1号楼",
+      "pinBasis": "现行公开通信地址点",
+      "precision": "ADDRESS",
+      "precisionKind": "exact",
+      "lon": 116.23755,
+      "lat": 40.16825
+    }
   },
   {
     "id": "org:015",
@@ -175,9 +370,21 @@
     "category": "industry",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中国移动广州分公司",
+    "mapCategory": "INDUSTRY",
+    "mapFamily": "INDUSTRY",
+    "mapLocation": {
+      "address": "广州市天河区天河北路610号",
+      "pinBasis": "中国移动广州分公司办公点",
+      "precision": "BUILDING",
+      "precisionKind": "exact",
+      "lon": 113.3376824,
+      "lat": 23.1412194
+    }
   },
   {
     "id": "org:016",
@@ -187,9 +394,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "琶洲实验室",
+    "mapCategory": "INSTITUTE",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "广州市海珠区琶洲桥头大街248号华新科创岛A区主楼",
+      "pinBasis": "琶洲实验室当前公开办公地址",
+      "precision": "ADDRESS",
+      "precisionKind": "exact",
+      "lon": 113.37317,
+      "lat": 23.09021
+    }
   },
   {
     "id": "org:017",
@@ -199,9 +418,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广东省农业科学院",
+    "mapCategory": "AGRICULTURE",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "广州市天河区金颖路29号",
+      "pinBasis": "广东省农业科学院院本部",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.354146,
+      "lat": 23.145383
+    }
   },
   {
     "id": "org:018",
@@ -211,9 +442,21 @@
     "category": "medical",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "中山大学中山眼科中心",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "广州市越秀区先烈南路54号（区庄院区）",
+      "pinBasis": "中山眼科中心区庄院区",
+      "precision": "HOSPITAL CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.28744403,
+      "lat": 23.13576896
+    }
   },
   {
     "id": "org:019",
@@ -223,9 +466,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "哈尔滨工业大学（深圳）",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "深圳市南山区平山一路（深圳大学城）",
+      "pinBasis": "哈尔滨工业大学（深圳）主校园",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.96878,
+      "lat": 22.586752
+    }
   },
   {
     "id": "org:020",
@@ -235,9 +490,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "南方医科大学",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "广州市白云区沙太南路1023—1063号",
+      "pinBasis": "南方医科大学广州校本部",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.334184,
+      "lat": 23.182586
+    }
   },
   {
     "id": "org:021",
@@ -247,9 +514,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "华南农业大学",
+    "mapCategory": "ACADEMIC",
+    "mapFamily": "ACADEMIC",
+    "mapLocation": {
+      "address": "广州市天河区五山路483号",
+      "pinBasis": "华南农业大学主校园",
+      "precision": "CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.3536811,
+      "lat": 23.1568182
+    }
   },
   {
     "id": "org:022",
@@ -259,9 +538,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "深圳大学大数据智能信息处理工程实验室",
+    "mapCategory": "RESEARCH",
+    "mapFamily": "RESEARCH",
+    "mapLocation": {
+      "address": "深圳市南山区南海大道3688号深圳大学粤海校区",
+      "pinBasis": "实验室所属深圳大学粤海校区；公开材料未给出独立楼宇",
+      "precision": "HOST CAMPUS",
+      "precisionKind": "host",
+      "lon": 113.932813,
+      "lat": 22.53306
+    }
   },
   {
     "id": "org:023",
@@ -271,9 +562,21 @@
     "category": "medical",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "深圳市精神卫生中心",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "深圳市坪山区振碧路77号（深圳市康宁医院坪山总院）",
+      "pinBasis": "机构主院区；合作材料未注明具体分院",
+      "precision": "HOSPITAL CAMPUS",
+      "precisionKind": "exact",
+      "lon": 114.30424,
+      "lat": 22.66296
+    }
   },
   {
     "id": "org:024",
@@ -283,9 +586,21 @@
     "category": "medical",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州医科大学附属脑科医院",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "广州市荔湾区明心路36号（芳村院区）",
+      "pinBasis": "广州医科大学附属脑科医院芳村院区",
+      "precision": "HOSPITAL CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.2394239,
+      "lat": 23.0982243
+    }
   },
   {
     "id": "org:025",
@@ -295,9 +610,21 @@
     "category": "medical",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州医科大学附属肿瘤医院",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "广州市越秀区横枝岗路78号",
+      "pinBasis": "广州医科大学附属肿瘤医院院本部",
+      "precision": "HOSPITAL CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.293772,
+      "lat": 23.14663
+    }
   },
   {
     "id": "org:026",
@@ -307,9 +634,21 @@
     "category": "medical",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州市中医医院",
+    "mapCategory": "MEDICAL",
+    "mapFamily": "MEDICAL",
+    "mapLocation": {
+      "address": "广州市荔湾区珠玑路16号（珠玑院区）",
+      "pinBasis": "现广州医科大学附属中医医院珠玑院区",
+      "precision": "HOSPITAL CAMPUS",
+      "precisionKind": "exact",
+      "lon": 113.243695,
+      "lat": 23.109073
+    }
   },
   {
     "id": "org:027",
@@ -319,9 +658,21 @@
     "category": "industry",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州博睿创新技术有限公司",
+    "mapCategory": "INDUSTRY",
+    "mapFamily": "INDUSTRY",
+    "mapLocation": {
+      "address": "办公地址未确认",
+      "pinBasis": "广州城市级近似锚点",
+      "precision": "CITY-LEVEL",
+      "precisionKind": "approx",
+      "lon": 113.264385,
+      "lat": 23.129112
+    }
   },
   {
     "id": "org:028",
@@ -331,9 +682,21 @@
     "category": "industry",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "江西桑沃科技有限公司",
+    "mapCategory": "INDUSTRY",
+    "mapFamily": "INDUSTRY",
+    "mapLocation": {
+      "address": "办公地址未确认",
+      "pinBasis": "江西省级近似锚点（南昌）",
+      "precision": "PROVINCE-LEVEL",
+      "precisionKind": "approx",
+      "lon": 115.857963,
+      "lat": 28.682892
+    }
   },
   {
     "id": "org:029",
@@ -343,9 +706,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广东工业大学智能感知与控制团队",
+    "mapCategory": "GDUT",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "广东省揭阳市惠来县神泉镇大学路1号（广东工业大学揭阳校区）",
+      "pinBasis": "所属广东工业大学揭阳校区；未定位独立楼宇",
+      "precision": "HOST CAMPUS",
+      "precisionKind": "host",
+      "lon": 116.32180503,
+      "lat": 22.98282064
+    }
   },
   {
     "id": "org:030",
@@ -355,9 +730,21 @@
     "category": "academic",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广东工业大学 YC 勇创团队",
+    "mapCategory": "GDUT",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "广东省揭阳市惠来县神泉镇大学路1号（广东工业大学揭阳校区）",
+      "pinBasis": "所属广东工业大学揭阳校区；未定位独立楼宇",
+      "precision": "HOST CAMPUS",
+      "precisionKind": "host",
+      "lon": 116.32180503,
+      "lat": 22.98282064
+    }
   },
   {
     "id": "org:031",
@@ -367,9 +754,21 @@
     "category": "institute",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广东工业大学信息物理融合实验室",
+    "mapCategory": "GDUT",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "广东省揭阳市惠来县神泉镇大学路1号（广东工业大学揭阳校区）",
+      "pinBasis": "所属广东工业大学揭阳校区；未定位独立楼宇",
+      "precision": "HOST CAMPUS",
+      "precisionKind": "host",
+      "lon": 116.32180503,
+      "lat": 22.98282064
+    }
   },
   {
     "id": "org:032",
@@ -379,9 +778,21 @@
     "category": "industry",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "广州微调科技有限公司",
+    "mapCategory": "INDUSTRY",
+    "mapFamily": "INDUSTRY",
+    "mapLocation": {
+      "address": "办公地址未确认",
+      "pinBasis": "广州城市级近似锚点",
+      "precision": "CITY-LEVEL",
+      "precisionKind": "approx",
+      "lon": 113.264385,
+      "lat": 23.129112
+    }
   },
   {
     "id": "org:033",
@@ -391,9 +802,21 @@
     "category": "community",
     "listedPartner": true,
     "evidenceRefs": [
-      "evidence:source-introduction"
+      "evidence:source-introduction",
+      "evidence:network-addresses"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "mapName": "Datawhale",
+    "mapCategory": "OPEN SOURCE",
+    "mapFamily": "OTHER",
+    "mapLocation": {
+      "address": "分布式开源社区，无单一地理办公点",
+      "pinBasis": "非地理节点",
+      "precision": "DISTRIBUTED",
+      "precisionKind": "distributed",
+      "lon": null,
+      "lat": null
+    }
   },
   {
     "id": "org:supplemental-01",

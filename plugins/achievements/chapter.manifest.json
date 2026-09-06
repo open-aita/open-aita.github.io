@@ -1,45 +1,18 @@
 {
   "apiVersion": "aita.chapter/v1",
   "id": "achievements",
-  "version": "1.0.0",
-  "routeBase": "/achievements",
-  "renderer": "astro",
+  "order": 4,
+  "entry": "Section.astro",
   "demoEntry": "#achievements",
-  "routes": [
-    "/achievements"
-  ],
-  "navigation": {
-    "label": {
-      "zh": "荣誉与创新",
-      "en": "Achievements"
-    },
-    "order": 40
-  },
-  "consumes": [
-    "achievements",
-    "projects",
-    "organizations",
-    "evidence"
-  ],
-  "contributes": {
-    "home": [],
-    "footer": []
-  },
   "operations": [
     "achievements.add-record",
     "achievements.update-record"
   ],
-  "capabilities": [
-    "responsive-images",
-    "search"
+  "consumes": [
+    "achievements"
   ],
-  "performance": {
-    "contentPageInitialJsKb": 0,
-    "interactiveRouteJsKb": 80
-  },
-  "constraints": {
-    "globalStyleMutation": false,
-    "crossPluginImports": false,
-    "peopleEntities": false
+  "navigation": {
+    "label": "ACHIEVEMENTS",
+    "utilityLabel": "HONORS"
   }
 }

@@ -1,225 +1,81 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { gzipSync } from 'node:zlib';
-import { validateContent } from '../domain/index.mjs';
-import { ROOT, readJson, listContentCollections, getTaskRegistry, getTask, validateOperationInput, plan as createPlan } from '../operations-core/index.mjs';
-
-function result(id, ok, details = {}) {
-  return { id, status: ok ? 'passed' : 'failed', ...details };
-}
-
-function error(code, message, details = {}) {
-  return { code, message, ...details };
-}
-
-async function exists(relativePath) {
-  try { await fs.access(path.join(ROOT, relativePath)); return true; }
-  catch { return false; }
-}
-
-function collectReferences(value, references, pointer = '$') {
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => collectReferences(item, references, `${pointer}/${index}`));
-    return;
-  }
-  if (!value || typeof value !== 'object') return;
-  for (const [key, child] of Object.entries(value)) {
-    const childPointer = `${pointer}/${key}`;
-    if ((key.endsWith('Ids') || key === 'evidenceRefs') && Array.isArray(child)) {
-      for (const id of child) if (typeof id === 'string') references.push({ id, pointer: childPointer });
-    }
-    collectReferences(child, references, childPointer);
-  }
-}
-
-function localRuntimeRefs(html) {
-  const refs = [];
-  const regex = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
-  for (const match of html.matchAll(regex)) {
-    const value = match[1].trim();
-    if (!value || value.startsWith('#') || /^(?:https?:|mailto:|tel:|data:|javascript:)/i.test(value)) continue;
-    refs.push(value.split(/[?#]/, 1)[0]);
-  }
-  return [...new Set(refs)];
-}
-
-function cssRuntimeRefs(css) {
-  const refs = [];
-  for (const match of css.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/gi)) {
-    const value = match[1].trim();
-    if (!value || /^(?:https?:|data:|#|%23)/i.test(value)) continue;
-    refs.push(value);
-  }
-  return [...new Set(refs)];
-}
+import { validateContent, operationSchema, validateSchema } from '../domain/index.mjs';
+import { ROOT, readJson, listContentCollections, getTaskRegistry, chapterManifests } from '../operations-core/index.mjs';
+import { inspectArtifact, filesUnder } from './artifact.mjs';
 
 export async function verifyRepository({ changed = false, includeRecipes = true } = {}) {
   const checks = [];
   const errors = [];
-  const warnings = [];
+  const check = (id, issues, details = {}) => {
+    checks.push({ id, status: issues.length ? 'failed' : 'passed', ...details, issues });
+    errors.push(...issues.map(message => ({ code: id, message })));
+  };
+  const exists = file => fs.access(path.join(ROOT,file)).then(()=>true,()=>false);
+  const required = ['apps/site/src/pages/index.astro','apps/site/astro.config.mjs','packages/domain/schema.mjs','packages/design-system/tokens.css','AGENTS.md','README.md'];
+  check('repository-layout', (await Promise.all(required.map(async file=>(await exists(file))?null:`Missing ${file}`))).filter(Boolean));
+  const collections = Object.fromEntries((await listContentCollections()).map(item=>[item.name,item.data]));
+  const contentErrors = validateContent(collections);
+  check('content-schema', contentErrors.map(item=>`${item.pointer}: ${item.message}`));
+  check('content-inventory', [], { counts: Object.fromEntries(Object.entries(collections).map(([name,data])=>[name,Array.isArray(data)?data.length:1])) });
 
-  const requiredFiles = [
-    'index.html', 'assets/css/styles.css', 'assets/js/main.js', 'AGENTS.md',
-    'agent/manifest.json', 'agent/task-registry.json', 'agent/component-registry.json',
-    'content/settings.json', 'docs/AITA官网技术架构设计_v2_Agent-Native.md',
-  ];
-  const missing = [];
-  for (const file of requiredFiles) if (!(await exists(file))) missing.push(file);
-  checks.push(result('repository-layout', missing.length === 0, { missing }));
-  if (missing.length) errors.push(error('AITA_REPOSITORY_REQUIRED_FILE_MISSING', '缺少必需文件', { paths: missing }));
-
-  const expectedPlugins = (await readJson('agent/manifest.json')).plugins;
-  const pluginDir = path.join(ROOT, 'plugins');
-  const pluginEntries = (await fs.readdir(pluginDir, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
-  const manifests = [];
-  for (const pluginId of pluginEntries) {
-    try { manifests.push(await readJson(`plugins/${pluginId}/chapter.manifest.json`)); }
-    catch (caught) { errors.push(error(caught.code ?? 'AITA_PLUGIN_MANIFEST_INVALID', caught.message, caught.details)); }
-  }
-  const manifestIds = manifests.map((item) => item.id).sort();
-  const pluginSetOk = JSON.stringify(manifestIds) === JSON.stringify([...expectedPlugins].sort()) && !pluginEntries.includes('people');
-  checks.push(result('chapter-contract', pluginSetOk, { expected: expectedPlugins, actual: manifestIds }));
-  if (!pluginSetOk) errors.push(error('AITA_PLUGIN_SET_INVALID', '章节注册表与插件目录不一致，或存在 people 插件', { actual: manifestIds }));
-  const routeBases = manifests.map((item) => item.routeBase);
-  if (new Set(routeBases).size !== routeBases.length) errors.push(error('AITA_PLUGIN_ROUTE_CONFLICT', '插件 routeBase 冲突', { routeBases }));
+  const manifests = await chapterManifests();
+  const chapterIssues = [];
+  const seenIds = new Set(), seenOrders = new Set(), seenAnchors = new Set();
   for (const manifest of manifests) {
-    if (manifest.renderer !== 'astro') errors.push(error('AITA_PLUGIN_RENDERER_INVALID', `插件 ${manifest.id} 首版 renderer 必须为 astro`));
-    if (manifest.performance?.contentPageInitialJsKb !== 0) errors.push(error('AITA_PLUGIN_JS_BUDGET_INVALID', `插件 ${manifest.id} 普通内容页 JS 预算必须为 0 KB`));
-  }
-
-  const collections = await listContentCollections();
-  const contentErrors = validateContent(Object.fromEntries(collections.map(item => [item.name, item.data])));
-  checks.push(result('content-schema', contentErrors.length === 0, { errors: contentErrors }));
-  if (contentErrors.length) errors.push(error('AITA_CONTENT_INVALID', '内容未通过领域校验', { errors: contentErrors }));
-  const allIds = new Map();
-  const references = [];
-  const duplicateIds = [];
-  const peopleEntities = [];
-  const evidenceMissing = [];
-  for (const collection of collections) {
-    if (!Array.isArray(collection.data)) continue;
-    for (let index = 0; index < collection.data.length; index += 1) {
-      const entity = collection.data[index];
-      if (!entity || typeof entity !== 'object') continue;
-      if (typeof entity.id === 'string') {
-        if (allIds.has(entity.id)) duplicateIds.push({ id: entity.id, first: allIds.get(entity.id), second: `${collection.path}#${index}` });
-        else allIds.set(entity.id, `${collection.path}#${index}`);
-        if (entity.id.startsWith('person:') || entity.type === 'person') peopleEntities.push(entity.id);
-      }
-      if (!['redirects','news','evidence'].includes(collection.name) && entity.id && (!Array.isArray(entity.evidenceRefs) || entity.evidenceRefs.length === 0)) {
-        evidenceMissing.push({ id: entity.id, path: collection.path });
-      }
-      collectReferences(entity, references, `${collection.path}#${index}`);
+    const folder = `plugins/${manifest.id}`;
+    if (manifest.apiVersion !== 'aita.chapter/v1' || manifest.entry !== 'Section.astro' || !Number.isInteger(manifest.order) || !/^#[\w-]+$/.test(manifest.demoEntry)) chapterIssues.push(`Invalid chapter manifest: ${manifest.id}`);
+    if (seenIds.has(manifest.id) || seenOrders.has(manifest.order) || seenAnchors.has(manifest.demoEntry)) chapterIssues.push(`Duplicate chapter ID, position or anchor: ${manifest.id}`);
+    seenIds.add(manifest.id); seenOrders.add(manifest.order); seenAnchors.add(manifest.demoEntry);
+    if (!(await exists(`${folder}/${manifest.entry}`)) || !(await exists(`${folder}/styles.css`))) chapterIssues.push(`Missing implementation: ${manifest.id}`);
+    for (const collection of manifest.consumes) if (!(collection in collections)) chapterIssues.push(`${manifest.id}: Unknown collection ${collection}`);
+    const sources = (await filesUnder(path.join(ROOT,folder))).filter(file=>file.endsWith('.astro'));
+    for (const file of sources) {
+      const source = await fs.readFile(file,'utf8');
+      const consumed = [...source.matchAll(/\bcontent(?:\.([\w]+)|\[['"]([^'"]+)['"]\])/g)].map(m=>m[1]??m[2]);
+      for (const name of new Set(consumed)) if (!manifest.consumes.includes(name)) chapterIssues.push(`${manifest.id}: Undeclared content dependency ${name}`);
     }
   }
-  const unresolved = references.filter(({ id }) => !allIds.has(id));
-  checks.push(result('content-identity', duplicateIds.length === 0 && peopleEntities.length === 0, { duplicateIds, peopleEntities }));
-  checks.push(result('entity-relations', unresolved.length === 0, { unresolved }));
-  checks.push(result('evidence', evidenceMissing.length === 0, { missing: evidenceMissing }));
-  if (duplicateIds.length) errors.push(error('AITA_CONTENT_DUPLICATE_ID', '发现重复永久 ID', { duplicateIds }));
-  if (peopleEntities.length || await exists('content/people.json')) errors.push(error('AITA_PEOPLE_DOMAIN_FORBIDDEN', 'v2 禁止人员实体集合', { peopleEntities }));
-  if (unresolved.length) errors.push(error('AITA_CONTENT_REFERENCE_UNRESOLVED', '存在无法解析的实体引用', { unresolved }));
-  if (evidenceMissing.length) errors.push(error('AITA_CONTENT_EVIDENCE_REQUIRED', '重要公开事实缺少 Evidence', { entities: evidenceMissing }));
+  if (await exists('index.html')) chapterIssues.push('Legacy root index.html duplicates the Astro entry');
+  check('chapter-contract', chapterIssues, { chapters: manifests.map(m=>({id:m.id,entry:`plugins/${m.id}/${m.entry}`,anchor:m.demoEntry,order:m.order})) });
 
-  const byName = Object.fromEntries(collections.map((item) => [item.name, item.data]));
-  const countSummary = {
-    listedPartners: (byName.organizations ?? []).filter((item) => item.listedPartner).length,
-    allOrganizations: (byName.organizations ?? []).length,
-    projects: (byName.projects ?? []).length,
-    papers: (byName.outputs ?? []).filter((item) => item.type === 'paper').length,
-    ipRecords: (byName.outputs ?? []).filter((item) => ['patent','softwareCopyright'].includes(item.type)).length,
-    nationalInnovationProjects: (byName.achievements ?? []).filter((item) => item.type === 'nationalInnovationProject').length,
-    provincialInnovationProjects: (byName.achievements ?? []).filter((item) => item.type === 'provincialInnovationProject').length,
-    competitionRecords: (byName.achievements ?? []).filter((item) => item.type === 'competition').length,
-    events: (byName.events ?? []).length,
-  };
-  checks.push(result('content-inventory', true, { counts: countSummary }));
-
-  const taskRegistry = await getTaskRegistry();
-  const operationIds = taskRegistry.tasks.map((task) => task.id);
-  const duplicateOperations = operationIds.filter((id, index) => operationIds.indexOf(id) !== index);
-  const forbiddenOperations = operationIds.filter((id) => /(?:^|\.)(?:people|person)(?:\.|$)/i.test(id));
-  const schemasMissing = [];
-  for (const task of taskRegistry.tasks) if (!(await exists(task.inputSchema))) schemasMissing.push(task.inputSchema);
-  const declaredOperations = new Set(manifests.flatMap((manifest) => manifest.operations ?? []));
-  const undeclaredTasks = operationIds.filter((id) => !declaredOperations.has(id) && !id.startsWith('media.') && !id.startsWith('site.') && !id.startsWith('redirect.'));
-  const agentContractOk = duplicateOperations.length === 0 && forbiddenOperations.length === 0 && schemasMissing.length === 0 && undeclaredTasks.length === 0;
-  checks.push(result('agent-contract', agentContractOk, { operationCount: operationIds.length, duplicateOperations, forbiddenOperations, schemasMissing, undeclaredTasks }));
-  if (!agentContractOk) errors.push(error('AITA_AGENT_CONTRACT_INVALID', 'Agent Operation 注册表或 Schema 不完整', { duplicateOperations, forbiddenOperations, schemasMissing, undeclaredTasks }));
-
-  const componentRegistry = await readJson('agent/component-registry.json');
-  const componentSchemaMissing = [];
-  for (const component of Object.values(componentRegistry.components ?? {})) if (!(await exists(component.propsSchema))) componentSchemaMissing.push(component.propsSchema);
-  checks.push(result('component-registry', componentSchemaMissing.length === 0, { componentCount: Object.keys(componentRegistry.components ?? {}).length, missingSchemas: componentSchemaMissing }));
-  if (componentSchemaMissing.length) errors.push(error('AITA_COMPONENT_SCHEMA_MISSING', '组件 props Schema 缺失', { paths: componentSchemaMissing }));
-
-  const html = await fs.readFile(path.join(ROOT, 'index.html'), 'utf8');
-  const css = await fs.readFile(path.join(ROOT, 'assets/css/styles.css'), 'utf8');
-  const js = await fs.readFile(path.join(ROOT, 'assets/js/main.js'), 'utf8');
-  const ids = [...html.matchAll(/\bid=["']([^"']+)["']/gi)].map((match) => match[1]);
-  const duplicateHtmlIds = ids.filter((id, index) => ids.indexOf(id) !== index);
-  const anchors = [...html.matchAll(/\bhref=["']#([^"']+)["']/gi)].map((match) => match[1]).filter(Boolean);
-  const brokenAnchors = [...new Set(anchors.filter((id) => !ids.includes(id)))];
-  const requiredAnchors = ['top','about','research','projects','outputs','achievements','network','activities','join'];
-  const missingAnchors = requiredAnchors.filter((id) => !ids.includes(id));
-  const imgTags = [...html.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
-  const imagesWithoutAlt = imgTags.filter((tag) => !/\balt=["'][^"']*["']/i.test(tag));
-  const accessibilityOk = /<html\b[^>]*\blang=["']zh-CN["']/i.test(html) && /class=["'][^"']*skip-link/i.test(html) && imagesWithoutAlt.length === 0;
-  checks.push(result('html-structure', duplicateHtmlIds.length === 0 && brokenAnchors.length === 0 && missingAnchors.length === 0, { duplicateHtmlIds, brokenAnchors, missingAnchors }));
-  checks.push(result('accessibility-baseline', accessibilityOk, { imagesWithoutAlt: imagesWithoutAlt.length }));
-  if (duplicateHtmlIds.length) errors.push(error('AITA_HTML_DUPLICATE_ID', 'HTML 存在重复 ID', { duplicateHtmlIds }));
-  if (brokenAnchors.length || missingAnchors.length) errors.push(error('AITA_HTML_ANCHOR_INVALID', 'HTML 锚点不完整', { brokenAnchors, missingAnchors }));
-  if (!accessibilityOk) errors.push(error('AITA_ACCESSIBILITY_BASELINE_FAILED', '无障碍基础约束未通过', { imagesWithoutAlt: imagesWithoutAlt.length }));
-  if (/data-plugin=["']people["']|id=["']people["']|href=["'][^"']*\/people/i.test(html)) errors.push(error('AITA_PEOPLE_UI_FORBIDDEN', '页面中仍存在人员章节或人员路由'));
-
-  const refs = localRuntimeRefs(html);
-  const missingAssets = [];
-  for (const ref of refs) {
-    const normalized = ref.replace(/^\.\//, '');
-    if (!(await exists(normalized))) missingAssets.push(ref);
+  const tasks = (await getTaskRegistry()).tasks;
+  const taskIssues = [];
+  const declared = new Set(manifests.flatMap(m=>m.operations));
+  for (const task of tasks) {
+    if (!declared.has(task.id) && !['site','media','redirect'].includes(task.plugin)) taskIssues.push(`Undeclared operation ${task.id}`);
+    if (!task.allowedWritePaths.every(file=>file===`content/${task.target.collection}.json`)) taskIssues.push(`Invalid write scope ${task.id}`);
+    try { validateSchema(operationSchema(task), {}); } catch(error) { taskIssues.push(`${task.id}: ${error.message}`); }
   }
-  for (const ref of cssRuntimeRefs(css)) {
-    const normalized = path.posix.normalize(path.posix.join('assets/css', ref));
-    if (!(await exists(normalized))) missingAssets.push(ref);
+  if (new Set(tasks.map(t=>t.id)).size!==tasks.length) taskIssues.push('Duplicate operation IDs');
+  for (const id of declared) if (!tasks.some(t=>t.id===id)) taskIssues.push(`Manifest declares missing operation ${id}`);
+  check('agent-contract', taskIssues, { operationCount: tasks.length, schemaSource: 'packages/domain/schema.mjs' });
+
+  const components = (await readJson('agent/component-registry.json')).components;
+  const componentIssues = [];
+  for (const [name,component] of Object.entries(components)) {
+    if (!(await exists(component.source))) componentIssues.push(`${name}: implementation missing`);
+    else if (!(await fs.readFile(path.join(ROOT,component.source),'utf8')).includes('interface Props')) componentIssues.push(`${name}: typed Props missing`);
   }
-  const remoteRuntime = /<script\b[^>]*\bsrc=["']https?:/i.test(html) || /<link\b[^>]*\bhref=["']https?:/i.test(html) || /@import\s+(?:url\()?\s*["']?https?:/i.test(css) || /url\(\s*["']?https?:/i.test(css);
-  const networkApis = /\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/.test(js);
-  checks.push(result('offline-runtime', missingAssets.length === 0 && !remoteRuntime && !networkApis, { missingAssets, remoteRuntime, networkApis }));
-  if (missingAssets.length || remoteRuntime || networkApis) errors.push(error('AITA_OFFLINE_RUNTIME_INVALID', '离线运行依赖不完整或包含远程运行时资源', { missingAssets, remoteRuntime, networkApis }));
+  check('component-registry', componentIssues, { components: Object.keys(components), propValidation: 'npm run check compiles the actual Astro Props' });
+  const evidenceIssues = [];
+  for (const item of collections.evidence) if (!(await exists(item.path.split('#')[0]))) evidenceIssues.push(`${item.id}: source file missing`);
+  check('evidence-files', evidenceIssues);
+  const mediaIssues = [];
+  for (const item of collections['media-assets']) for (const key of ['path','fallbackPath']) if (item[key] && !(await exists(`apps/site/public/${item[key]}`))) mediaIssues.push(`${item.id}: missing ${item[key]}`);
+  check('media-files', mediaIssues);
 
-  const cssGzipKb = gzipSync(Buffer.from(css)).byteLength / 1024;
-  const jsGzipKb = gzipSync(Buffer.from(js)).byteLength / 1024;
-  const performanceOk = cssGzipKb <= 35 && jsGzipKb <= 10;
-  checks.push(result('performance-budget', performanceOk, { cssGzipKb: Number(cssGzipKb.toFixed(2)), baseJsGzipKb: Number(jsGzipKb.toFixed(2)), limits: { cssGzipKb:35, baseJsGzipKb:10 } }));
-  if (!performanceOk) errors.push(error('AITA_PERFORMANCE_BUDGET_EXCEEDED', '静态 Demo 超出 CSS 或基础 JS 预算', { cssGzipKb, jsGzipKb }));
-
-  const mediaErrors = [];
-  for (const media of byName['media-assets'] ?? []) {
-    for (const key of ['path','fallbackPath']) {
-      if (media[key] && !(await exists(media[key]))) mediaErrors.push({ id: media.id, field: key, path: media[key] });
-    }
-    if (!media.alt?.zh || !(media.width > 0) || !(media.height > 0)) mediaErrors.push({ id: media.id, reason: 'metadata-incomplete' });
-  }
-  checks.push(result('media-metadata', mediaErrors.length === 0, { errors: mediaErrors }));
-  if (mediaErrors.length) errors.push(error('AITA_MEDIA_METADATA_INVALID', '媒体路径或元数据不完整', { mediaErrors }));
-
+  const artifact = await inspectArtifact(ROOT, manifests);
+  checks.push(...artifact.checks);
+  errors.push(...artifact.errors.map(message=>({code:'artifact',message})));
   if (includeRecipes) {
-    const recipeResult = await testRecipes();
-    checks.push(result('recipe-tests', recipeResult.ok, { total: recipeResult.total, passed: recipeResult.passed, failures: recipeResult.failures }));
-    if (!recipeResult.ok) errors.push(error('AITA_RECIPE_TEST_FAILED', '一个或多个可执行 Recipe 失败', { failures: recipeResult.failures }));
+    const recipes = await testRecipes();
+    check('recipe-tests', recipes.failures.map(f=>`${f.recipe}: ${f.errors.join('; ')}`), { total: recipes.total, passed: recipes.passed });
   }
-
-  if (changed) warnings.push({ code:'AITA_CHANGED_SCOPE_DEMO', message:'当前仓库规模采用完整验证；--changed 不缩小校验范围。' });
-  return {
-    ok: errors.length === 0,
-    scope: changed ? 'changed-compatible-full-check' : 'full',
-    summary: { passed: checks.filter((item) => item.status === 'passed').length, failed: checks.filter((item) => item.status === 'failed').length, errorCount: errors.length, warningCount: warnings.length },
-    checks,
-    errors,
-    warnings,
-    nextActions: errors.length ? ['fix-errors', 'run-verify-again'] : ['review-preview', 'package-immutable-artifact'],
-  };
+  return { ok: errors.length===0, scope: 'full', changedRequested: changed,
+    summary: {passed:checks.filter(c=>c.status==='passed').length,failed:checks.filter(c=>c.status==='failed').length,errorCount:errors.length},
+    checks, errors, nextActions: errors.length?['fix-errors','rebuild','verify']:['review-current-preview'] };
 }
 
 function hasEvidence(input) {
@@ -252,13 +108,17 @@ export async function testRecipes() {
       if (assertions.mustRequireEvidence && !hasEvidence(request)) errors.push('evidence missing');
       for (const check of assertions.requiredChecksInclude ?? []) if (!changePlan.requiredChecks.includes(check)) errors.push(`required check missing: ${check}`);
       for (const prefix of assertions.affectedPathsExclude ?? []) if (changePlan.affectedPaths.some((item) => item.startsWith(prefix))) errors.push(`forbidden path affected: ${prefix}`);
+      const original = await operations.readJson(task.allowedWritePaths[0]);
       const preview = await operations.apply(changePlan, { dryRun: true });
+      if (JSON.stringify(original) !== JSON.stringify(await operations.readJson(task.allowedWritePaths[0]))) errors.push('dry-run wrote content');
       const applied = await operations.apply(changePlan);
       const repeated = await operations.apply(changePlan);
       if (!preview.dryRun || !applied.ok || !repeated.alreadyApplied) errors.push('apply / preview / idempotence failed');
       const after = await operations.readJson(applied.sourcePath);
       const actual = Array.isArray(after) ? after.find(item => item.id === request.id) : after;
       if (JSON.stringify(actual) !== JSON.stringify(preview.after)) errors.push('preview differs from persisted result');
+      const expected = request.patch ?? (task.target.mode === 'status' ? {status:request.status,verifiedAt:request.verifiedAt} : request);
+      for (const [key,value] of Object.entries(expected)) if (operations.stableStringify(actual[key]) !== operations.stableStringify(value)) errors.push(`requested field did not persist: ${key}`);
       if (errors.length) failures.push({ recipe: entry.name, errors });
     } catch (caught) {
       failures.push({ recipe: entry.name, errors: [caught.message], code: caught.code ?? null });

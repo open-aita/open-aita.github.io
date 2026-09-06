@@ -1,3 +1,1 @@
-# Operations Core
-
-离线 Demo 的确定性实现位于 `packages/operations-core/index.mjs`，暴露 `query / plan / apply / semanticDiff`。CLI、Recipe 测试与未来 Studio/MCP 适配器共享该实现。CLI 不调用 LLM。
+CLI 的确定性 Plan、dry-run、Apply 与语义 Diff。预演和写入共享 transformDocument，先校验完整候选内容，再原子写入；历史存入 .aita/history。Apply 不自动构建，发布前须执行 npm run build。

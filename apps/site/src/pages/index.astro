@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { loadContent } from '../../../../packages/content-loader-git/index.mjs';
+import { chapters } from '../chapters';
+import PartnerStrip from '../../../../plugins/partners/Strip.astro';
+const content = loadContent();
+---
+<SiteLayout content={content}>{chapters.map(({ Component, id }) => <><Component content={content} />{id === 'home' && <PartnerStrip content={content} />}</>)}</SiteLayout>

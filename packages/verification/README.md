@@ -1,3 +1,1 @@
-# Verification
-
-`packages/verification/index.mjs` 对内容 ID、引用、Evidence、章节清单、无人员实体约束、HTML 资源、锚点、无障碍基础项和性能预算执行稳定检查，并返回机器可读错误码。
+index.mjs 检查内容、真实章节及组件契约，并在隔离目录执行 Recipe；artifact.mjs 检查本次 dist 的锚点、本地资源、构建新鲜度和完整资源预算。浏览器主流程与故障隔离检查在 tools/smoke-site.mjs。

@@ -1,0 +1,119 @@
+---
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+import { networkPartners } from './data.mjs';
+const partners = networkPartners(content.organizations);
+import { number } from '../../packages/content-loader-git/index.mjs';
+import { formatPosition, displayMode, locationNote } from './presentation.js';
+const selected = partners.find(p => p.id === 'org:010') ?? partners[0];
+const native = partners.find(p => p.group === 'native');
+const regional = partners.filter(p => p.group === 'gba');
+const europe = partners.filter(p => p.map === 'EURASIA / EUROPE');
+const beijing = partners.filter(p => p.city === '北京');
+const cities = (items: typeof partners) => new Set(items.map(p => p.city)).size;
+const cityCount = (city: string) => number(regional.filter(p => p.city === city).length);
+
+---
+<section class="network-section shell" data-plugin="partners" id="network" aria-labelledby="network-title">
+    <header class="section-heading reveal">
+      <div>
+        <p class="section-kicker">NETWORK / 05</p>
+        <h2 id="network-title"><span class="heading-chapter">Network.</span> <span class="heading-context">跨学科、跨机构、</span><span class="heading-focus">跨场景</span></h2>
+      </div>
+      <p>合作网络覆盖高校、科研院所、医院、算力中心、能源、通信、农业与开源社区</p>
+    </header>
+
+    <div class="atlas-toolbar" aria-label="网络统计与筛选">
+      <div class="atlas-metric"><strong>{partners.length}</strong><span>formal<br>partners</span></div>
+      <div class="atlas-metric"><strong>{number(cities(partners.filter(p => p.lon != null)))}</strong><span>geo<br>clusters</span></div>
+      <div class="atlas-metric"><strong>{regional.length}</strong><span>regional<br>detail nodes</span></div>
+      <div class="filter-cluster" role="group" aria-label="按合作单位类别筛选">
+        <span>FILTER / TYPE</span>
+        <button class="filter-button" type="button" data-network-filter="ALL" aria-pressed="true">ALL</button>
+        <button class="filter-button" type="button" data-network-filter="ACADEMIC" aria-pressed="false">ACADEMIC</button>
+        <button class="filter-button" type="button" data-network-filter="RESEARCH" aria-pressed="false">RESEARCH</button>
+        <button class="filter-button" type="button" data-network-filter="MEDICAL" aria-pressed="false">MEDICAL</button>
+        <button class="filter-button" type="button" data-network-filter="INDUSTRY" aria-pressed="false">INDUSTRY</button>
+        <button class="filter-button" type="button" data-network-filter="OTHER" aria-pressed="false">OTHER</button>
+      </div>
+    </div>
+
+    <section class="atlas" aria-label="AITA 合作网络地图">
+      <noscript><p>启用 JavaScript 可查看交互点云地图；完整合作单位名录仍可在下方阅读。</p></noscript>
+      <div class="map-frame" id="main-map-frame">
+        <div class="map-topline"><span>FIG.05 / EURASIA COLLABORATION FIELD</span><span>N15°—N80° / W12°—E147°</span></div>
+        <canvas class="map-canvas" id="main-map" aria-hidden="true"></canvas>
+        <svg class="line-layer" id="main-lines" aria-hidden="true"></svg>
+        <div class="beacon-layer" id="main-beacons"></div>
+        <div class="latitude-scale" aria-hidden="true"><span style="top:0">80°N</span><span style="top:30.8%">60°N</span><span style="top:61.5%">40°N</span><span style="top:92.3%">20°N</span></div>
+        <span class="area-title area-title--europe"><strong>EUROPE AREA</strong><small>{number(europe.length)} SIGNALS / {number(cities(europe))} CITIES</small></span>
+        <span class="area-title area-title--beijing"><strong>BEIJING AREA</strong><small>{number(beijing.length)} SIGNALS / {number(cities(beijing))} CITY</small></span>
+        <span class="continent-label central">CENTRAL ASIA</span>
+        <span class="continent-label china">CHINA</span>
+        <span class="continent-label pacific">NORTH PACIFIC</span>
+        <div class="map-bottomline"><span>COASTLINE + NATIONAL BOUNDARY / POINT-SAMPLED</span><span>REAL GEOGRAPHIC SILHOUETTE / STATIC CANVAS</span></div>
+      </div>
+
+      <div class="atlas-detail-grid">
+        <article class="selection-panel" aria-live="polite" aria-atomic="true">
+          <div class="panel-topline"><span>SELECTED SIGNAL</span><span id="selection-status">{selected?.number ?? '00'} / {partners.length}</span></div>
+          <div class="selection-code" id="selection-code">NODE:{selected?.number ?? '00'} / {selected?.category ?? '—'}</div>
+          <h3 class="selection-name" id="selection-name">{selected?.name ?? '暂无合作单位'}</h3>
+          <div class="selection-meta"><span>ANCHOR <b id="selection-anchor">{selected?.anchor ?? "—"}</b></span><span>MAP <b id="selection-map">{selected?.map ?? "—"}</b></span></div>
+          <div class="selection-rule"></div>
+          <dl class="selection-coordinate">
+            <dt>POSITION</dt><dd id="selection-position">{formatPosition(selected)}</dd>
+            <dt>ADDRESS</dt><dd id="selection-address">{selected?.address ?? "—"}</dd>
+            <dt>PIN BASIS</dt><dd id="selection-basis">{selected?.pinBasis ?? "—"}</dd>
+            <dt>PRECISION</dt><dd id="selection-precision">{selected?.precision ?? "—"}</dd>
+            <dt>CATEGORY</dt><dd id="selection-category">{selected?.category ?? "—"}</dd>
+            <dt>DISPLAY</dt><dd id="selection-display">{displayMode(selected)}</dd>
+          </dl>
+          <p class="selection-note" id="selection-note">{locationNote(selected)}</p>
+          <div class="selection-actions">
+            <button class="text-button" id="locate-index" type="button">LOCATE IN INDEX</button>
+            <button class="text-button" id="clear-selection" type="button">RESET</button>
+          </div>
+          {native && <button class="network-native" type="button" data-partner-id={native.id} aria-label={`选择 ${native.name}`}>
+            <span class="native-glyph" aria-hidden="true"></span>
+            <span><strong>{native.name}</strong><small>NETWORK-NATIVE / DISTRIBUTED OPEN SOURCE</small></span>
+            <span>{native.number} ↗</span>
+          </button>}
+        </article>
+
+        <section class="gba-panel" id="gba-panel" aria-label="粤港澳大湾区合作单位局部图">
+          <div class="gba-title"><strong>GREATER BAY AREA / DETAIL</strong><small>{number(regional.filter(p => p.city !== '揭阳').length)} GBA SIGNALS + {cityCount('揭阳')} JIEYANG HQ SIGNALS · {number(cities(regional))} REGIONAL ANCHORS</small></div>
+          <div class="gba-meta">FIG.05-A<br>LOCAL LEADER LINES</div>
+          <canvas class="map-canvas" id="gba-map" aria-hidden="true"></canvas>
+          <svg class="line-layer" id="gba-lines" aria-hidden="true"></svg>
+          <div class="beacon-layer" id="gba-beacons"></div>
+          <span class="gba-city-label" data-city-label="GUANGZHOU">GUANGZHOU / {cityCount('广州')}</span>
+          <span class="gba-city-label" data-city-label="SHENZHEN">SHENZHEN / {cityCount('深圳')}</span>
+          <span class="gba-city-label" data-city-label="HONG KONG">HONG KONG / {cityCount('香港')}</span>
+          <span class="gba-city-label gba-city-label--hq" data-city-label="JIEYANG">JIEYANG / {cityCount('揭阳')} · AITA HQ</span>
+          <div class="gba-footer"><span>PEARL RIVER DELTA + JIEYANG / POINT-CLOUD COASTLINE</span><span>ANCHOR DOT = GEOGRAPHIC POSITION</span></div>
+        </section>
+      </div>
+      <div class="map-caption"><span>短引线起点保留地址或校园锚点，信号头就近避让；虚线表示城市／省级近似位置，点划线表示所属校区。</span><span>WGS84 · LOCAL LEADERS · CANVAS CLOUD + SVG SIGNALS + HTML INDEX</span></div>
+    </section>
+
+    <section class="partners-index" id="partners-index" aria-labelledby="partners-index-title">
+      <div class="index-head">
+        <div><p class="micro-label">DIRECTORY / COMPLETE INDEX</p><h3 id="partners-index-title">全部合作单位 / {partners.length}</h3></div>
+        <label class="search-field"><span>⌕</span><input id="partner-search" type="search" autocomplete="off" placeholder="检索合作单位、城市或类别" aria-label="检索合作单位"><span class="search-count" id="search-count" role="status">{partners.length} / {partners.length}</span></label>
+      </div>
+      <div class="partner-index-grid" id="partner-index-grid" aria-label="AITA 合作单位列表">{partners.map(p => <button class="partner-index-item" type="button" data-partner-id={p.id} aria-label={`${p.number} ${p.name}，${p.anchor}，${p.precision}`}><span class="index-number">{p.number}</span><span class="index-copy"><strong>{p.name}</strong><small>{p.anchor} · {p.category}</small></span><span class="index-symbol" data-shape={p.shape} aria-hidden="true"></span></button>)}
+      </div>
+      <div class="index-empty" id="index-empty" role="status">NO MATCHING PARTNER SIGNALS</div>
+    </section>
+
+    <footer class="page-footer"><span>AITA / RESEARCH NETWORK ATLAS / 2026</span><span>LOCATION BASIS: {number(partners.filter(p => ['exact','host'].includes(p.precisionKind)).length)} ADDRESS / CAMPUS · {number(partners.filter(p => p.precisionKind === 'approx').length)} APPROXIMATE · {number(partners.filter(p => p.group === 'native').length)} DISTRIBUTED</span></footer>
+<script is:inline type="application/json" data-network-data set:html={JSON.stringify(partners).replace(/</g, "\\u003c")} />
+</section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("network", () => import("./client.js"));
+</script>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AITA Outputs · Dynamic Particle Cloud</title>
+<meta name="robots" content="noindex,nofollow">
+<!--
+  本文件由原站（openai.com/zh-Hans-CN/index/hugging-face-incident-and-the-road-ahead/）
+  保存下来的 Turbopack chunk 原样内联组装而成。
+  效果沿用原站模块；AITA 集成调整了播放生命周期与画质策略：
+    - 模块 951947  CloudMeshHero 本体（chunks/14-cloud-mesh-hero.js）
+    - 模块 695418  three r180（chunks/07-three.js）
+    - 模块 218547 等 @react-three/fiber（chunks/09-r3f-reconciler.js / 10-r3f-canvas-gpu-profile.js）
+    - 模块 939951/409703  postprocessing 景深后处理（chunks/11-postprocessing.js）
+    - 模块 215453   GPU 性能分级 Provider（chunks/10-r3f-canvas-gpu-profile.js）
+    - 模块 841685   detect-gpu 6.0.5（chunks/13-detect-gpu.js）
+    - 模块 376151   react-dom 19.3 client（chunks/06-react-dom.js）
+  手写胶水仅两处，均已注释标注：
+    1. detect-gpu 桩（模块 523651）：原站按 URL 动态加载 chunk，单文件内直接解析到 841685；
+    2. 引导模块（990001）：createRoot 挂载 GpuPerformanceProvider + Hero，
+       detector 保留显式画质覆盖，本地 WebGL 探测默认 tier 2；
+       effect-budget.js 按实际帧间隔调整分辨率、粒子容量与后处理，不请求外部基准。
+  定制补丁见 build_single.js 的 PATCHES 表（当前：移除红色消息轨迹、青/紫短线条粒子）。
+  运行条件：WebGL（建议开硬件加速）；file:// 直接双击即可，无需服务器。
+  验证：控制台执行 document.querySelector("[data-particle-count]")?.getAttribute("data-particle-count")
+       应返回粒子数（按原站 GPU tier 逻辑动态取值，如 "26000"）。
+-->
+<script src="../effect-budget.js"></script>
+<script src="./diagnostics.js"></script>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<section data-cloud-mesh-hero aria-label="Cloud Mesh Hero">
+  <div data-cloud-mesh-media>
+    <div id="hero-root"></div>
+  </div>
+</section>
+<script src="./vendor/01-runtime-turbopack.js"></script>
+<script src="./vendor/02-react-core.js"></script>
+<script src="./vendor/03-utils-clsx.js"></script>
+<script src="./vendor/04-react-hooks.js"></script>
+<script src="./vendor/05-hooks-media-observer.js"></script>
+<script src="./vendor/06-react-dom.js"></script>
+<script src="./vendor/07-three.js"></script>
+<script src="./vendor/08-site-modules.js"></script>
+<script src="./vendor/09-r3f-reconciler.js"></script>
+<script src="./vendor/10-r3f-canvas-gpu-profile.js"></script>
+<script src="./vendor/11-postprocessing.js"></script>
+<script src="./vendor/12-scene-time.js"></script>
+<script src="./vendor/13-detect-gpu.js"></script>
+<script src="./vendor/14-cloud-mesh-hero.js"></script>
+<script src="./bootstrap.js"></script>
+</body>
+</html>

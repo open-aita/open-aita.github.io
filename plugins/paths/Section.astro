@@ -1,0 +1,25 @@
+---
+import { number } from '../../packages/content-loader-git/index.mjs';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+
+---
+<section class="paths-section shell" data-plugin="paths" id="paths" aria-labelledby="paths-title">
+<!-- Evidence: content/member-paths.json → evidence:source-introduction, sections 二 / 9–10. -->
+<div class="section-heading reveal">
+<div><p class="section-kicker">PEOPLE / NEXT CHAPTER</p><h2 id="paths-title"><span class="heading-chapter">Paths.</span> <span class="heading-context">从这里，</span><span class="heading-focus">走向更远</span></h2></div>
+<p>从科研实践到职业探索，从 AITA 走向新的学术与产业现场。记录成员的工作、实习与升学去向。</p>
+</div>
+<div class="paths-columns">
+<article class="paths-careers" aria-labelledby="paths-careers-title">
+<header><div><p class="section-kicker">01 / CAREERS &amp; INTERNSHIPS</p><h3 id="paths-careers-title">在真实问题中实践</h3></div><span class="paths-category">工作与实习</span></header>
+<ol class="paths-list">{content['member-paths'].careers.map((item,i) => <li><span class="paths-index">{number(i+1)}</span><div><h4>{item.organization}</h4><p>{item.role}</p></div></li>)}</ol>
+</article>
+<article class="paths-study" aria-labelledby="paths-study-title">
+<header><div><p class="section-kicker">02 / FURTHER STUDY</p><h3 id="paths-study-title">向更深的学术探索</h3></div><span class="paths-category">升学去向</span></header>
+<ol class="paths-list">{content['member-paths'].furtherStudy.map((item,i) => <li><span class="paths-index" aria-hidden="true">{number(i+1)}</span><div><h4>{item.organization}</h4><p>{item.memberCount} 位成员 {item.note && <span class="paths-degree">{item.note}</span>}</p></div></li>)}</ol>
+</article>
+</div>
+</section>

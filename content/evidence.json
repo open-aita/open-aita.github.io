@@ -33,5 +33,12 @@
     "title": "AITA 项目介绍 / 对外交流与活动",
     "path": "docs/AITA项目介绍_原始资料.md#三对外交流与活动",
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "id": "evidence:network-addresses",
+    "type": "local-document",
+    "title": "用户提供的合作网络地址与定位资料（迁移记录）",
+    "path": "docs/network-addresses.md",
+    "verifiedAt": "2026-09-07"
   }
 ]

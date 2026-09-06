@@ -7,7 +7,11 @@
   "scripts": {
     "aita": "node tools/aita.mjs",
     "verify": "node tools/aita.mjs verify --json",
-    "recipes": "node tools/aita.mjs recipe test --json"
+    "recipes": "node tools/aita.mjs recipe test --json",
+    "dev": "node tools/prepare-effects.mjs && astro dev --root apps/site",
+    "build": "node tools/prepare-effects.mjs && astro build --root apps/site",
+    "preview": "astro preview --root apps/site",
+    "check": "astro check --root apps/site"
   },
   "engines": {
     "node": ">=22.12.0"

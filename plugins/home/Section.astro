@@ -1,0 +1,38 @@
+---
+import JoinLink from '../../packages/design-system/JoinLink.astro';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+
+---
+<section class="hero" data-hero-visual="lake" data-plugin="home" id="top">
+<div class="hero-scene">
+<img alt="" class="hero-background" fetchpriority="high" height="627" src="/assets/images/lake1.png" width="2508"/>
+<div class="hero-copy reveal">
+<p class="eyebrow">OPEN RESEARCH / GDUT / 2026</p>
+<h1><span class="heading-context">通往</span><span class="heading-focus">无限智能</span></h1>
+<p class="hero-lead">{content.settings.hero.lead}</p>
+<div class="button-row">
+<a class="button button-primary" href="#research">探索研究 <span aria-hidden="true">›</span></a>
+<JoinLink recruitment={content.recruitment} variant="secondary" />
+</div>
+<p aria-label="AITA research command" class="terminal-line"><span>$</span> <span data-terminal="">aita towards --frontier</span><i aria-hidden="true"></i></p>
+</div>
+</div>
+<div class="hero-meta shell reveal">
+<div>
+<span class="meta-label">RESEARCH STACK</span>
+<p>{content.settings.hero.stack}</p>
+</div>
+<div>
+<span class="meta-label">DELIVERY MODEL</span>
+<p>RESEARCH → SYSTEM → REAL-WORLD FEEDBACK</p>
+</div>
+</div>
+</section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("top", () => import("./client.js"));
+</script>

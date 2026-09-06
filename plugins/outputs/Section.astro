@@ -1,0 +1,43 @@
+---
+import { text, number } from '../../packages/content-loader-git/index.mjs';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+const visible = content.outputs.filter(o => o.status !== 'archived');
+const papers = visible.filter(o => o.type === 'paper');
+const ip = visible.filter(o => ['patent','softwareCopyright'].includes(o.type));
+const systems = visible.filter(o => ['openSystem','openSource'].includes(o.type));
+const ipTitle = (record: typeof ip[number]) => text(record.title) + ({authorized:'已授权',accepted:'已受理',registered:'已登记'}[record.status as 'authorized'|'accepted'|'registered'] ?? '');
+---
+<section class="outputs-section shell" data-plugin="outputs" id="outputs">
+<div class="outputs-banner reveal">
+<div>
+<p class="section-kicker">OUTPUTS / 03</p>
+<h2><span class="heading-chapter">Outputs.</span> <span class="heading-context">研究、论文与</span><span class="heading-focus">可交付成果</span></h2>
+<p>从论文到专利、软件著作权与工程系统，建立可复用的研究资产。</p>
+</div>
+<div aria-hidden="true" class="output-art">
+<iframe class="output-art-frame" data-output-cloud-frame="" data-src="/effects/outputs/index.html" loading="eager" tabindex="-1" title="AITA Outputs 动态粒子云"></iframe>
+</div>
+</div>
+<div aria-labelledby="publication-title" class="publication-list reveal"><div class="list-header"><h3 id="publication-title">SELECTED PUBLICATIONS</h3><span>{number(papers.length)} RECORDS / SOURCE MATERIAL</span></div>{papers.map((paper, i) => <article class="publication-row" data-entity-id={paper.id} data-status={paper.status}><span class="publication-index">{number(i+1)}</span><div><p class="publication-meta">{paper.display?.venue ?? paper.labels?.[0] ?? paper.status.toUpperCase()}{paper.year ? ` · ${paper.year}` : ''}{['accepted','published'].includes(paper.status) ? ` · ${paper.status.toUpperCase()}` : ''}</p><h4>{text(paper.title)}</h4></div>{paper.url ? <a href={paper.url} rel="noreferrer" target="_blank">{paper.display?.linkLabel ?? 'PAPER'} ↗</a> : <span class="publication-pending">RECORD</span>}</article>)}</div>
+<div class="ip-layout reveal">
+<div class="ip-intro">
+<canvas aria-hidden="true" id="ip-particle-field"></canvas>
+<p class="section-kicker">INTELLECTUAL PROPERTY</p>
+<strong>{ip.length}</strong>
+<h3>专利与软件著作权记录</h3>
+<p>覆盖医学图像保护、遥感图像加密、边缘视频安全、无人机系统、果树管理和心理危机干预。</p>
+</div>
+<div class="ip-grid">{ip.filter(o => o.type === 'patent').slice(0,6).map(record => <article><span>{record.status.toUpperCase()} PATENT</span><h4>{ipTitle(record)}</h4></article>)}</div>
+</div><div class="output-archive reveal">
+<details class="records-archive"><summary><span>COMPLETE IP ARCHIVE</span><b>{ip.length} RECORDS</b><i>OPEN / CLOSE</i></summary><ol>{ip.map((record, i) => <li data-entity-id={record.id}><span>{number(i+1)}</span><div><strong>{ipTitle(record)}</strong></div><b>{record.status.toUpperCase()}</b></li>)}</ol></details>
+<div class="systems-index"><div class="list-header"><h3>OTHER SYSTEMS</h3><span>{number(systems.length)} RECORDS</span></div><div>{systems.map((record, i) => <article><span>SYS.{i+1}</span><h4>{text(record.title)}</h4><p>{record.statusLabel ?? record.status}</p></article>)}</div></div>
+</div>
+</section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("outputs", () => import("./client.js"));
+</script>

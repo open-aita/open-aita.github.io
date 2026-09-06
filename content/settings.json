@@ -2,27 +2,114 @@
   "schemaVersion": "aita.content/v2",
   "brand": {
     "name": "AITA",
-    "displayName": "AITA Intelligence Lab",
-    "slogan": "TOWARD ∞ — INFINITE INTELLIGENCE"
+    "displayName": "AITA Research Lab",
+    "slogan": "TOWARD ∞ — INFINITE INTELLIGENCE",
+    "tagline": "Toward Infinite Intelligence",
+    "logo": "assets/images/aita-header-mark.svg"
   },
   "locale": "zh-CN",
   "defaultLanguage": "zh",
   "supportedLanguages": [
-    "zh",
-    "en"
+    "zh"
   ],
-  "counts": {
-    "listedPartnerOrganizations": 33,
-    "externalCollaborationProjects": 16,
-    "papers": 7,
-    "patentsAndSoftwareCopyrights": 12,
-    "nationalInnovationProjects": 6,
-    "provincialInnovationProjects": 5,
-    "competitionAndAwardRecords": 77
-  },
   "contentNotes": [
     "研究方向由项目材料归纳，用于官网信息组织。",
     "原始资料未提供官方招新邮箱或表单，演示版保持待接入状态。",
     "姓名仅作为相关条目的 contributors 展示值，不形成独立人员实体。"
-  ]
+  ],
+  "evidenceRefs": [
+    "evidence:source-introduction"
+  ],
+  "hero": {
+    "lead": "围绕大模型、多模态学习、医疗人工智能、视觉理解与可信系统，将前沿研究连接到真实世界的复杂问题。",
+    "stack": "Multimodal Intelligence  /  Medical AI  /  Trustworthy Systems  /  Agents"
+  },
+  "meta": {
+    "title": "AITA — Toward Infinite Intelligence",
+    "description": "AITA 人工智能技术创新团队官网演示：实验室介绍、研究方向、合作项目、科研成果、荣誉、合作网络与活动。"
+  },
+  "about": {
+    "overview": {
+      "value": {
+        "zh": "团队项目连接高校、研究机构、医院、企业与开放社区，覆盖模型研究、数据系统、医学智能、工业安全和多模态感知。研究方向由所提供的项目与成果材料归纳。"
+      },
+      "evidenceRefs": [
+        "evidence:source-introduction"
+      ]
+    },
+    "directions": [
+      {
+        "id": "direction:01",
+        "title": {
+          "zh": "多模态与生成智能"
+        },
+        "summary": {
+          "zh": "研究视觉语言模型、视频理解与生成、多模态事故预测，以及统一感知与生成架构。"
+        },
+        "topics": [
+          "VLM-supervised video generation",
+          "Accident warning with MA-former",
+          "Event-aware anomaly detection"
+        ],
+        "visual": "tokens",
+        "evidenceRefs": [
+          "evidence:source-introduction"
+        ]
+      },
+      {
+        "id": "direction:02",
+        "title": {
+          "zh": "医疗与健康智能"
+        },
+        "summary": {
+          "zh": "联合医院与科研机构，在眼科、肿瘤、脑科、心理健康与医学影像方向构建可验证系统。"
+        },
+        "topics": [
+          "Glaucoma diagnosis with VLMs",
+          "Graph RAG for depression pre-diagnosis",
+          "Clinical data governance and ML platforms"
+        ],
+        "visual": "medical",
+        "evidenceRefs": [
+          "evidence:source-introduction"
+        ]
+      },
+      {
+        "id": "direction:03",
+        "title": {
+          "zh": "可信与安全系统"
+        },
+        "summary": {
+          "zh": "覆盖医学与遥感图像保护、边缘视频加密、设备安全检查及能源泄漏风险监测。"
+        },
+        "topics": [
+          "Chaos-based image protection",
+          "Edge-device video encryption",
+          "Dynamic industrial risk monitoring"
+        ],
+        "visual": "chaos",
+        "evidenceRefs": [
+          "evidence:source-introduction"
+        ]
+      },
+      {
+        "id": "direction:04",
+        "title": {
+          "zh": "智能体与数据系统"
+        },
+        "summary": {
+          "zh": "构建训练数据生成、多智能体协作、竞赛平台、端侧模型与国产大模型适配系统。"
+        },
+        "topics": [
+          "DataFactory training-data pipeline",
+          "DataForge multi-agent synthesis",
+          "Model deployment and evaluation systems"
+        ],
+        "visual": "agents",
+        "evidenceRefs": [
+          "evidence:source-introduction"
+        ]
+      }
+    ]
+  }
 }

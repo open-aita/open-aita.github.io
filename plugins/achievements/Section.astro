@@ -1,0 +1,35 @@
+---
+import { text, number } from '../../packages/content-loader-git/index.mjs';
+import './styles.css';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+const awards = content.achievements.filter(a => ['competition','award','grant'].includes(a.type));
+const innovations = content.achievements.filter(a => ['nationalInnovationProject','provincialInnovationProject'].includes(a.type));
+const groups = [{label:'NATIONAL',title:'国家级大学生创新项目',records:innovations.filter(a => a.type === 'nationalInnovationProject')},{label:'PROVINCIAL',title:'省级大学生创新项目',records:innovations.filter(a => a.type === 'provincialInnovationProject')}];
+---
+<section class="achievements-section shell" data-plugin="achievements" id="achievements">
+<div class="award-stream reveal" data-award-stream="">
+<header class="award-stream-header">
+<div><span class="award-stream-kicker">ACHIEVEMENTS / 04</span><h2 class="award-stream-title"><span class="heading-chapter">Selected.</span> <span class="heading-context">精选竞赛与</span><span class="heading-focus">获奖记录</span></h2></div>
+<div class="award-stream-meta">
+<div class="award-stream-summary">
+<p><b>{innovations.length}</b><span>项国家级省级大创项目</span></p>
+<p><b data-award-stream-count="">{awards.length}</b><span>项国家级省级获奖</span></p>
+</div>
+<button aria-controls="award-stream-flow" aria-pressed="false" data-award-stream-toggle="" hidden="" type="button">PAUSE FLOW</button>
+</div>
+</header>
+<div aria-hidden="true" class="award-stream-viewport" data-award-stream-viewport="" id="award-stream-flow">
+<div class="award-stream-fallback">{awards.slice(0,4).map((record,i) => <span class={`award-code-token award-code-token--${["green","blue","purple","red"][i]}`}><span>{text(record.title)}</span><em>{record.level}</em></span>)}</div>
+</div>
+<p class="sr-only">完整的 {awards.length} 条竞赛与获奖记录保留在本节下方的完整档案中。</p>
+</div>
+<div class="innovation-layout reveal">{groups.map(group => <section><header><p>{group.label} / {number(group.records.length)}</p><h3>{group.title}</h3></header><div>{group.records.map((record, i) => <article><span>{number(i+1)}</span><h4>{text(record.title)}</h4></article>)}</div></section>)}</div>
+<details class="records-archive award-records reveal"><summary><span>COMPLETE COMPETITION &amp; AWARD ARCHIVE</span><b>{awards.length} RECORDS</b><i>OPEN / CLOSE</i></summary><ol>{awards.map((record, i) => <li data-entity-id={record.id}><span>{number(i+1,3)}</span><div><strong>{text(record.title)}</strong></div><b>{record.level}</b></li>)}</ol></details>
+</section>
+
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("achievements", () => import("./client.js"));
+</script>

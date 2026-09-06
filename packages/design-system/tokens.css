@@ -1,0 +1,39 @@
+
+
+@layer tokens {
+  :root {
+    --bg: #0e0e0e;
+    --bg-deep: #0a0a0a;
+    --surface: #131313;
+    --surface-2: #181818;
+    --surface-3: #1d1d1d;
+    --text: #f4f4f4;
+    --text-soft: rgba(255, 255, 255, .72);
+    --muted: rgba(255, 255, 255, .5);
+    --muted-2: rgba(255, 255, 255, .25);
+    --border: #202020;
+    --border-light: #3b3b3b;
+    --brand-accent: #9aa7b8;
+    --accent-about: #b3aa99;
+    --accent-research: #8fa9b4;
+    --accent-projects: #bda67f;
+    --accent-achievements: #b8ab8e;
+    --heading-accent-about: #ffd28a;
+    --heading-accent-research: #72dbff;
+    --heading-accent-projects: #ffb45e;
+    --heading-accent-achievements: #f6d267;
+    --heading-accent-brand: #a8b9ff;
+    --status-success: #78e772;
+    --surface-statement: #ddff45;
+    --text-on-statement: #141414;
+    --text-micro: rgba(255, 255, 255, .5);
+    --decorative-neutral: #c5c5c5;
+    --status-danger: #ff6e67;
+    --header-height: 76px;
+    --page-pad: clamp(18px, 1.5vw, 24px);
+    --section-gap: clamp(72px, 8vw, 128px);
+    --mono: "ABC Favorit Mono", "Geist Mono", "Cascadia Mono", "JetBrains Mono", "SFMono-Regular", Consolas, "Microsoft YaHei UI", monospace;
+    --sans: "Geist", "Inter", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --serif: "Iowan Old Style", "Times New Roman", "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  }
+}

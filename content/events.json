@@ -31,7 +31,13 @@
     "evidenceRefs": [
       "evidence:activities"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "title": "IJCAI 2025",
+      "caption": "第三十四届国际人工智能联合会议（IJCAI 2025）",
+      "label": "CONFERENCE / 2025",
+      "variant": "wide"
+    }
   },
   {
     "id": "event:ai-summer-camp",
@@ -46,7 +52,13 @@
     "evidenceRefs": [
       "evidence:activities"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "title": "AI 夏令营",
+      "caption": "Datawhale AI 夏令营",
+      "label": "COMMUNITY / AI EDUCATION",
+      "variant": "tall"
+    }
   },
   {
     "id": "event:datawhale-aix",
@@ -113,7 +125,12 @@
     "evidenceRefs": [
       "evidence:activities"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "display": {
+      "title": "昇腾开发者创享日",
+      "caption": "华为昇腾开发者创享日",
+      "label": "DEVELOPER EVENT"
+    }
   },
   {
     "contributors": [],
@@ -129,6 +146,12 @@
     "title": {
       "zh": "AIY 黑客松 2026"
     },
-    "verifiedAt": "2026-09-02"
+    "verifiedAt": "2026-09-02",
+    "display": {
+      "title": "AIY 黑客松 2026",
+      "caption": "AIY 黑客松 2026",
+      "label": "HACKATHON / 2026",
+      "variant": "hackathon"
+    }
   }
 ]

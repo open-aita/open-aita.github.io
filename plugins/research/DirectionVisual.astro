@@ -1,0 +1,47 @@
+---
+interface Props { variant?: string; id: string }
+const { variant = 'tokens', id } = Astro.props;
+const gradientId = `${id.replaceAll(':', '-')}-line`;
+---
+{variant === 'tokens' && <div aria-hidden="true" class="unit-visual unit-visual--tokens">
+<svg role="presentation" viewBox="0 0 520 260">
+<defs><linearGradient id={gradientId} x1="0" x2="1"><stop stop-color="#78e772"></stop><stop offset="1" stop-color="#78e772"></stop></linearGradient></defs>
+<g class="diagram-grid"><path d="M20 40H500M20 90H500M20 140H500M20 190H500M20 240H500M70 20V250M160 20V250M250 20V250M340 20V250M430 20V250"></path></g>
+<g fill="none" stroke={`url(#${gradientId})`} data-direction-line stroke-width="2">
+<path d="M58 193C120 193 124 68 190 68S263 203 334 203s88-99 139-99"></path>
+<path d="M58 193 190 68 334 203 473 104" opacity=".55" stroke-dasharray="5 7"></path>
+</g>
+<g fill="#0a0a0a" stroke="#eff2eb" stroke-width="2"><circle cx="58" cy="193" r="9"></circle><circle cx="190" cy="68" r="9"></circle><circle cx="334" cy="203" r="9"></circle><circle cx="473" cy="104" r="9"></circle></g>
+<g class="diagram-text"><text x="36" y="224">VISION</text><text x="166" y="48">LANGUAGE</text><text x="307" y="235">WORLD</text><text x="442" y="84">ACTION</text></g>
+</svg>
+</div>}
+{variant === 'medical' && <div aria-hidden="true" class="unit-visual unit-visual--medical">
+<svg role="presentation" viewBox="0 0 520 260">
+<g fill="none" stroke="#767c75" stroke-width="1"><circle cx="260" cy="130" r="104"></circle><circle cx="260" cy="130" r="78"></circle><circle cx="260" cy="130" r="48"></circle><path d="M156 130H364M260 26V234"></path></g>
+<path d="M158 134c30-50 62-74 102-74 43 0 76 25 104 74-30 47-65 69-104 69-42 0-75-23-102-69Z" fill="none" stroke="#f2f4ee" stroke-width="2"></path>
+<circle cx="260" cy="132" fill="none" r="31" stroke="#78e772" stroke-width="3"></circle>
+<circle cx="260" cy="132" fill="#78e772" r="8"></circle>
+<g class="pulse"><circle cx="260" cy="132" fill="none" opacity=".35" r="42" stroke="#78e772"></circle></g>
+<g class="diagram-text"><text x="32" y="42">DIAGNOSIS</text><text x="402" y="226">CARE</text><text x="226" y="252">MODEL × CLINIC</text></g>
+</svg>
+</div>}
+{variant === 'chaos' && <div aria-hidden="true" class="unit-visual unit-visual--chaos">
+<svg role="presentation" viewBox="0 0 520 260">
+<g fill="none" stroke="#3e443e" stroke-width="1"><path d="M15 35H505M15 80H505M15 125H505M15 170H505M15 215H505"></path></g>
+<g fill="none" stroke-linecap="square">
+<path d="M22 135C55 35 90 232 124 128S194 38 229 133s70 101 105-3 70-89 105 4 54 69 67 8" stroke="#78e772" stroke-width="2"></path>
+<path d="M22 146C57 238 92 40 127 139s70 100 105 0 70-96 105 1 70 98 105-3 51-68 64-9" opacity=".8" stroke="#78e772" stroke-width="1.5"></path>
+</g>
+<g class="diagram-text"><text x="21" y="25">CHAOTIC MAP / SECURE EDGE</text><text x="410" y="246">t → ∞</text></g>
+</svg>
+</div>}
+{variant === 'agents' && <div aria-hidden="true" class="unit-visual unit-visual--agents">
+<svg role="presentation" viewBox="0 0 520 260">
+<g fill="none" stroke="#5a605a" stroke-width="1">
+<path d="M95 61 208 106 317 52 423 123 326 213 207 180 95 61Z"></path><path d="M208 106 207 180M317 52 326 213M95 61 326 213M423 123 208 106"></path>
+</g>
+<g fill="#0a0a0a" stroke="#f2f4ee" stroke-width="2"><circle cx="95" cy="61" r="13"></circle><circle cx="208" cy="106" r="13"></circle><circle cx="317" cy="52" r="13"></circle><circle cx="423" cy="123" r="13"></circle><circle cx="326" cy="213" r="13"></circle><circle cx="207" cy="180" r="13"></circle></g>
+<circle cx="208" cy="106" fill="#78e772" r="6"></circle><circle cx="326" cy="213" fill="#78e772" r="6"></circle>
+<g class="diagram-text"><text x="54" y="38">DATA</text><text x="177" y="85">EVAL</text><text x="286" y="29">MODEL</text><text x="433" y="128">TOOL</text><text x="339" y="239">TRACE</text><text x="160" y="211">AGENT</text></g>
+</svg>
+</div>}

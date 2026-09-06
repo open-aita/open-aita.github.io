@@ -1,0 +1,6 @@
+---
+interface Props { brand: { name: string; displayName: string; tagline: string; logo: string }; footer?: boolean }
+const { brand, footer = false } = Astro.props;
+---
+{footer ? <div class="footer-wordmark"><img alt="" height="160" src={'/' + brand.logo} width="103" /><span><b>{brand.name}</b><i>{brand.tagline}</i></span></div>
+: <a aria-label={`${brand.name} 首页`} class="brand" href="#top"><img class="brand-mark" alt="" width="103" height="160" src={'/' + brand.logo} /><span class="brand-type"><b>{brand.name}</b><i>{brand.displayName.replace(brand.name, '').trim()}</i></span></a>}

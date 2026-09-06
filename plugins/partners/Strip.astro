@@ -1,0 +1,15 @@
+---
+import { text } from '../../packages/content-loader-git/index.mjs';
+import type { loadContent } from '../../packages/content-loader-git/index.mjs';
+interface Props { content: ReturnType<typeof loadContent> }
+const { content } = Astro.props;
+const partners = content.organizations.filter(o => o.listedPartner);
+const order = ['org:001','org:002','org:007','org:012','org:011','org:010','org:009','org:004','org:005'];
+const featured = partners.filter(o => o.featured).sort((a,b) => order.indexOf(a.id)-order.indexOf(b.id));
+---
+<section aria-labelledby="partner-strip-title" class="partner-strip shell" data-plugin-owner="partners">
+<div class="strip-heading">
+<p id="partner-strip-title">Research network</p>
+<p>{partners.length} 家正式合作单位，覆盖高校、科研院所、医院、产业与开放社区。</p>
+</div>
+<div class="partner-grid partner-grid--featured">{featured.map(org => <div class="partner-cell"><small>{org.stripCategory} ↗</small><strong>{org.shortName ?? text(org.name)}</strong></div>)}<div class="partner-cell partner-cell--count"><small>FULL NETWORK</small><strong>+{partners.length-featured.length}</strong></div></div></section>

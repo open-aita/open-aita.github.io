@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const scope = { window: {} };
-vm.runInNewContext(fs.readFileSync(new URL('../assets/js/effect-budget.js', import.meta.url), 'utf8'), scope);
+vm.runInNewContext(fs.readFileSync(new URL('../packages/kernel/effect-budget.js', import.meta.url), 'utf8'), scope);
 const create = scope.window.createAitaEffectBudget;
 const run = (budget, fps, seconds, start = 0) => {
   for (let i = 0; i <= fps * seconds; i++) budget.sample(start + i * 1000 / fps);

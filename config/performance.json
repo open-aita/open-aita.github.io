@@ -1,0 +1,7 @@
+{
+  "mainJsGzipKb": 35,
+  "mainCssGzipKb": 35,
+  "mainHtmlGzipKb": 50,
+  "aboutEffectGzipKb": 220,
+  "outputsEffectGzipKb": 700
+}

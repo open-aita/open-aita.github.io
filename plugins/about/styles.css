@@ -1,0 +1,189 @@
+
+
+@layer sections {
+
+  :where([data-plugin="about"], [data-plugin-owner="about"]).about-section .section-kicker,
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy h2 .heading-chapter { color: var(--accent-about); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy h2 .heading-chapter { color: var(--heading-accent-projects); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]).about-section {
+    scroll-margin-top: calc(var(--header-height) + 18px);
+    margin-bottom: var(--section-gap);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.35fr);
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy {
+    position: relative;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(28px, 4vw, 62px);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--surface);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, var(--surface) 0%, var(--surface) 18%, transparent 84%),
+      linear-gradient(to bottom, transparent 55%, var(--surface) 100%);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy > :not(.about-field-frame) { position: relative; z-index: 2; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame {
+    position: absolute;
+    inset: -4%;
+    z-index: 0;
+    width: 108%;
+    height: 108%;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    filter: contrast(1.08) brightness(.86);
+    transition: opacity .9s ease;
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame.is-loaded { opacity: .64; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy h2 {
+    max-width: 620px;
+    margin: 56px 0 22px;
+    color: var(--text);
+    font: 600 clamp(28px, 3.1vw, 48px)/1.16 var(--sans);
+    letter-spacing: -.02em;
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy > p:not(.section-kicker) {
+    max-width: 560px;
+    color: var(--muted);
+    font: 15px/1.8 var(--sans);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy .button-row { margin-top: auto; padding-top: 36px; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system {
+    position: relative;
+    min-height: 520px;
+    display: grid;
+    grid-template-rows: 42px 1fr 52px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: var(--bg);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-head,
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-foot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--border);
+    color: rgba(255, 255, 255, .45);
+    font: 9px/1 var(--mono);
+    letter-spacing: .18em;
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-foot {
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    border-bottom: 0;
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-foot i { width: 34px; height: 1px; background: var(--border-light); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system svg { width: 100%; height: 100%; min-height: 400px; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step {
+    stroke: var(--border-light);
+    animation: about-loop-highlight 8s linear infinite both;
+    animation-play-state: paused;
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step:nth-child(2) { animation-delay: 2s; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step:nth-child(3) { animation-delay: 4s; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step:nth-child(4) { animation-delay: 6s; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system.is-loop-active .about-loop-step { animation-play-state: running; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts article {
+    position: relative;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts small { color: var(--text-micro); font: 10px/1 var(--mono); letter-spacing: .06em; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts strong { color: var(--text-soft); font: 500 clamp(42px, 4.6vw, 72px)/1 var(--sans); letter-spacing: -.03em; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts article:nth-child(2) { box-shadow: inset 0 1px var(--text); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts p { color: var(--muted); font: 11px/1.5 var(--sans); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note {
+    grid-column: 1 / -1;
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    align-items: center;
+    gap: 28px;
+    padding: 16px 18px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note span,
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note b { color: var(--text-micro); font: 700 10px/1.4 var(--mono); letter-spacing: .06em; }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note p { color: var(--muted); font: 13px/1.65 var(--sans); }
+  :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note b { text-align: right; color: var(--muted-2); }
+}
+
+@layer utilities {
+
+  @media (max-width: 1260px) {
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy h2 { margin-top: 42px; }
+  }
+
+  @media (max-width: 980px) {
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-grid { grid-template-columns: 1fr; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy, :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system { min-height: 480px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts { grid-template-columns: repeat(2, 1fr); }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note { grid-template-columns: 120px 1fr; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note b { grid-column: 2; text-align: left; }
+  }
+
+  @media (max-width: 680px) {
+
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy { min-height: 480px; padding: 24px 20px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy::after {
+      background:
+        linear-gradient(to bottom, var(--surface) 0%, var(--surface) 38%, transparent 76%, var(--surface) 100%),
+        linear-gradient(90deg, var(--surface) 0%, transparent 80%);
+    }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame {
+      inset: auto -16% -2%;
+      width: 132%;
+      height: 74%;
+    }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame.is-loaded { opacity: .58; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy h2 { margin-top: 44px; font-size: 27px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system { min-height: 400px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system svg { min-height: 300px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-foot { gap: 8px; font-size: 8px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-system-foot i { width: 15px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-facts article { min-height: 130px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note { grid-template-columns: 1fr; gap: 8px; padding: 18px; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .source-note b { grid-column: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame { display: none; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step { animation: none; }
+    :where([data-plugin="about"], [data-plugin-owner="about"]) .about-loop-step:first-child { stroke: var(--heading-accent-about); }
+  }
+}

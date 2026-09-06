@@ -1,0 +1,394 @@
+[
+  {
+    "organizationId": "org:001",
+    "shape": "academic",
+    "anchor": "BEIJING · HAIDIAN / CN",
+    "city": "北京",
+    "group": "main",
+    "map": "EURASIA / BEIJING",
+    "dx": -70,
+    "dy": -82,
+    "label": "TSINGHUA AIR",
+    "align": "left"
+  },
+  {
+    "organizationId": "org:002",
+    "shape": "academic",
+    "anchor": "BEIJING · HAIDIAN / CN",
+    "city": "北京",
+    "group": "main",
+    "map": "EURASIA / BEIJING",
+    "dx": -34,
+    "dy": -116,
+    "label": "PEKING UNIVERSITY",
+    "align": "left"
+  },
+  {
+    "organizationId": "org:003",
+    "shape": "academic",
+    "anchor": "BELFAST / UK",
+    "city": "贝尔法斯特",
+    "group": "main",
+    "map": "EURASIA / EUROPE",
+    "dx": -15,
+    "dy": -62,
+    "label": "QUEEN'S BELFAST",
+    "align": "right"
+  },
+  {
+    "organizationId": "org:004",
+    "shape": "academic",
+    "anchor": "SHEFFIELD / UK",
+    "city": "谢菲尔德",
+    "group": "main",
+    "map": "EURASIA / EUROPE",
+    "dx": 26,
+    "dy": -38,
+    "label": "SHEFFIELD",
+    "align": "right"
+  },
+  {
+    "organizationId": "org:005",
+    "shape": "academic",
+    "anchor": "TRENTO / IT",
+    "city": "特伦托",
+    "group": "main",
+    "map": "EURASIA / EUROPE",
+    "dx": -22,
+    "dy": -62,
+    "label": "UNIVERSITY OF TRENTO",
+    "align": "left"
+  },
+  {
+    "organizationId": "org:006",
+    "shape": "institute",
+    "anchor": "POVO · TRENTO / IT",
+    "city": "特伦托",
+    "group": "main",
+    "map": "EURASIA / EUROPE",
+    "dx": 24,
+    "dy": -28,
+    "label": "FBK",
+    "align": "right"
+  },
+  {
+    "organizationId": "org:007",
+    "shape": "institute",
+    "anchor": "BEIJING · HAIDIAN / CN",
+    "city": "北京",
+    "group": "main",
+    "map": "EURASIA / BEIJING",
+    "dx": 30,
+    "dy": -86,
+    "label": "CASIA",
+    "align": "right"
+  },
+  {
+    "organizationId": "org:008",
+    "shape": "institute",
+    "anchor": "PAK SHEK KOK · HK / CN",
+    "city": "香港",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.945,
+      0.72
+    ]
+  },
+  {
+    "organizationId": "org:009",
+    "shape": "academic",
+    "anchor": "HUNG HOM · HK / CN",
+    "city": "香港",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.86,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:010",
+    "shape": "academic",
+    "anchor": "NANSHA · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.27,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:011",
+    "shape": "institute",
+    "anchor": "XILI · SHENZHEN / CN",
+    "city": "深圳",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.57,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:012",
+    "shape": "institute",
+    "anchor": "SHIBILONG · SHENZHEN / CN",
+    "city": "深圳",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.66,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:013",
+    "shape": "compute",
+    "anchor": "TIANHE · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.14,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:014",
+    "shape": "industry",
+    "anchor": "CHANGPING · BEIJING / CN",
+    "city": "北京",
+    "group": "main",
+    "map": "EURASIA / BEIJING",
+    "dx": 74,
+    "dy": -48,
+    "label": "CNPC RISE",
+    "align": "right"
+  },
+  {
+    "organizationId": "org:015",
+    "shape": "industry",
+    "anchor": "TIANHE · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.25,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:016",
+    "shape": "institute",
+    "anchor": "PAZHOU · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.69,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:017",
+    "shape": "agriculture",
+    "anchor": "TIANHE · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.36,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:018",
+    "shape": "medical",
+    "anchor": "YUEXIU · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.4
+    ]
+  },
+  {
+    "organizationId": "org:019",
+    "shape": "academic",
+    "anchor": "UNIVERSITY TOWN · SHENZHEN / CN",
+    "city": "深圳",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.48,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:020",
+    "shape": "medical",
+    "anchor": "BAIYUN · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.47,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:021",
+    "shape": "academic",
+    "anchor": "WUSHAN · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.58,
+      0.12
+    ]
+  },
+  {
+    "organizationId": "org:022",
+    "shape": "institute",
+    "anchor": "NANSHAN · SHENZHEN / CN",
+    "city": "深圳",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.39,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:023",
+    "shape": "medical",
+    "anchor": "PINGSHAN · SHENZHEN / CN",
+    "city": "深圳",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.76,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:024",
+    "shape": "medical",
+    "anchor": "LIWAN · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.76
+    ]
+  },
+  {
+    "organizationId": "org:025",
+    "shape": "medical",
+    "anchor": "YUEXIU · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.28
+    ]
+  },
+  {
+    "organizationId": "org:026",
+    "shape": "medical",
+    "anchor": "LIWAN · GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.86
+    ]
+  },
+  {
+    "organizationId": "org:027",
+    "shape": "industry",
+    "anchor": "GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.52
+    ]
+  },
+  {
+    "organizationId": "org:028",
+    "shape": "industry",
+    "anchor": "JIANGXI PROVINCE / CN",
+    "city": "江西",
+    "group": "main",
+    "map": "EURASIA / CHINA",
+    "dx": -24,
+    "dy": -56,
+    "label": "JIANGXI · PROVINCIAL",
+    "align": "left"
+  },
+  {
+    "organizationId": "org:029",
+    "shape": "gdut",
+    "anchor": "JIEYANG CAMPUS / CN",
+    "city": "揭阳",
+    "group": "gba",
+    "map": "GBA + JIEYANG DETAIL",
+    "display": [
+      0.93,
+      0.2
+    ]
+  },
+  {
+    "organizationId": "org:030",
+    "shape": "gdut",
+    "anchor": "JIEYANG CAMPUS / CN",
+    "city": "揭阳",
+    "group": "gba",
+    "map": "GBA + JIEYANG DETAIL",
+    "display": [
+      0.93,
+      0.36
+    ]
+  },
+  {
+    "organizationId": "org:031",
+    "shape": "gdut",
+    "anchor": "JIEYANG CAMPUS / CN",
+    "city": "揭阳",
+    "group": "gba",
+    "map": "GBA + JIEYANG DETAIL",
+    "display": [
+      0.93,
+      0.52
+    ]
+  },
+  {
+    "organizationId": "org:032",
+    "shape": "industry",
+    "anchor": "GUANGZHOU / CN",
+    "city": "广州",
+    "group": "gba",
+    "map": "GBA DETAIL",
+    "display": [
+      0.055,
+      0.64
+    ]
+  },
+  {
+    "organizationId": "org:033",
+    "shape": "community",
+    "anchor": "DISTRIBUTED",
+    "city": "分布式社区",
+    "group": "native",
+    "map": "NETWORK-NATIVE"
+  }
+]

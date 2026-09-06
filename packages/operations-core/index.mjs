@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateContent, validatePatch, validateSchema } from '../domain/index.mjs';
+import { validateContent, operationSchema, validateSchema } from '../domain/index.mjs';
 
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(MODULE_DIR, '../..');
@@ -111,6 +111,13 @@ export async function getTaskRegistry() {
   return readJson('agent/task-registry.json');
 }
 
+export async function chapterManifests() {
+  const directories = (await fs.readdir(path.join(ROOT,'plugins'), {withFileTypes:true})).filter(entry=>entry.isDirectory());
+  const manifests = await Promise.all(directories.map(entry=>readJson(`plugins/${entry.name}/chapter.manifest.json`)));
+  for (let i=0;i<manifests.length;i++) if (manifests[i].id!==directories[i].name) throw new AitaOperationError('AITA_CHAPTER_ID_INVALID','章节目录名必须与清单 ID 一致');
+  return manifests.sort((a,b)=>a.order-b.order);
+}
+
 export async function getTask(operationId) {
   const registry = await getTaskRegistry();
   const task = registry.tasks.find((item) => item.id === operationId);
@@ -124,11 +131,10 @@ export async function getTask(operationId) {
 }
 
 export async function validateOperationInput(task, input) {
-  const schema = await readJson(task.inputSchema);
+  const schema = operationSchema(task);
   const errors = validateSchema(schema, input);
-  if (input?.patch && typeof input.patch === 'object') errors.push(...validatePatch(task.target.collection, input.patch));
   if (errors.length) throw new AitaOperationError('AITA_OPERATION_INPUT_INVALID', `Operation 输入不符合 Schema：${task.id}`, { operationId: task.id, errors });
-  return { ok: true, schema: task.inputSchema };
+  return { ok: true, schemaSource: 'packages/domain/schema.mjs' };
 }
 
 export async function listContentCollections() {
@@ -145,8 +151,13 @@ export async function listContentCollections() {
 
 export async function queryEntity(entityId) {
   for (const collection of await listContentCollections()) {
-    if (!Array.isArray(collection.data)) continue;
-    const entity = collection.data.find((item) => item && item.id === entityId);
+    const find = value => {
+      if (!value || typeof value !== 'object') return null;
+      if (value.id === entityId) return value;
+      for (const child of Object.values(value)) { const match = find(child); if (match) return match; }
+      return null;
+    };
+    const entity = find(collection.data);
     if (entity) {
       return {
         ok: true,
@@ -166,6 +177,7 @@ export async function queryEntity(entityId) {
 function setByPath(object, dottedPath, value) {
   const keys = dottedPath.split('.').filter(Boolean);
   if (!keys.length) throw new AitaOperationError('AITA_SETTING_PATH_INVALID', '设置路径为空');
+  if (keys.some(key => ['__proto__', 'constructor', 'prototype'].includes(key))) throw new AitaOperationError('AITA_SETTING_PATH_INVALID', '设置路径不允许访问对象原型');
   let cursor = object;
   for (const key of keys.slice(0, -1)) {
     if (!cursor[key] || typeof cursor[key] !== 'object' || Array.isArray(cursor[key])) cursor[key] = {};
@@ -175,12 +187,8 @@ function setByPath(object, dottedPath, value) {
 }
 
 async function affectedRoutesFor(task) {
-  const file = `plugins/${task.plugin}/chapter.manifest.json`;
-  const manifest = await readJson(file).catch(error => {
-    if (['media', 'site', 'redirect'].includes(task.plugin)) return null;
-    throw error;
-  });
-  return manifest ? [manifest.demoEntry] : ['/'];
+  const affected = (await chapterManifests()).filter(manifest=>manifest.consumes.includes(task.target.collection));
+  return affected.length ? affected.map(manifest=>manifest.demoEntry) : ['/'];
 }
 
 function plannedChange(task, input) {
@@ -428,6 +436,7 @@ export async function describeRepository() {
   return {
     ok: true,
     ...manifest,
+    plugins: (await chapterManifests()).map(chapter=>chapter.id),
     currentRevision: await sourceRevision(),
     operationCount: tasks.tasks.length,
     componentCount: Object.keys(components.components).length,

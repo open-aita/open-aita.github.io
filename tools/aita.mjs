@@ -2,8 +2,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import {
-  ROOT, AitaOperationError, describeRepository, getTaskRegistry, getTask, readJson,
-  queryEntity, plan, apply, semanticDiff, sourceRevision,
+  AitaOperationError, describeRepository, getTaskRegistry, getTask, readJson,
+  queryEntity, plan, apply, semanticDiff,
 } from '../packages/operations-core/index.mjs';
 import { verifyRepository, testRecipes } from '../packages/verification/index.mjs';
 import { operationSchema } from '../packages/domain/index.mjs';
@@ -38,8 +38,7 @@ function usage() {
   `  aita recipe test --json\n` +
   `  aita ui list --json\n` +
   `  aita ui inspect <component> --json\n` +
-  `  aita preview create --changed --json\n` +
-  `  aita rollback inspect <release-id> --json`;
+  `  aita preview create --json`;
 }
 
 async function readInput(file) {
@@ -47,7 +46,7 @@ async function readInput(file) {
   const absolute = path.resolve(process.cwd(), file);
   const text = await fs.readFile(absolute, 'utf8');
   if (!file.toLowerCase().endsWith('.json')) {
-    throw new AitaOperationError('AITA_INPUT_FORMAT_UNSUPPORTED', '离线 CLI 以 JSON 作为可执行输入；生产适配器可在进入 Operations Core 前转换 YAML', { path: file });
+    throw new AitaOperationError('AITA_INPUT_FORMAT_UNSUPPORTED', 'CLI 仅接受 JSON 输入', { path: file });
   }
   try { return JSON.parse(text); }
   catch (error) { throw new AitaOperationError('AITA_INPUT_JSON_INVALID', `输入 JSON 无法解析：${file}`, { cause: error.message }); }
@@ -62,13 +61,13 @@ async function main() {
 
   if (command === 'describe') {
     const result = await describeRepository();
-    emit(result, `AITA Agent-Native Demo\nRevision: ${result.currentRevision}\nPlugins: ${result.plugins.join(', ')}\nOperations: ${result.operationCount}\nComponents: ${result.componentCount}`);
+    emit(result, `AITA Research Lab\nPlugins: ${result.plugins.join(', ')}\nOperations: ${result.operationCount}\nComponents: ${result.componentCount}`);
     return;
   }
 
   if (command === 'task' && subcommand === 'list') {
     const registry = await getTaskRegistry();
-    emit({ ok: true, schemaVersion: registry.schemaVersion, tasks: registry.tasks.map(({ id, version, plugin, risk, description, inputSchema }) => ({ id, version, plugin, risk, description, inputSchema })) }, registry.tasks.map((task) => `${task.id}\t${task.risk}\t${task.description}`).join('\n'));
+    emit({ ok: true, schemaVersion: registry.schemaVersion, schemaSource: registry.schemaSource, tasks: registry.tasks.map(({ id, version, plugin, risk, description }) => ({ id, version, plugin, risk, description })) }, registry.tasks.map((task) => `${task.id}\t${task.risk}\t${task.description}`).join('\n'));
     return;
   }
 
@@ -141,31 +140,22 @@ async function main() {
     const registry = await readJson('agent/component-registry.json');
     const component = registry.components[third];
     if (!component) throw new AitaOperationError('AITA_COMPONENT_UNKNOWN', `未知组件：${third}`);
-    emit({ ok: true, name: third, component, propsSchema: await readJson(component.propsSchema) });
+    emit({ ok: true, name: third, component, propsDefinition: component.source, validation: 'npm run check' });
     return;
   }
 
   if (command === 'ui' && subcommand === 'validate') {
     const result = await verifyRepository({ changed: has('--changed'), includeRecipes: false });
-    const uiChecks = result.checks.filter((check) => ['component-registry','accessibility-baseline','performance-budget','html-structure'].includes(check.id));
-    const ok = uiChecks.every((check) => check.status === 'passed');
+    const uiChecks = result.checks.filter((check) => ['component-registry','accessibility-baseline','performance-budget','html-structure','local-assets','build-freshness'].includes(check.id));
+    const ok = uiChecks.length === 6 && uiChecks.every((check) => check.status === 'passed');
     emit({ ok, checks: uiChecks });
     if (!ok) process.exitCode = 5;
     return;
   }
 
   if (command === 'preview' && subcommand === 'create') {
-    const finalPreview = path.join(ROOT, 'preview', 'final');
-    const available = await fs.access(finalPreview).then(() => true).catch(() => false);
-    emit({ ok: available, mode: 'offline-prebuilt-preview', path: 'preview/final/', sourceRevision: await sourceRevision(), changedRequested: has('--changed'), nextActions: available ? ['review-screenshots'] : ['run-visual-capture'] });
-    if (!available) process.exitCode = 5;
-    return;
-  }
-
-  if (command === 'rollback' && subcommand === 'inspect') {
-    if (!third) throw new AitaOperationError('AITA_RELEASE_ID_REQUIRED', '缺少 release ID');
-    const release = await readJson('release.manifest.json');
-    emit({ ok: release.releaseId === third, requestedReleaseId: third, release, rollbackUnit: 'complete-immutable-artifact' });
+    const { createPreview } = await import('./preview-site.mjs');
+    emit(await createPreview());
     return;
   }
 

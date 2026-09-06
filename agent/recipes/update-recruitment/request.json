@@ -1,9 +1,10 @@
 {
   "id": "recruitment:general",
   "patch": {
-    "status": "draft",
+    "status": "open",
+    "formUrl": "https://example.org/aita/join",
     "summary": {
-      "zh": "示例更新；联系方式仍保持为空。"
+      "zh": "示例招新更新，仅用于隔离测试。"
     }
   },
   "evidenceRefs": [

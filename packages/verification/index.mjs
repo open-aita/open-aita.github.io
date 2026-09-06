@@ -86,6 +86,7 @@ export async function testRecipes() {
   const base = path.join(ROOT, 'agent', 'recipes');
   const entries = (await fs.readdir(base, { withFileTypes: true })).filter((entry) => entry.isDirectory()).sort((a,b) => a.name.localeCompare(b.name));
   const failures = [];
+  const requests = [];
   const work = path.join(ROOT, '.work');
   await fs.mkdir(work, { recursive: true });
   const fixture = await fs.mkdtemp(path.join(work, 'recipes-'));
@@ -97,6 +98,7 @@ export async function testRecipes() {
   for (const entry of entries) {
     try {
       const request = JSON.parse(await fs.readFile(path.join(base, entry.name, 'request.json'), 'utf8'));
+      requests.push({name:entry.name,request});
       const assertions = JSON.parse(await fs.readFile(path.join(base, entry.name, 'assertions.json'), 'utf8'));
       const task = await operations.getTask(assertions.operation);
       await operations.validateOperationInput(task, request);
@@ -124,6 +126,33 @@ export async function testRecipes() {
       failures.push({ recipe: entry.name, errors: [caught.message], code: caught.code ?? null });
     }
   }
+    // Complete the same Recipe journey through the actual Astro renderer.
+    // No second renderer or production writes are used for this check.
+    if (!failures.length) {
+      try {
+        for (const name of ['apps/site','packages/content-loader-git','packages/design-system','packages/kernel']) {
+          await fs.cp(path.join(ROOT,name),path.join(fixture,name),{recursive:true,filter:file=>!file.split(path.sep).includes('.astro') && !file.split(path.sep).join('/').includes('/public/effects')});
+        }
+        const { prepareEffects } = await import('../../tools/prepare-effects.mjs');
+        await prepareEffects(pathToFileURL(fixture+path.sep));
+        const { build } = await import('astro');
+        await build({root:path.join(fixture,'apps/site'),logLevel:'silent'});
+        const html = await fs.readFile(path.join(fixture,'dist/index.html'),'utf8');
+        for (const {name,request} of requests) {
+          const expected = name==='add-project' ? `data-entity-id="${request.id}"`
+            : name==='publish-activity-gallery' ? request.title.zh
+            : name==='replace-gallery-media' ? `alt="${request.patch.alt.zh}"`
+            : name==='change-publication-status' ? `data-entity-id="${request.id}" data-status="${request.status}"`
+            : request.patch.summary.zh;
+          if (!html.includes(expected)) failures.push({recipe:name,errors:['Applied content did not reach the built page']});
+        }
+        const join = requests.find(item=>item.name==='update-recruitment').request;
+        const links = [...html.matchAll(/<a\b[^>]*\bdata-join-link\b[^>]*>/g)].map(m=>m[0]);
+        if (links.length!==3 || links.some(tag=>!tag.includes(`href="${join.patch.formUrl}"`))) failures.push({recipe:'update-recruitment',errors:['The three join links did not use the configured URL']});
+      } catch(error) {
+        failures.push({recipe:'content-to-astro',errors:[error.message]});
+      }
+    }
     // The critical failure path: an invalid patch must be rejected before any write.
     const before = await operations.readJson('content/projects.json');
     let rejected = false;

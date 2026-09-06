@@ -326,27 +326,6 @@
   }
   dialog::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(7px); }
 
-  .lightbox {
-    width: min(92vw, 1280px);
-    max-height: 92vh;
-    padding: 48px 18px 16px;
-  }
-  .lightbox > button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--border-light);
-    background: var(--surface-3);
-    cursor: pointer;
-    font: 18px/1 var(--mono);
-  }
-  .lightbox figure { display: grid; place-items: center; gap: 12px; }
-  .lightbox img { max-height: 76vh; width: auto; object-fit: contain; }
-  .lightbox figcaption { color: var(--muted); font: 11px/1.5 var(--mono); }
-
-
 }
 
 @layer sections {

@@ -16,7 +16,12 @@ const other = content.events.filter(e => !gallery.includes(e));
 {gallery.map(event => { const asset = content['media-assets'].find(m => m.id === event.mediaAssetIds[0]); if (!asset) throw new Error(`Missing gallery asset for ${event.id}`); return <button class:list={['gallery-card', 'reveal', event.display?.variant && `gallery-card--${event.display.variant}`]} data-caption={event.display?.caption ?? text(event.title)} data-lightbox={asset.fallbackPath ?? asset.path} type="button"><picture>{asset.path.endsWith('.webp') && <source srcset={asset.path} type="image/webp" />}<img alt={text(asset.alt)} height={asset.height} loading="lazy" src={asset.fallbackPath ?? asset.path} width={asset.width} /></picture><span><small>{event.display?.label ?? event.kind.toUpperCase()}</small><strong>{event.display?.title ?? text(event.title)}</strong><i>OPEN IMAGE ↗</i></span></button> })}
 <article class="activity-index reveal"><p class="section-kicker">MORE ACTIVITIES</p><ul>{other.map((event,i) => <li><span>{number(i+1)}</span>{text(event.title)}</li>)}</ul></article>
 {content.news.filter(n => n.status !== 'draft' && n.status !== 'archived').map(item => <article class="activity-index reveal"><h3>{text(item.title)}</h3><p>{text(item.summary)}</p></article>)}
-</div></section>
+</div>
+<dialog class="lightbox" data-lightbox-dialog="">
+<button aria-label="关闭图片" data-lightbox-close="" type="button">×</button>
+<figure><img alt="" src=""/><figcaption></figcaption></figure>
+</dialog>
+</section>
 
 <script>
 import { mountChapter } from "../../packages/kernel/client.js";

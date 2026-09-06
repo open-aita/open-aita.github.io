@@ -42,15 +42,6 @@ export function validateSchema(schema, value) {
   return (validate.errors ?? []).map(({ instancePath, message, params }) => ({ pointer: instancePath || '/', message, ...params }));
 }
 
-export function validatePatch(collection, patch) {
-  const definition = contentSchema.properties[collection]?.items;
-  if (!definition) return [{ pointer: '/patch', message: `Collection does not support entity patches: ${collection}` }];
-  const entity = contentSchema.$defs[definition.$ref.split('/').at(-1)];
-  const errors = validateSchema({ ...entity, $defs: contentSchema.$defs, required: [] }, patch);
-  if (Object.hasOwn(patch, 'id')) errors.push({ pointer: '/id', message: 'Permanent IDs cannot be changed by an update' });
-  return errors;
-}
-
 export function validateContent(collections) {
   const errors = validateSchema(contentSchema, collections);
   const ids = new Set();

@@ -51,15 +51,11 @@ const { content } = Astro.props;
 <div class="footer-grid shell">
 <div><h3>RESEARCH</h3><a href="#about">About AITA</a><a href="#research">Research stack</a><a href="#projects">Project index</a><a href="#outputs">Publications &amp; IP</a></div>
 <div><h3>LAB</h3><a href="#achievements">Achievements</a><a href="#network">Partners</a><a href="#activities">Activities</a><a href="#join">Join AITA</a></div>
-<div><h3>BUILD</h3><p>ASTRO / STATIC WEBSITE</p><p>AGENT PROTOCOL / AITA.OPERATIONS V1</p><p>CONTENT SCHEMA / AITA.CONTENT V2</p></div>
-<div class="footer-note"><p>AITA 人工智能技术创新团队</p><p>AITA Research Lab · All runtime assets are local.</p></div>
+<div><h3>BUILD</h3><p>RESEARCH / BUILD / VERIFY / SHARE</p><p>OPEN RESEARCH / GDUT</p><p>ALGORITHMS · SYSTEMS · APPLICATIONS</p></div>
+<div class="footer-note"><p>AITA 人工智能技术创新团队</p><p>{content.settings.brand.displayName}</p></div>
 </div>
 <div class="footer-bottom shell"><span>© 2026 AITA</span><span>TOWARD ∞ — INFINITE INTELLIGENCE</span></div>
 </footer>
-<dialog class="lightbox" data-lightbox-dialog="">
-<button aria-label="关闭图片" data-lightbox-close="" type="button">×</button>
-<figure><img alt="" src=""/><figcaption></figcaption></figure>
-</dialog>
 <noscript><div class="noscript">页面内容无需 JavaScript 即可阅读；项目筛选、动态背景和图片放大功能需要启用 JavaScript。</div></noscript>
 
 <script>import { mountChapter } from "../../../../packages/kernel/client.js";mountChapter("main-content", () => import("../../../../packages/kernel/navigation.js"));</script>

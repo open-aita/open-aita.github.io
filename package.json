@@ -8,10 +8,11 @@
     "aita": "node tools/aita.mjs",
     "verify": "node tools/aita.mjs verify --json",
     "recipes": "node tools/aita.mjs recipe test --json",
-    "dev": "node tools/prepare-effects.mjs && astro dev --root apps/site",
+    "dev": "node tools/prepare-effects.mjs && cd apps/site && astro dev",
     "build": "node tools/prepare-effects.mjs && astro build --root apps/site",
-    "preview": "astro preview --root apps/site",
-    "check": "astro check --root apps/site"
+    "preview": "cd apps/site && astro preview",
+    "check": "astro check --root apps/site",
+    "smoke": "node tools/smoke-site.mjs"
   },
   "engines": {
     "node": ">=22.12.0"

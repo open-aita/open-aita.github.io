@@ -272,8 +272,7 @@ export function transformDocument(task, input, current) {
   if (mode === 'set') {
     if (Array.isArray(document) || !document || typeof document !== 'object') throw new AitaOperationError('AITA_TARGET_SHAPE_INVALID', `${relativePath} 不是设置对象`);
     const targetPath = task.target.path ?? input.key;
-    const value = task.target.path === 'featuredContentIds' ? input.entityIds
-      : task.target.path === 'about.overview' ? { value: input.overview, evidenceRefs: input.evidenceRefs ?? [] }
+    const value = task.target.path === 'about.overview' ? { value: input.overview, evidenceRefs: input.evidenceRefs ?? [] }
       : input.value;
     before = structuredClone(document);
     setByPath(document, targetPath, value);

@@ -1,7 +1,6 @@
 export function mount(root) {
-const doc = document;
   // Accessible image lightbox.
-  const lightbox = doc.querySelector("[data-lightbox-dialog]");
+  const lightbox = root.querySelector("[data-lightbox-dialog]");
   const lightboxImage = lightbox?.querySelector("img");
   const lightboxCaption = lightbox?.querySelector("figcaption");
   const closeLightbox = () => lightbox?.open && lightbox.close();
@@ -15,7 +14,7 @@ const doc = document;
       else lightbox.setAttribute("open", "");
     });
   });
-  doc.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
+  lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
   lightbox?.addEventListener("click", (event) => {
     if (event.target === lightbox) closeLightbox();
   });

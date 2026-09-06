@@ -1,5 +1,27 @@
 
 
+@layer components {
+  :where([data-plugin="activities"]) .lightbox {
+    width: min(92vw, 1280px);
+    max-height: 92vh;
+    padding: 48px 18px 16px;
+  }
+  :where([data-plugin="activities"]) .lightbox > button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-3);
+    cursor: pointer;
+    font: 18px/1 var(--mono);
+  }
+  :where([data-plugin="activities"]) .lightbox figure { display: grid; place-items: center; gap: 12px; }
+  :where([data-plugin="activities"]) .lightbox img { max-height: 76vh; width: auto; object-fit: contain; }
+  :where([data-plugin="activities"]) .lightbox figcaption { color: var(--muted); font: 11px/1.5 var(--mono); }
+}
+
 @layer sections {
 
   :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-heading h2 .heading-chapter,

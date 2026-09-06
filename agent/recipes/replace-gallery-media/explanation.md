@@ -1,1 +1,3 @@
-替换已有活动媒体的本地路径和替代文本。输入统一使用 id、patch、evidenceRefs；执行测试只在隔离副本中写入，不会改变生产资料。
+# replace-gallery-media
+
+此 Recipe 在隔离副本中执行 Plan、dry-run、Apply 和重复 Apply，并验证生成的 Astro 网页。不会写入生产内容。请求字段以 `task schema` 输出为准。

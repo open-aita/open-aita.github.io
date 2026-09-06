@@ -1285,6 +1285,7 @@
     .paths-list h4 { font-size: 14px; }
     .paths-study .paths-list h4 { font-size: 17px; }
   }
+  .brand-mark { width: auto; height: 16px; flex: 0 0 auto; margin-right: 9px; transform: translateY(-1px); }
   @media (max-width: 700px) {
     .paths-columns { grid-template-columns: minmax(0, 1fr); }
     .paths-careers { padding-right: 0; }
@@ -1411,6 +1412,7 @@
     .header-cta { min-height: 32px; padding-inline: 10px; white-space: nowrap; }
     .header-cta span { display: none; }
     .menu-toggle { display: block; }
+    .brand-mark { transform: translateY(-2px); }
     .brand-type b { font-size: 18px; }
     .brand-type i { font-size: 16px; }
 

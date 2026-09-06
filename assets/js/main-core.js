@@ -3,6 +3,8 @@
 
   const doc = document;
   const body = doc.body;
+  const joinUrl = body.dataset.joinUrl || "#join";
+  doc.querySelectorAll("[data-join-link]").forEach((link) => link.setAttribute("href", joinUrl));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Blink only while the terminal is visible; CSS handles reduced motion.
@@ -311,24 +313,6 @@
   doc.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
   lightbox?.addEventListener("click", (event) => {
     if (event.target === lightbox) closeLightbox();
-  });
-
-  // Demo notice keeps unsupported contact details explicit instead of inventing them.
-  const demoDialog = doc.querySelector("[data-demo-dialog]");
-  doc.querySelector("[data-demo-notice]")?.addEventListener("click", () => {
-    if (!demoDialog) return;
-    if (typeof demoDialog.showModal === "function") demoDialog.showModal();
-    else demoDialog.setAttribute("open", "");
-  });
-  doc.querySelectorAll("[data-demo-close]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (!demoDialog) return;
-      if (typeof demoDialog.close === "function") demoDialog.close();
-      else demoDialog.removeAttribute("open");
-    });
-  });
-  demoDialog?.addEventListener("click", (event) => {
-    if (event.target === demoDialog) demoDialog.close();
   });
 
   // Section-aware navigation.

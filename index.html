@@ -9,12 +9,13 @@
 <meta content="AITA 人工智能技术创新团队官网演示：实验室介绍、研究方向、合作项目、科研成果、荣誉、合作网络与活动。" name="description"/>
 <title>AITA — Toward Infinite Intelligence</title>
 <link href="assets/images/favicon.svg" rel="icon" type="image/svg+xml"/>
-<link href="assets/css/styles.css?v=20260907-3" rel="stylesheet"/>
+<link href="assets/css/styles.css?v=20260907-5" rel="stylesheet"/>
 <link href="assets/css/network-atlas.css?v=20260904-3" rel="stylesheet"/>
 <script defer src="assets/js/network-atlas.js?v=20260905-2"></script>
-<script defer="" src="assets/js/main.js?v=20260905-8"></script>
+<script defer="" src="assets/js/main.js?v=20260907-1"></script>
 </head>
-<body>
+<!-- Set data-join-url to the future recruitment URL; all three join buttons share it. -->
+<body data-join-url="#join">
 <a class="skip-link" href="#main-content">跳到正文</a>
 <header class="site-header" data-header="">
 <div class="header-inner">
@@ -23,7 +24,7 @@
 <span class="brand-type"><b>AITA</b><i>Research Lab</i></span>
 </a>
 <nav aria-label="主要导航" class="primary-nav"><a href="#about"><span>ABOUT</span><small>01</small></a><a href="#research"><span>RESEARCH</span><small>02</small></a><a href="#outputs"><span>OUTPUTS</span><small>03</small></a><a href="#network"><span>NETWORK</span><small>04</small></a></nav>
-<nav aria-label="辅助导航" class="utility-nav"><a href="#achievements">HONORS</a><a href="#activities">EVENTS</a><a href="#about">EXPLORE</a><a class="header-cta" href="#join">JOIN US <span aria-hidden="true">›</span></a></nav>
+<nav aria-label="辅助导航" class="utility-nav"><a href="#achievements">HONORS</a><a href="#activities">EVENTS</a><a href="#about">EXPLORE</a><a class="header-cta" data-join-link="" href="#join">JOIN US <span aria-hidden="true">›</span></a></nav>
 <button aria-controls="mobile-menu" aria-expanded="false" class="menu-toggle" data-menu-toggle="" type="button">
 <span class="sr-only">打开导航菜单</span>
 <span></span><span></span>
@@ -44,7 +45,7 @@
 <p class="hero-lead">围绕大模型、多模态学习、医疗人工智能、视觉理解与可信系统，将前沿研究连接到真实世界的复杂问题。</p>
 <div class="button-row">
 <a class="button button-primary" href="#research">探索研究 <span aria-hidden="true">›</span></a>
-<a class="button button-secondary" href="#join">加入 AITA</a>
+<a class="button button-secondary" data-join-link="" href="#join">加入 AITA</a>
 </div>
 <p aria-label="AITA research command" class="terminal-line"><span>$</span> <span data-terminal="">aita towards --frontier</span><i aria-hidden="true"></i></p>
 </div>
@@ -635,8 +636,8 @@
 <div class="join-copy">
 <p>面向愿意把算法、系统与真实问题连接起来的同学。原始资料未提供官方招新邮箱或报名表单，因此演示版保留明确的待接入状态。</p>
 <div class="button-row">
-<a class="button button-primary" href="#research">探索研究方向 <span aria-hidden="true">›</span></a>
-<button class="button button-secondary" data-demo-notice="" type="button">DEMO NOTICE</button>
+<a class="button button-primary" data-join-link="" href="#join">加入 AITA <span aria-hidden="true">›</span></a>
+<a class="button button-secondary" href="#top">BACK TO TOP <span aria-hidden="true">↑</span></a>
 </div>
 </div>
 <div aria-hidden="true" class="join-system"><div><span>AITA://</span><b>∞</b></div><ol><li>01 / RESEARCH</li><li>02 / BUILD</li><li>03 / VERIFY</li><li>04 / SHARE</li></ol></div>
@@ -645,7 +646,7 @@
 </main>
 <footer class="site-footer">
 <div class="footer-cta shell">
-<div class="footer-wordmark"><img alt="" height="46" src="assets/images/aita-mark.svg" width="62"/><span><b>AITA</b><i>Toward Infinite Intelligence</i></span></div>
+<div class="footer-wordmark"><img alt="" height="160" src="assets/images/aita-header-mark.svg" width="103"/><span><b>AITA</b><i>Toward Infinite Intelligence</i></span></div>
 <a class="button button-primary" href="#top">BACK TO TOP <span aria-hidden="true">↑</span></a>
 </div>
 <div class="footer-grid shell">
@@ -659,13 +660,6 @@
 <dialog class="lightbox" data-lightbox-dialog="">
 <button aria-label="关闭图片" data-lightbox-close="" type="button">×</button>
 <figure><img alt="" src=""/><figcaption></figcaption></figure>
-</dialog>
-<dialog class="demo-dialog" data-demo-dialog="">
-<button aria-label="关闭" data-demo-close="" type="button">×</button>
-<p class="section-kicker">DEMO NOTICE</p>
-<h2>这是 Agent-Native 架构的离线官网 Demo</h2>
-<p>官网可直接离线浏览；包内同时提供内容实体、章节插件清单、任务注册表、组件注册表、策略、Schema、Recipes 与确定性验证 CLI。原始资料未提供招新邮箱或报名入口，因此没有虚构这些信息。</p>
-<button class="button button-primary" data-demo-close="" type="button">明白</button>
 </dialog>
 <noscript><div class="noscript">页面内容无需 JavaScript 即可阅读；项目筛选、动态背景和图片放大功能需要启用 JavaScript。</div></noscript>
 </body>

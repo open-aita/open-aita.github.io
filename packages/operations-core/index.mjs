@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateContent, validatePatch, validateSchema } from '../domain/index.mjs';
 
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(MODULE_DIR, '../..');
@@ -122,63 +123,11 @@ export async function getTask(operationId) {
   return task;
 }
 
-function typeMatches(value, expected) {
-  const types = Array.isArray(expected) ? expected : [expected];
-  return types.some((type) => {
-    if (type === 'null') return value === null;
-    if (type === 'array') return Array.isArray(value);
-    if (type === 'object') return value !== null && typeof value === 'object' && !Array.isArray(value);
-    if (type === 'integer') return Number.isInteger(value);
-    return typeof value === type;
-  });
-}
-
-function validateNode(schema, value, pointer, errors) {
-  if (!schema || typeof schema !== 'object') return;
-  if ('const' in schema && value !== schema.const) {
-    errors.push({ pointer, message: `必须等于 ${JSON.stringify(schema.const)}` });
-    return;
-  }
-  if (schema.enum && !schema.enum.includes(value)) {
-    errors.push({ pointer, message: `必须属于枚举：${schema.enum.join(', ')}` });
-    return;
-  }
-  if (schema.type && !typeMatches(value, schema.type)) {
-    errors.push({ pointer, message: `类型应为 ${Array.isArray(schema.type) ? schema.type.join('|') : schema.type}` });
-    return;
-  }
-  if (typeof value === 'string') {
-    if (schema.minLength !== undefined && value.length < schema.minLength) errors.push({ pointer, message: `长度不得小于 ${schema.minLength}` });
-    if (schema.pattern && !(new RegExp(schema.pattern).test(value))) errors.push({ pointer, message: `不符合格式 ${schema.pattern}` });
-  }
-  if (Array.isArray(value)) {
-    if (schema.minItems !== undefined && value.length < schema.minItems) errors.push({ pointer, message: `至少包含 ${schema.minItems} 项` });
-    if (schema.items) value.forEach((item, index) => validateNode(schema.items, item, `${pointer}/${index}`, errors));
-  }
-  if (value && typeof value === 'object' && !Array.isArray(value)) {
-    if (schema.minProperties !== undefined && Object.keys(value).length < schema.minProperties) errors.push({ pointer, message: `至少包含 ${schema.minProperties} 个字段` });
-    for (const required of schema.required ?? []) {
-      if (!(required in value)) errors.push({ pointer: `${pointer}/${required}`, message: '缺少必填字段' });
-    }
-    for (const [key, child] of Object.entries(value)) {
-      if (schema.properties?.[key]) validateNode(schema.properties[key], child, `${pointer}/${key}`, errors);
-      else if (schema.additionalProperties === false) errors.push({ pointer: `${pointer}/${key}`, message: '不允许的字段' });
-      else if (schema.additionalProperties && typeof schema.additionalProperties === 'object') validateNode(schema.additionalProperties, child, `${pointer}/${key}`, errors);
-    }
-  }
-}
-
 export async function validateOperationInput(task, input) {
   const schema = await readJson(task.inputSchema);
-  const errors = [];
-  validateNode(schema, input, '$', errors);
-  if (errors.length) {
-    throw new AitaOperationError('AITA_OPERATION_INPUT_INVALID', `Operation 输入不符合 Schema：${task.id}`, {
-      operationId: task.id,
-      schema: task.inputSchema,
-      errors,
-    });
-  }
+  const errors = validateSchema(schema, input);
+  if (input?.patch && typeof input.patch === 'object') errors.push(...validatePatch(task.target.collection, input.patch));
+  if (errors.length) throw new AitaOperationError('AITA_OPERATION_INPUT_INVALID', `Operation 输入不符合 Schema：${task.id}`, { operationId: task.id, errors });
   return { ok: true, schema: task.inputSchema };
 }
 
@@ -225,17 +174,13 @@ function setByPath(object, dottedPath, value) {
   cursor[keys.at(-1)] = value;
 }
 
-function affectedRoutesFor(task, input) {
-  const pluginBase = {
-    home: '/', about: '/about', research: '/research', outputs: '/outputs', achievements: '/achievements',
-    partners: '/partners', activities: '/activities', join: '/join',
-  }[task.plugin] ?? '/';
-  const routes = new Set([pluginBase]);
-  if (task.plugin === 'research' && input.slug) routes.add(`/research/${input.slug}`);
-  if (task.plugin === 'outputs' && input.slug) routes.add(`/outputs/${input.slug}`);
-  if (task.plugin === 'activities' && input.slug) routes.add(`/activities/${input.slug}`);
-  if (task.plugin === 'partners' && input.slug) routes.add(`/partners/${input.slug}`);
-  return [...routes];
+async function affectedRoutesFor(task) {
+  const file = `plugins/${task.plugin}/chapter.manifest.json`;
+  const manifest = await readJson(file).catch(error => {
+    if (['media', 'site', 'redirect'].includes(task.plugin)) return null;
+    throw error;
+  });
+  return manifest ? [manifest.demoEntry] : ['/'];
 }
 
 function plannedChange(task, input) {
@@ -269,6 +214,7 @@ export async function plan(operationId, input, context = {}) {
   const task = await getTask(operationId);
   await validateOperationInput(task, input);
   await assertPlanPreconditions(task, input);
+  await previewOperation(task, input);
   const baseRevision = context.baseRevision ?? await sourceRevision();
   const change = plannedChange(task, input);
   const payload = {
@@ -284,7 +230,7 @@ export async function plan(operationId, input, context = {}) {
       ...(input.evidenceRefs ? ['required evidence references are present'] : []),
     ],
     changes: [change],
-    affectedRoutes: affectedRoutesFor(task, input),
+    affectedRoutes: await affectedRoutesFor(task),
     affectedPaths: task.allowedWritePaths,
     requiredChecks: task.requiredChecks,
     allowedWritePaths: task.allowedWritePaths,
@@ -308,43 +254,10 @@ function entityIndex(items, id) {
   return items.findIndex((item) => item && item.id === id);
 }
 
-export async function apply(changePlan, context = {}) {
-  verifyPlanHash(changePlan);
-  const task = await getTask(changePlan.operation);
-  if (task.version !== changePlan.operationVersion) {
-    throw new AitaOperationError('AITA_OPERATION_VERSION_MISMATCH', 'Operation 版本与计划不一致', {
-      planned: changePlan.operationVersion,
-      current: task.version,
-    });
-  }
-  if (stableStringify(task.allowedWritePaths) !== stableStringify(changePlan.allowedWritePaths)) {
-    throw new AitaOperationError('AITA_PLAN_WRITE_SCOPE_MISMATCH', '计划写入范围与当前 Operation 不一致');
-  }
-  await fs.mkdir(HISTORY_DIR, { recursive: true });
-  const historyPath = path.join(HISTORY_DIR, `${changePlan.planId}.json`);
-  try {
-    const existing = JSON.parse(await fs.readFile(historyPath, 'utf8'));
-    return { ok: true, alreadyApplied: true, planId: changePlan.planId, history: existing, nextActions: ['run-semantic-diff', 'run-verify'] };
-  } catch (error) {
-    if (error?.code !== 'ENOENT') throw error;
-  }
-  const currentRevision = await sourceRevision();
-  if (currentRevision !== changePlan.baseRevision) {
-    throw new AitaOperationError('AITA_PLAN_BASE_REVISION_MISMATCH', '仓库基线已变化，旧 Plan 已失效', {
-      plannedRevision: changePlan.baseRevision,
-      currentRevision,
-      suggestedAction: 'regenerate-plan',
-    });
-  }
-  if (context.dryRun) {
-    return { ok: true, dryRun: true, planId: changePlan.planId, validatedRevision: currentRevision, nextActions: ['apply-plan'] };
-  }
-
+export function transformDocument(task, input, current) {
   const relativePath = task.allowedWritePaths[0];
-  let document = await readJson(relativePath);
-  const beforeDocument = structuredClone(document);
+  const document = structuredClone(current);
   const mode = task.target.mode;
-  const input = changePlan.input;
   let before = null;
   let after = null;
 
@@ -392,6 +305,53 @@ export async function apply(changePlan, context = {}) {
     }
   }
 
+  return { document, before, after };
+}
+
+export async function previewOperation(task, input) {
+  await validateOperationInput(task, input);
+  const collections = Object.fromEntries((await listContentCollections()).map(item => [item.name, item.data]));
+  const candidate = transformDocument(task, input, collections[task.target.collection]);
+  collections[task.target.collection] = candidate.document;
+  const errors = validateContent(collections);
+  if (errors.length) throw new AitaOperationError('AITA_CONTENT_INVALID', '变更后的内容未通过领域校验，未写入文件', { errors });
+  return candidate;
+}
+
+export async function apply(changePlan, context = {}) {
+  verifyPlanHash(changePlan);
+  const task = await getTask(changePlan.operation);
+  if (task.version !== changePlan.operationVersion) {
+    throw new AitaOperationError('AITA_OPERATION_VERSION_MISMATCH', 'Operation 版本与计划不一致', {
+      planned: changePlan.operationVersion,
+      current: task.version,
+    });
+  }
+  if (stableStringify(task.allowedWritePaths) !== stableStringify(changePlan.allowedWritePaths)) {
+    throw new AitaOperationError('AITA_PLAN_WRITE_SCOPE_MISMATCH', '计划写入范围与当前 Operation 不一致');
+  }
+  const historyPath = path.join(HISTORY_DIR, `${changePlan.planId}.json`);
+  try {
+    const existing = JSON.parse(await fs.readFile(historyPath, 'utf8'));
+    return { ok: true, alreadyApplied: true, planId: changePlan.planId, history: existing, nextActions: ['run-semantic-diff', 'run-verify'] };
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error;
+  }
+  const currentRevision = await sourceRevision();
+  if (currentRevision !== changePlan.baseRevision) {
+    throw new AitaOperationError('AITA_PLAN_BASE_REVISION_MISMATCH', '仓库基线已变化，旧 Plan 已失效', {
+      plannedRevision: changePlan.baseRevision,
+      currentRevision,
+      suggestedAction: 'regenerate-plan',
+    });
+  }
+  const { document, before, after } = await previewOperation(task, changePlan.input);
+  if (context.dryRun) {
+    return { ok: true, dryRun: true, planId: changePlan.planId, before, after, affectedRoutes: changePlan.affectedRoutes, nextActions: ['apply-plan'] };
+  }
+  const relativePath = task.allowedWritePaths[0];
+  const beforeDocument = await readJson(relativePath);
+  await fs.mkdir(HISTORY_DIR, { recursive: true });
   await writeJsonAtomic(relativePath, document);
   const newRevision = await sourceRevision();
   const history = {
@@ -438,7 +398,8 @@ export async function semanticDiff(planId = null) {
   if (!files.length) {
     return { ok: true, changes: [], message: '没有已应用的 Change Plan', nextActions: ['create-plan'] };
   }
-  const target = planId ? `${planId}.json` : files.at(-1);
+  const byTime = await Promise.all(files.map(async file => ({ file, time: (await fs.stat(path.join(HISTORY_DIR, file))).mtimeMs })));
+  const target = planId ? `${planId}.json` : byTime.sort((a, b) => b.time - a.time)[0].file;
   if (!files.includes(target)) throw new AitaOperationError('AITA_HISTORY_NOT_FOUND', `未找到 Apply 历史：${planId}`, { planId });
   const history = JSON.parse(await fs.readFile(path.join(HISTORY_DIR, target), 'utf8'));
   return {

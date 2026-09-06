@@ -1,16 +1,24 @@
 {
-  "name": "aita-web-agent-native-demo",
+  "name": "aita-research-site",
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "AITA Agent-Native offline static website demo",
+  "description": "AITA research website and deterministic content maintenance",
   "scripts": {
     "aita": "node tools/aita.mjs",
     "verify": "node tools/aita.mjs verify --json",
     "recipes": "node tools/aita.mjs recipe test --json"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "astro": "7.3.1",
+    "playwright": "1.63.0",
+    "typescript": "5.9.3"
+  }
 }

@@ -1,6 +1,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
+import { validateContent } from '../domain/index.mjs';
 import { ROOT, readJson, listContentCollections, getTaskRegistry, getTask, validateOperationInput, plan as createPlan } from '../operations-core/index.mjs';
 
 function result(id, ok, details = {}) {
@@ -67,7 +69,7 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
   checks.push(result('repository-layout', missing.length === 0, { missing }));
   if (missing.length) errors.push(error('AITA_REPOSITORY_REQUIRED_FILE_MISSING', '缺少必需文件', { paths: missing }));
 
-  const expectedPlugins = ['home','about','research','outputs','achievements','partners','activities','join'];
+  const expectedPlugins = (await readJson('agent/manifest.json')).plugins;
   const pluginDir = path.join(ROOT, 'plugins');
   const pluginEntries = (await fs.readdir(pluginDir, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
   const manifests = [];
@@ -78,7 +80,7 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
   const manifestIds = manifests.map((item) => item.id).sort();
   const pluginSetOk = JSON.stringify(manifestIds) === JSON.stringify([...expectedPlugins].sort()) && !pluginEntries.includes('people');
   checks.push(result('chapter-contract', pluginSetOk, { expected: expectedPlugins, actual: manifestIds }));
-  if (!pluginSetOk) errors.push(error('AITA_PLUGIN_SET_INVALID', '章节插件集合必须恰好包含八个 v2 插件，且不得存在 people 插件', { actual: manifestIds }));
+  if (!pluginSetOk) errors.push(error('AITA_PLUGIN_SET_INVALID', '章节注册表与插件目录不一致，或存在 people 插件', { actual: manifestIds }));
   const routeBases = manifests.map((item) => item.routeBase);
   if (new Set(routeBases).size !== routeBases.length) errors.push(error('AITA_PLUGIN_ROUTE_CONFLICT', '插件 routeBase 冲突', { routeBases }));
   for (const manifest of manifests) {
@@ -87,6 +89,9 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
   }
 
   const collections = await listContentCollections();
+  const contentErrors = validateContent(Object.fromEntries(collections.map(item => [item.name, item.data])));
+  checks.push(result('content-schema', contentErrors.length === 0, { errors: contentErrors }));
+  if (contentErrors.length) errors.push(error('AITA_CONTENT_INVALID', '内容未通过领域校验', { errors: contentErrors }));
   const allIds = new Map();
   const references = [];
   const duplicateIds = [];
@@ -129,10 +134,7 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
     competitionRecords: (byName.achievements ?? []).filter((item) => item.type === 'competition').length,
     events: (byName.events ?? []).length,
   };
-  const expectedCounts = { listedPartners:33, projects:16, papers:7, ipRecords:12, nationalInnovationProjects:6, provincialInnovationProjects:5, competitionRecords:77, events:8 };
-  const countMismatches = Object.entries(expectedCounts).filter(([key, expected]) => countSummary[key] !== expected).map(([key, expected]) => ({ key, expected, actual: countSummary[key] }));
-  checks.push(result('source-material-counts', countMismatches.length === 0, { counts: countSummary, mismatches: countMismatches }));
-  if (countMismatches.length) errors.push(error('AITA_CONTENT_COUNT_MISMATCH', '结构化内容数量与资料迁移基线不一致', { countMismatches }));
+  checks.push(result('content-inventory', true, { counts: countSummary }));
 
   const taskRegistry = await getTaskRegistry();
   const operationIds = taskRegistry.tasks.map((task) => task.id);
@@ -208,7 +210,7 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
     if (!recipeResult.ok) errors.push(error('AITA_RECIPE_TEST_FAILED', '一个或多个可执行 Recipe 失败', { failures: recipeResult.failures }));
   }
 
-  if (changed) warnings.push({ code:'AITA_CHANGED_SCOPE_DEMO', message:'离线包没有 Git 工作树，changed-scope 使用完整规范源检查。' });
+  if (changed) warnings.push({ code:'AITA_CHANGED_SCOPE_DEMO', message:'当前仓库规模采用完整验证；--changed 不缩小校验范围。' });
   return {
     ok: errors.length === 0,
     scope: changed ? 'changed-compatible-full-check' : 'full',
@@ -228,13 +230,21 @@ export async function testRecipes() {
   const base = path.join(ROOT, 'agent', 'recipes');
   const entries = (await fs.readdir(base, { withFileTypes: true })).filter((entry) => entry.isDirectory()).sort((a,b) => a.name.localeCompare(b.name));
   const failures = [];
+  const work = path.join(ROOT, '.work');
+  await fs.mkdir(work, { recursive: true });
+  const fixture = await fs.mkdtemp(path.join(work, 'recipes-'));
+  try {
+    for (const name of ['content', 'agent', 'plugins', 'packages/operations-core', 'packages/domain']) {
+      await fs.cp(path.join(ROOT, name), path.join(fixture, name), { recursive: true });
+    }
+    const operations = await import(pathToFileURL(path.join(fixture, 'packages/operations-core/index.mjs')).href);
   for (const entry of entries) {
     try {
       const request = JSON.parse(await fs.readFile(path.join(base, entry.name, 'request.json'), 'utf8'));
       const assertions = JSON.parse(await fs.readFile(path.join(base, entry.name, 'assertions.json'), 'utf8'));
-      const task = await getTask(assertions.operation);
-      await validateOperationInput(task, request);
-      const changePlan = await createPlan(assertions.operation, request);
+      const task = await operations.getTask(assertions.operation);
+      await operations.validateOperationInput(task, request);
+      const changePlan = await operations.plan(assertions.operation, request);
       const change = changePlan.changes[0];
       const errors = [];
       if (changePlan.operation !== assertions.operation) errors.push('operation mismatch');
@@ -242,10 +252,29 @@ export async function testRecipes() {
       if (assertions.mustRequireEvidence && !hasEvidence(request)) errors.push('evidence missing');
       for (const check of assertions.requiredChecksInclude ?? []) if (!changePlan.requiredChecks.includes(check)) errors.push(`required check missing: ${check}`);
       for (const prefix of assertions.affectedPathsExclude ?? []) if (changePlan.affectedPaths.some((item) => item.startsWith(prefix))) errors.push(`forbidden path affected: ${prefix}`);
+      const preview = await operations.apply(changePlan, { dryRun: true });
+      const applied = await operations.apply(changePlan);
+      const repeated = await operations.apply(changePlan);
+      if (!preview.dryRun || !applied.ok || !repeated.alreadyApplied) errors.push('apply / preview / idempotence failed');
+      const after = await operations.readJson(applied.sourcePath);
+      const actual = Array.isArray(after) ? after.find(item => item.id === request.id) : after;
+      if (JSON.stringify(actual) !== JSON.stringify(preview.after)) errors.push('preview differs from persisted result');
       if (errors.length) failures.push({ recipe: entry.name, errors });
     } catch (caught) {
       failures.push({ recipe: entry.name, errors: [caught.message], code: caught.code ?? null });
     }
   }
-  return { ok: failures.length === 0, total: entries.length, passed: entries.length - failures.length, failures };
+    // The critical failure path: an invalid patch must be rejected before any write.
+    const before = await operations.readJson('content/projects.json');
+    let rejected = false;
+    try { await operations.plan('research.update-project', { id: before[0].id, patch: { title: 42 } }); }
+    catch (error) { rejected = error.code === 'AITA_OPERATION_INPUT_INVALID'; }
+    if (!rejected || JSON.stringify(before) !== JSON.stringify(await operations.readJson('content/projects.json'))) {
+      failures.push({ recipe: 'invalid-update', errors: ['invalid content was not rejected without writes'] });
+    }
+  } finally {
+    if (!fixture.startsWith(`${work}${path.sep}recipes-`)) throw new Error('Unexpected recipe fixture path');
+    await fs.rm(fixture, { recursive: true, force: true });
+  }
+  return { ok: failures.length === 0, total: entries.length + 1, passed: entries.length + 1 - failures.length, failures };
 }

@@ -1257,6 +1257,45 @@
   .activity-index li span { color: var(--muted-2); font: 10px/1 var(--mono); }
 
   /* ---------------------------------------------------------------- join */
+  .paths-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
+  .paths-section .section-kicker { color: var(--brand-accent); }
+  .paths-section .heading-chapter { color: var(--heading-accent-brand); }
+  .paths-section .section-heading > p { color: var(--text-soft); }
+  .paths-columns { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  .paths-columns > article { min-width: 0; }
+  .paths-careers { padding-right: 36px; }
+  .paths-study { padding-left: 36px; border-left: 1px solid var(--border-light); }
+  .paths-columns header { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-block: 36px 24px; }
+  .paths-columns h3 { margin-top: 12px; font: 500 clamp(20px, 1.7vw, 27px)/1.35 var(--sans); }
+  .paths-category { flex: 0 0 auto; padding-bottom: 3px; color: var(--text-soft); font: 11px/1.5 var(--mono); }
+  .paths-list { list-style: none; }
+  .paths-list li { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start; gap: 16px; padding: 20px 0; border-top: 1px solid var(--border); }
+  .paths-index { padding-top: 4px; color: var(--brand-accent); font: 10px/1.5 var(--mono); }
+  .paths-list h4 { font: 500 16px/1.5 var(--sans); overflow-wrap: anywhere; }
+  .paths-list p { margin-top: 5px; color: var(--text-soft); font: 12px/1.7 var(--sans); }
+  .paths-study .paths-list li { grid-template-columns: 22px minmax(0, 1fr); padding-block: 28px; }
+  .paths-study .paths-list h4 { font-size: 19px; }
+  .paths-study .paths-list p { margin-top: 12px; }
+  .paths-degree { display: inline-block; margin-left: 10px; padding: 1px 7px; border: 1px solid var(--border-light); color: var(--heading-accent-brand); font-size: 11px; }
+  @media (max-width: 1000px) {
+    .paths-careers { padding-right: 24px; }
+    .paths-study { padding-left: 24px; }
+    .paths-category { display: none; }
+    .paths-list li { gap: 10px; }
+    .paths-list h4 { font-size: 14px; }
+    .paths-study .paths-list h4 { font-size: 17px; }
+  }
+  @media (max-width: 700px) {
+    .paths-columns { grid-template-columns: minmax(0, 1fr); }
+    .paths-careers { padding-right: 0; }
+    .paths-study { padding-left: 0; border-left: 0; }
+    .paths-category { display: block; }
+    .paths-columns header { padding-block: 30px 22px; }
+    .paths-list li { grid-template-columns: 18px minmax(0, 1fr); padding-block: 18px; }
+    .paths-list h4, .paths-study .paths-list h4 { font-size: 16px; }
+    .paths-study .paths-list li { grid-template-columns: 18px minmax(0, 1fr); padding-block: 22px; }
+  }
+
   .join-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: 24px; }
   .join-panel {
     position: relative;

@@ -1,0 +1,87 @@
+{
+  "evidenceRefs": [
+    "evidence:source-introduction"
+  ],
+  "sourceSections": [
+    "二 / 9、实习与就业情况",
+    "二 / 10、优秀成员升学去向"
+  ],
+  "careers": [
+    {
+      "organization": "中国科学院鹏城实验室",
+      "role": "大模型算法工程师实习"
+    },
+    {
+      "organization": "广汽研究院",
+      "role": "大模型算法工程师实习"
+    },
+    {
+      "organization": "中国海油",
+      "role": "大模型算法工程师实习"
+    },
+    {
+      "organization": "琶洲实验室（黄埔）",
+      "role": "算法工程师实习"
+    },
+    {
+      "organization": "微软亚洲研究院",
+      "role": "数据分析实习"
+    },
+    {
+      "organization": "广州光锥元信息科技有限公司",
+      "role": "Diffusion算法工程师"
+    },
+    {
+      "organization": "深圳市浩瑞泰科技有限公司",
+      "role": "前端开发工程师"
+    },
+    {
+      "organization": "英国SimpleTex团队",
+      "role": "Redteam实习"
+    },
+    {
+      "organization": "清华大学智能产业研究院",
+      "role": "科研实习"
+    },
+    {
+      "organization": "中国科学院自动化研究所",
+      "role": "科研实习"
+    },
+    {
+      "organization": "广州微调科技有限公司",
+      "role": "技术总监"
+    }
+  ],
+  "furtherStudy": [
+    {
+      "organization": "香港科技大学（广州）",
+      "note": null,
+      "memberCount": 2
+    },
+    {
+      "organization": "北京邮电大学",
+      "note": null,
+      "memberCount": 1
+    },
+    {
+      "organization": "哈尔滨工程大学",
+      "note": null,
+      "memberCount": 1
+    },
+    {
+      "organization": "深圳大学",
+      "note": null,
+      "memberCount": 1
+    },
+    {
+      "organization": "澳门大学",
+      "note": null,
+      "memberCount": 1
+    },
+    {
+      "organization": "中国科学院大学自动化研究所",
+      "note": "直博",
+      "memberCount": 1
+    }
+  ]
+}

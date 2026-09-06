@@ -482,6 +482,18 @@
     color: var(--text-soft);
     font: clamp(15px, 1.2vw, 17px)/1.7 var(--sans);
   }
+  .hero-copy .button-secondary {
+    color: #f4f7ff;
+    background: rgba(255, 255, 255, .25);
+    border-color: transparent;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  }
+  .hero-copy .button-secondary:hover,
+  .hero-copy .button-secondary:focus-visible {
+    background-color: rgba(255, 255, 255, .33);
+  }
   .terminal-line {
     display: flex;
     align-items: center;
@@ -496,6 +508,13 @@
     height: 15px;
     margin-left: 6px;
     background: var(--text-soft);
+    animation: terminal-cursor-blink 1s steps(1, end) infinite;
+    animation-play-state: paused;
+  }
+  .terminal-line.is-cursor-active i { animation-play-state: running; }
+  @keyframes terminal-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
   .hero-meta {
     position: relative;
@@ -1555,6 +1574,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    .terminal-line i { animation: none; opacity: 1; }
     .reveal { opacity: 1; transform: none; }
     .about-field-frame { display: none; }
     .about-loop-step { animation: none; }

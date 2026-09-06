@@ -2080,12 +2080,20 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     vOpacity = mix(0.57, 0.88, focalDepth) *
       mix(0.74, 1.0, character) * cameraClearance * formationVisibility * (1.0 - uScrollProgress);
 
+    // Scattered phases give colored filaments a soft, independent twinkle.
+    // Reuse scene time so visibility/pause handling also pauses the shimmer.
+    float twinklePhase = fract(aAgent.x * 31.73 + character * 19.17) * 6.28318530718;
+    float twinkleRate = mix(1.8, 3.2, fract(character * 23.41));
+    float twinkleWave = 0.5 + 0.5 * sin(uTime * twinkleRate + twinklePhase);
+    float twinkle = mix(0.24, 1.0, twinkleWave * twinkleWave);
+    vOpacity *= mix(1.0, twinkle, vStreak);
+
     // Keep individual infected agents legible after depth-of-field softening.
     size = mix(size, max(size, 2.15), vInfection);
 
     float perspective = 8.0 / max(-viewPosition.z, 0.12);
     float dotPointSize = min(size * uPixelRatio * mix(perspective, 1.0, 0.28), 5.0 * uPixelRatio);
-    gl_PointSize = vStreak > 0.5 ? min(max(dotPointSize * 4.2, 8.0 * uPixelRatio), 11.0 * uPixelRatio) : dotPointSize;
+    gl_PointSize = vStreak > 0.5 ? min(max(dotPointSize * 3.4, 6.5 * uPixelRatio), 9.0 * uPixelRatio) : dotPointSize;
     gl_Position = projectionMatrix * viewPosition;
   }
 `,$=`
@@ -2314,7 +2322,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     // Short thin capsule aligned to screen-space motion (PointCoord y 轴翻转).
     vec2 streakDir = vec2(vStreakDir.x, -vStreakDir.y);
     vec2 streakAxes = vec2(dot(spriteCoord, streakDir), dot(spriteCoord, vec2(-streakDir.y, streakDir.x)));
-    float streakSd = length(vec2(max(abs(streakAxes.x) - 0.30, 0.0), streakAxes.y)) - 0.062;
+    float streakSd = length(vec2(max(abs(streakAxes.x) - 0.30, 0.0), streakAxes.y)) - 0.038;
     float streakEdge = clamp(fwidth(streakSd), 0.02, 0.2);
     float streakCoverage = 1.0 - smoothstep(-streakEdge, streakEdge, streakSd);
     float coverage = mix(circleCoverage, streakCoverage, vStreak);

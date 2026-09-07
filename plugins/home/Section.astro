@@ -2,6 +2,7 @@
 import JoinLink from '../../packages/design-system/JoinLink.astro';
 import { Image } from 'astro:assets';
 import heroBackground from './assets/ascii-magic-4.jpg';
+import heroAlternate from './assets/ascii-magic-3.webp';
 import './styles.css';
 import type { loadContent } from '../../packages/content-loader-git/index.mjs';
 interface Props { content: ReturnType<typeof loadContent> }
@@ -10,7 +11,9 @@ const { content } = Astro.props;
 ---
 <section class="hero" data-hero-visual="lake" data-plugin="home" id="top">
 <div class="hero-scene">
-<Image src={heroBackground} alt="" class="hero-background" fetchpriority="high" loading="eager" decoding="async" format="webp" quality={90} widths={[960, 1600, 2508, 3840, 5016]} sizes="(max-width: 680px) 225vw, 100vw" />
+<Image src={heroBackground} alt="" class="hero-background is-current" fetchpriority="high" loading="eager" decoding="async" format="webp" quality={90} widths={[960, 1600, 2508, 3840, 5016]} sizes="(max-width: 680px) 225vw, 100vw" />
+<Image src={heroAlternate} alt="" class="hero-background" loading="lazy" decoding="async" format="webp" quality={90} widths={[960, 1600, 2508, 3840, 5016]} sizes="(max-width: 680px) 225vw, 100vw" />
+<button class="hero-switch" type="button" aria-label="切换首屏背景" disabled><canvas class="hero-tear-layer" aria-hidden="true"></canvas><canvas class="hero-block-layer" aria-hidden="true"></canvas></button>
 <div class="hero-copy reveal">
 <p class="eyebrow">OPEN RESEARCH / GDUT / 2026</p>
 <h1><span class="heading-context">通往</span><span class="heading-focus">无限智能</span></h1>

@@ -20,6 +20,7 @@
     width: 100%;
   }
   :where([data-plugin="home"], [data-plugin-owner="home"]) .hero-scene {
+    overflow: hidden;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
   }
@@ -29,7 +30,24 @@
     height: auto;
     align-self: center;
     pointer-events: none;
+    opacity: 0;
   }
+  [data-plugin="home"] .hero-background.is-current { opacity: 1; }
+  [data-plugin="home"] .hero-switch {
+    position: relative;
+    grid-area: 1 / 1;
+    z-index: 0;
+    align-self: stretch;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  [data-plugin="home"] .hero-switch:focus-visible { outline: 2px solid #b8ddea; outline-offset: -4px; }
+  [data-plugin="home"] .hero-switch canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  [data-plugin="home"] .hero-tear-layer { z-index: 0; }
+  [data-plugin="home"] .hero-block-layer { z-index: 1; }
   :where([data-plugin="home"], [data-plugin-owner="home"]) .hero-copy {
     position: relative;
     z-index: 1;
@@ -126,6 +144,7 @@
   @media (max-width: 680px) {
 
     :where([data-plugin="home"], [data-plugin-owner="home"]) .hero-scene { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
+    [data-plugin="home"] .hero-switch { position: absolute; inset: 0; width: 100%; height: 100%; }
     :where([data-plugin="home"], [data-plugin-owner="home"]) .hero-background {
       position: absolute;
       inset: 0;
@@ -160,6 +179,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    [data-plugin="home"] .hero-background { animation: none !important; }
     :where([data-plugin="home"], [data-plugin-owner="home"]) .terminal-line i { animation: none; opacity: 1; }
   }
 }

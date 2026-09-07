@@ -36,7 +36,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       await page.goto(url);
       await page.waitForFunction(()=>['top','about','projects','outputs','network','activities','main-content'].every(id=>document.getElementById(id)?.dataset.enhanced==='true'));
       assert.equal(await page.locator('#join').getAttribute('data-enhanced'),'waiting','Distant canvas should not initialize during the first load');
-      assert.match(await page.locator('.hero-background').evaluate(img=>img.currentSrc),/\.webp$/);
+      for (const src of await page.locator('.hero-background').evaluateAll(images=>images.map(img=>img.currentSrc))) assert.match(src,/\.webp$/);
       if (width===1440) {
         // Fresh context/cache-disabled routing: prepare offscreen, but do not animate.
         await page.waitForFunction(()=>document.querySelector('#outputs iframe').classList.contains('is-loaded'),null,{timeout:20000});

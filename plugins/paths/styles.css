@@ -4,7 +4,7 @@
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .section-kicker { color: var(--brand-accent); }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .heading-chapter { color: var(--heading-accent-brand); }
-  [data-plugin="paths"] .paths-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: center; min-height: 340px; border: 1px solid var(--border); background: #0b0d10; overflow: hidden; }
+  [data-plugin="paths"] .paths-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: center; min-height: 340px; border: 1px solid var(--border); background: #08090b; overflow: hidden; }
   [data-plugin="paths"] .paths-intro { padding: clamp(28px, 3.4vw, 64px); }
   [data-plugin="paths"] .paths-intro h2 { margin-block: 22px 18px; color: var(--text); font: 600 clamp(30px, 3.3vw, 52px)/1.12 var(--sans); letter-spacing: -.02em; }
   [data-plugin="paths"] .paths-intro > p:last-child { max-width: 36em; color: var(--text-soft); font: 14px/1.75 var(--sans); }

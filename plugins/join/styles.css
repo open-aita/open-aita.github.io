@@ -28,7 +28,7 @@
     row-gap: 40px;
     padding: clamp(28px, 4vw, 64px);
     border: 1px solid var(--border);
-    background: var(--surface-2);
+    background: #0b0b0b;
   }
   :where([data-plugin="join"], [data-plugin-owner="join"]) .join-panel::after {
     content: "";

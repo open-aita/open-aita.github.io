@@ -74,8 +74,9 @@
 }
 /* Network Atlas adapted from the user-supplied standalone HTML. */
 @layer sections {
+  #network .section-heading > p { max-width: none; text-wrap: balance; }
 #network .atlas-toolbar { min-height: 58px; display: grid; grid-template-columns: auto auto auto minmax(260px, 1fr); align-items: center; border: 1px solid var(--border); border-bottom: 0; background: rgba(255,255,255,.012); }
-  #network .atlas-metric { min-height: 57px; min-width: 142px; display: flex; align-items: baseline; gap: 9px; padding: 0 16px; border-right: 1px solid var(--border); }
+  #network .atlas-metric { min-height: 57px; min-width: 142px; display: flex; align-items: center; gap: 9px; padding: 0 16px; border-right: 1px solid var(--border); }
   #network .atlas-metric strong { color: var(--text); font: 500 24px/1 var(--sans); letter-spacing: -.04em; }
   #network .atlas-metric span { color: var(--muted); font: 9px/1.35 var(--mono); letter-spacing: .075em; text-transform: uppercase; }
   #network .filter-cluster { min-width: 0; justify-self: stretch; display: flex; align-items: center; justify-content: flex-end; gap: 4px; padding: 8px; overflow-x: auto; scrollbar-width: none; }

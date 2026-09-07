@@ -208,7 +208,14 @@ prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-clou
       ipContext.restore();
     };
 
-    drawIpField();
-    window.addEventListener("resize", drawIpField, { passive: true });
+    let ipVisible = false;
+    const refreshIp = () => { if (ipVisible) drawIpField(); };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        ipVisible = entry.isIntersecting;
+        refreshIp();
+      }, {rootMargin:'600px 0px'}).observe(ipCanvas);
+    } else { ipVisible = true; refreshIp(); }
+    window.addEventListener("resize", refreshIp, { passive: true });
   }
 }

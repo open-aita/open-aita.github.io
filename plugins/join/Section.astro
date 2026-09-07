@@ -27,5 +27,5 @@ const { content } = Astro.props;
 
 <script>
 import { mountChapter } from "../../packages/kernel/client.js";
-mountChapter("join", () => import("./client.js"));
+mountChapter("join", () => import("./client.js"), { near: true });
 </script>

@@ -65,6 +65,6 @@ const projects = content.projects.filter(p => p.status !== 'archived');
 
 <script>
 import { mountChapter } from "../../packages/kernel/client.js";
-mountChapter("research", () => import("./client.js"));
+mountChapter("research", () => import("./client.js"), { near: true });
 mountChapter("projects", () => import("./projects.js"));
 </script>

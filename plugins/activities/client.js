@@ -7,7 +7,8 @@ export function mount(root) {
   root.querySelectorAll("[data-lightbox]").forEach((button) => {
     button.addEventListener("click", () => {
       if (!lightbox || !lightboxImage || !lightboxCaption) return;
-      lightboxImage.src = button.dataset.lightbox || "";
+      // Reuse the browser-selected image instead of downloading a second original.
+      lightboxImage.src = button.querySelector('img')?.currentSrc || button.dataset.lightbox || "";
       lightboxImage.alt = button.dataset.caption || "活动图片";
       lightboxCaption.textContent = button.dataset.caption || "";
       if (typeof lightbox.showModal === "function") lightbox.showModal();

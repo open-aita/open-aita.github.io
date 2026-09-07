@@ -31,5 +31,5 @@ const groups = [{label:'NATIONAL',title:'国家级大学生创新项目',records
 
 <script>
 import { mountChapter } from "../../packages/kernel/client.js";
-mountChapter("achievements", () => import("./client.js"));
+mountChapter("achievements", () => import("./client.js"), { near: true });
 </script>

@@ -34,7 +34,9 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
         return route.continue();
       });
       await page.goto(url);
-      await page.waitForFunction(()=>['top','about','research','projects','outputs','achievements','network','activities','join','main-content'].every(id=>document.getElementById(id)?.dataset.enhanced==='true'));
+      await page.waitForFunction(()=>['top','about','projects','outputs','network','activities','main-content'].every(id=>document.getElementById(id)?.dataset.enhanced==='true'));
+      assert.equal(await page.locator('#join').getAttribute('data-enhanced'),'waiting','Distant canvas should not initialize during the first load');
+      assert.match(await page.locator('.hero-background').evaluate(img=>img.currentSrc),/\.webp$/);
       if (width===1440) {
         // Fresh context/cache-disabled routing: prepare offscreen, but do not animate.
         await page.waitForFunction(()=>document.querySelector('#outputs iframe').classList.contains('is-loaded'),null,{timeout:20000});
@@ -50,6 +52,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       }
       for (const chapter of chapters) {
         await page.locator(chapter.demoEntry).scrollIntoViewIfNeeded();
+        if (['research','achievements','join'].includes(chapter.id)) await page.waitForFunction(id=>document.getElementById(id).dataset.enhanced==='true',chapter.demoEntry.slice(1));
         if (width===1440 && ['about','outputs'].includes(chapter.id)) {
           await page.locator(`${chapter.demoEntry} iframe`).evaluate(frame=>frame.scrollIntoView());
           await page.waitForFunction(id=>document.querySelector(`${id} iframe`).classList.contains('is-loaded'),chapter.demoEntry,{timeout:20000});
@@ -63,6 +66,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       await page.locator('[data-filter="all"]').click();
       await page.locator('.gallery-card').first().click();
       assert.equal(await page.locator('#activities dialog[open]').count(),1);
+      assert.equal(await page.locator('#activities dialog img').evaluate(img=>img.src),await page.locator('.gallery-card img').first().evaluate(img=>img.currentSrc),'Lightbox should reuse the selected image');
       await page.locator('[data-lightbox-close]').click();
       await page.locator('#partner-search').fill('Datawhale');
       assert.equal(await page.locator('.partner-index-item:not([disabled])').count(),1);
@@ -101,9 +105,12 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
         };
       });
       await page.goto(url);
-      await page.waitForFunction(()=>document.querySelector('#research').dataset.enhanced==='false' && ['outputs','join','projects','main-content'].every(id=>document.getElementById(id).dataset.enhanced==='true'));
+      await page.locator('#research').scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>document.querySelector('#research').dataset.enhanced==='false' && ['outputs','projects','main-content'].every(id=>document.getElementById(id).dataset.enhanced==='true'));
       await page.locator('[data-filter="agents"]').click();
       assert.equal(await page.locator('.project-card:not([hidden])').count(),content.projects.filter(p=>p.category==='agents'&&p.status!=='archived').length);
+      await page.locator('#join').scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>document.querySelector('#join').dataset.enhanced==='true');
       report.faultIsolation='Research failure is contained; navigation, project filter, Outputs and Join initialize.';
       await page.close();
     }

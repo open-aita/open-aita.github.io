@@ -33,7 +33,7 @@ export async function inspectArtifact(root, manifests) {
   check('html-structure', [...duplicates.map(id => `Duplicate ID ${id}`), ...absent.map(id => `Missing anchor #${id}`)]);
   const images = [...markup.matchAll(/<img\b[^>]*>/g)].map(m=>m[0]);
   check('accessibility-baseline', [
-    ...images.filter(tag=>!tag.includes('alt=')).map(tag=>`Image without alt: ${tag.slice(0,100)}`),
+    ...images.filter(tag=>!/\salt(?:\s|=|\/?>)/i.test(tag)).map(tag=>`Image without alt: ${tag.slice(0,100)}`),
     ...(!/<html\b[^>]*lang="zh-CN"/.test(markup) ? ['Missing document language'] : []),
     ...(!markup.includes('class="skip-link"') ? ['Missing skip link'] : []),
   ]);

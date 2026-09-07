@@ -11,7 +11,7 @@
 - Join：`plugins/join/client.js`。
 - 地图交互：`plugins/partners/client.js`；事实数据由 organizations.json 提供，图形避让参数在 map-layout.json。
 
-附近的 iframe 由 `packages/kernel/effects.js` 排队启动，进入视野且页面可见才播放。减少动态效果时不加载装饰 iframe。`packages/kernel/effect-budget.js` 继续使用真实帧间隔控制画质，不新增外部 GPU 基准请求。
+iframe 由 `packages/kernel/effects.js` 排队启动；Outputs 在页面首次加载完成后利用空闲队列提前准备，About 仍在附近启动，二者都只在进入视野且页面可见时播放。减少动态效果时不加载装饰 iframe。Network 的两张静态点云图在首次加载后以低优先级下载，到附近再绘制，各自就绪后独立显示。`packages/kernel/effect-budget.js` 继续使用真实帧间隔控制画质，不新增外部 GPU 基准请求。
 
 修改特效后重新运行 `npm run build` 或重新启动 dev 准备步骤。不要修改自动生成的 `apps/site/public/effects/`。
 

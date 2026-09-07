@@ -14,6 +14,7 @@ export function mount(root) {
   const byId = new Map(partners.map(p => [p.id, p]));
   const state = { filter: 'ALL', query: '', lockedId: partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null, hoverId: null };
   const cloudImages = {};
+  let loading = false;
   const scriptBase = new URL("/assets/images/", location.href);
   const drawRects = {};
 
@@ -21,18 +22,21 @@ export function mount(root) {
   const $$ = (sel, scope=root) => [...scope.querySelectorAll(sel)];
   const activeId = () => state.hoverId || state.lockedId;
 
-  async function loadCloudImages() {
-    await Promise.all(Object.keys(CLOUDS).map(async key => {
+  function loadCloudImages() {
+    if (loading) return;
+    loading = true;
+    Object.keys(CLOUDS).forEach(key => {
       const image = new Image();
       image.decoding = 'async';
+      image.fetchPriority = 'low';
       image.src = new URL(`network-${key}.webp?v=20260905-2`, scriptBase).href;
-      try {
-        await image.decode();
+      image.decode().then(() => {
         cloudImages[key] = image;
-      } catch (error) {
+        if (started) renderCloud($(key === 'main' ? '#main-map' : '#gba-map'), key);
+      }).catch(error => {
         console.warn(`Network ${key} background could not load:`, error);
-      }
-    }));
+      });
+    });
   }
 
   function fitRect(containerW, containerH, dataW, dataH) {
@@ -76,7 +80,10 @@ export function mount(root) {
     drawRects[key] = rect;
     // The retained source/browser export tool owns the point loops and glow pass.
     // One bitmap blit replaces 32,431 per-point paths during first scroll.
-    if (image) ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height);
+    if (image) {
+      ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height);
+      canvas.classList.add('is-ready');
+    }
     return rect;
   }
 
@@ -332,7 +339,6 @@ export function mount(root) {
     renderMainOverlay();
     renderGbaOverlay();
     updateUI();
-    root.classList.add('is-ready');
   }
 
   buildIndex();
@@ -376,19 +382,15 @@ export function mount(root) {
     window.addEventListener('resize', scheduleRender);
   }
   updateUI();
-  let loading = false;
-  const startRendering = async () => {
-    if (started || loading) return;
-    loading = true;
-    try {
-      await loadCloudImages();
-    } catch (error) {
-      // The directory and interactive signals remain usable if a bitmap fails.
-      console.warn('Network background image could not load:', error);
-    }
+  const startRendering = () => {
+    if (started) return;
     started = true;
+    loadCloudImages();
     renderAll();
   };
+  // Fetch at low priority after the first page load; draw only near the viewport.
+  if (document.readyState === 'complete') loadCloudImages();
+  else window.addEventListener('load', loadCloudImages, { once: true });
   if (typeof IntersectionObserver === 'function') {
     const observer = new IntersectionObserver(entries => {
       if (!entries.some(entry => entry.isIntersecting)) return;

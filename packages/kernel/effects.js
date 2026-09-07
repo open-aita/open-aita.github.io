@@ -19,7 +19,7 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
     if ('requestIdleCallback' in window) window.requestIdleCallback(runEffectJob, { timeout: 1200 });
     else window.setTimeout(runEffectJob, 100);
   };
-  export const prepareEffect = (frame, prefix) => {
+  export const prepareEffect = (frame, prefix, { warmup = false } = {}) => {
     if (!(frame instanceof HTMLIFrameElement) || reduceMotion) return;
     let visible = false, queued = false;
     const sync = () => {
@@ -56,6 +56,12 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
       }));
       scheduleEffectJob();
     };
+    // Warm requested effects only after critical page resources finish loading.
+    // The existing idle queue limits initialization; sync still pauses offscreen playback.
+    if (warmup) {
+      if (doc.readyState === 'complete') enqueue();
+      else window.addEventListener('load', enqueue, { once: true });
+    }
     if ('IntersectionObserver' in window) {
       const preload = new IntersectionObserver(entries => {
         if (!entries.some(entry => entry.isIntersecting)) return;

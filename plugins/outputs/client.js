@@ -2,7 +2,7 @@ import { prepareEffect } from "../../packages/kernel/effects.js";
 export function mount(root) {
   const doc = document;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-cloud");
+prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-cloud", { warmup: true });
   // Deterministic folded particle surface for the intellectual-property panel.
   const ipCanvas = root.querySelector("#ip-particle-field");
   if (ipCanvas instanceof HTMLCanvasElement) {

@@ -21,20 +21,39 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
     for (const width of [1440,390]) {
       const page = await browser.newPage({viewport:{width,height:900},reducedMotion:width===390?'reduce':'no-preference'});
       const errors=[], remote=[], missing=[];
+      const networkRequests=[];
+      let releaseGba;
+      const delayedGba=new Promise(resolve=>{releaseGba=resolve;});
       page.on('pageerror',error=>errors.push(error.message));
       page.on('response',response=>{if(response.status()>=400)missing.push(`${response.status()} ${response.url()}`);});
-      await page.route('**/*',route=>{
+      await page.route('**/*',async route=>{
         const request=route.request().url();
         if (/^https?:/.test(request) && !request.startsWith(url+'/')) {remote.push(request);return route.abort();}
+        if (request.includes('/assets/images/network-')) networkRequests.push(request);
+        if (width===1440 && request.includes('/network-gba.webp')) await delayedGba;
         return route.continue();
       });
       await page.goto(url);
       await page.waitForFunction(()=>['top','about','research','projects','outputs','achievements','network','activities','join','main-content'].every(id=>document.getElementById(id)?.dataset.enhanced==='true'));
+      if (width===1440) {
+        // Fresh context/cache-disabled routing: prepare offscreen, but do not animate.
+        await page.waitForFunction(()=>document.querySelector('#outputs iframe').classList.contains('is-loaded'),null,{timeout:20000});
+        assert.equal(await page.frameLocator('#outputs iframe').locator('body').getAttribute('data-active'),'false');
+        assert.equal(networkRequests.length,2,'Both maps should fetch before scrolling');
+        await page.locator('#network').evaluate(el=>el.scrollIntoView({behavior:'instant'}));
+        await page.waitForFunction(()=>document.querySelector('#main-map').classList.contains('is-ready'));
+        assert.equal(await page.locator('#gba-map').evaluate(el=>el.classList.contains('is-ready')),false,'Slow regional map must not block the main map');
+        releaseGba();
+        await page.waitForFunction(()=>document.querySelector('#gba-map').classList.contains('is-ready'));
+      } else {
+        assert.equal(await page.locator('#outputs iframe').getAttribute('src'),null,'Reduced motion skips the dynamic effect');
+      }
       for (const chapter of chapters) {
         await page.locator(chapter.demoEntry).scrollIntoViewIfNeeded();
         if (width===1440 && ['about','outputs'].includes(chapter.id)) {
           await page.locator(`${chapter.demoEntry} iframe`).evaluate(frame=>frame.scrollIntoView());
           await page.waitForFunction(id=>document.querySelector(`${id} iframe`).classList.contains('is-loaded'),chapter.demoEntry,{timeout:20000});
+          if (chapter.id==='outputs') await page.frameLocator('#outputs iframe').locator('body[data-active="true"]').waitFor();
         }
       }
       const currentProjects=content.projects.filter(p=>p.status!=='archived');

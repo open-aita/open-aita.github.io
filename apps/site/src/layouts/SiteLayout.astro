@@ -30,7 +30,7 @@ const { content } = Astro.props;
 <header class="site-header" data-header="">
 <div class="header-inner">
 <Brand brand={content.settings.brand} />
-<nav aria-label="主要导航" class="primary-nav">{primary.map(c => <a href={c.demoEntry}><span>{c.navigation.primaryLabel}</span><small>{String(c.navigation.primaryOrder).padStart(2,'0')}</small></a>)}</nav>
+<nav aria-label="主要导航" class="primary-nav">{primary.map(c => <a href={c.demoEntry}><span>{c.navigation.primaryLabel}</span><small>{String(c.navigation.primaryOrder).padStart(2,'0')}</small></a>)}<a href="https://open-aita.pages.dev/"><span>BLOG</span><small>↗</small></a></nav>
 <nav aria-label="辅助导航" class="utility-nav">{utility.map(c => <a href={c.demoEntry}>{c.navigation.utilityLabel}</a>)}<a href="#about">EXPLORE</a><JoinLink recruitment={content.recruitment} variant="header" /></nav>
 <button aria-controls="mobile-menu" aria-expanded="false" class="menu-toggle" data-menu-toggle="" type="button">
 <span class="sr-only">打开导航菜单</span>

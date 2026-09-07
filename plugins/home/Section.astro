@@ -1,7 +1,7 @@
 ---
 import JoinLink from '../../packages/design-system/JoinLink.astro';
 import { Image } from 'astro:assets';
-import lake from './assets/lake1.png';
+import heroBackground from './assets/ascii-magic-4.jpg';
 import './styles.css';
 import type { loadContent } from '../../packages/content-loader-git/index.mjs';
 interface Props { content: ReturnType<typeof loadContent> }
@@ -10,7 +10,7 @@ const { content } = Astro.props;
 ---
 <section class="hero" data-hero-visual="lake" data-plugin="home" id="top">
 <div class="hero-scene">
-<Image src={lake} alt="" class="hero-background" fetchpriority="high" loading="eager" decoding="async" format="webp" quality={90} widths={[960, 1600, 2508]} sizes="(max-width: 680px) 225vw, 100vw" />
+<Image src={heroBackground} alt="" class="hero-background" fetchpriority="high" loading="eager" decoding="async" format="webp" quality={90} widths={[960, 1600, 2508, 3840, 5016]} sizes="(max-width: 680px) 225vw, 100vw" />
 <div class="hero-copy reveal">
 <p class="eyebrow">OPEN RESEARCH / GDUT / 2026</p>
 <h1><span class="heading-context">通往</span><span class="heading-focus">无限智能</span></h1>

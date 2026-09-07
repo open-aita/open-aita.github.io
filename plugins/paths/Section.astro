@@ -1,6 +1,7 @@
 ---
 import { number } from '../../packages/content-loader-git/index.mjs';
 import './styles.css';
+import PathsArt from './PathsArt.astro';
 import type { loadContent } from '../../packages/content-loader-git/index.mjs';
 interface Props { content: ReturnType<typeof loadContent> }
 const { content } = Astro.props;
@@ -8,9 +9,11 @@ const { content } = Astro.props;
 ---
 <section class="paths-section shell" data-plugin="paths" id="paths" aria-labelledby="paths-title">
 <!-- Evidence: content/member-paths.json → evidence:source-introduction, sections 二 / 9–10. -->
-<div class="section-heading reveal">
-<div><p class="section-kicker">PEOPLE / NEXT CHAPTER</p><h2 id="paths-title"><span class="heading-chapter">Paths.</span> <span class="heading-context">从这里，</span><span class="heading-focus">走向更远</span></h2></div>
+<div class="paths-banner reveal">
+<div class="paths-intro"><p class="section-kicker">PEOPLE / NEXT CHAPTER</p><h2 id="paths-title"><span class="heading-chapter">Paths.</span> <span class="heading-context">从这里，</span><span class="heading-focus">走向更远</span></h2>
 <p>从科研实践到职业探索，从 AITA 走向新的学术与产业现场。记录成员的工作、实习与升学去向。</p>
+</div>
+<PathsArt />
 </div>
 <div class="paths-columns">
 <article class="paths-careers" aria-labelledby="paths-careers-title">
@@ -23,3 +26,7 @@ const { content } = Astro.props;
 </article>
 </div>
 </section>
+<script>
+import { mountChapter } from "../../packages/kernel/client.js";
+mountChapter("paths", () => import("./client.js"), { near: true });
+</script>

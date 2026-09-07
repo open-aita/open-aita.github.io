@@ -4,7 +4,15 @@
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .section-kicker { color: var(--brand-accent); }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .heading-chapter { color: var(--heading-accent-brand); }
-  :where([data-plugin="paths"], [data-plugin-owner="paths"]).paths-section .section-heading > p { color: var(--text-soft); }
+  [data-plugin="paths"] .paths-banner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: center; min-height: 340px; border: 1px solid var(--border); background: #0b0d10; overflow: hidden; }
+  [data-plugin="paths"] .paths-intro { padding: clamp(28px, 3.4vw, 64px); }
+  [data-plugin="paths"] .paths-intro h2 { margin-block: 22px 18px; color: var(--text); font: 600 clamp(30px, 3.3vw, 52px)/1.12 var(--sans); letter-spacing: -.02em; }
+  [data-plugin="paths"] .paths-intro > p:last-child { max-width: 36em; color: var(--text-soft); font: 14px/1.75 var(--sans); }
+  [data-plugin="paths"] .aita-paths { position: relative; width: 100%; aspect-ratio: 3 / 1; overflow: hidden; isolation: isolate; contain: layout paint; pointer-events: none; background: radial-gradient(ellipse at 65% 50%, #11192570, transparent 75%); }
+  [data-plugin="paths"] .aita-paths canvas, [data-plugin="paths"] .aita-paths .fallback { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  [data-plugin="paths"] .aita-paths canvas { opacity: 0; }
+  [data-plugin="paths"] .aita-paths[data-ready] canvas { opacity: 1; }
+  [data-plugin="paths"] .aita-paths[data-ready] .fallback { display: none; }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns > article { min-width: 0; }
   :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-careers { padding-right: 36px; }
@@ -30,6 +38,9 @@
     :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study .paths-list h4 { font-size: 17px; }
   }
   @media (max-width: 700px) {
+    [data-plugin="paths"] .paths-banner { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    [data-plugin="paths"] .paths-intro { padding: 28px 24px 16px; }
+    [data-plugin="paths"] .aita-paths { margin-block: 8px 24px; }
     :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-columns { grid-template-columns: minmax(0, 1fr); }
     :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-careers { padding-right: 0; }
     :where([data-plugin="paths"], [data-plugin-owner="paths"]) .paths-study { padding-left: 0; border-left: 0; }

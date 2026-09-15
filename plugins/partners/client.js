@@ -308,13 +308,6 @@ export function mount(root) {
       el.disabled = !matches(p);
       el.setAttribute('aria-pressed', String(el.dataset.partnerId === id));
     });
-    const native=$('.network-native');
-    if (native) {
-    native.classList.toggle('is-active',id===native.dataset.partnerId);
-    native.style.opacity=matches(byId.get(native.dataset.partnerId))?'1':'.12';
-    native.disabled = !matches(byId.get(native.dataset.partnerId));
-    native.setAttribute('aria-pressed', String(id === native.dataset.partnerId));
-    }
     const visible=partners.filter(matches).length;
     $('#search-count').textContent=`${String(visible).padStart(2,'0')} / ${partners.length}`;
     $('#index-empty').classList.toggle('is-visible',visible===0);
@@ -359,11 +352,6 @@ export function mount(root) {
     setFilter('ALL');
   }
   $('#clear-selection').addEventListener('click', resetSelection);
-  $('.network-native')?.addEventListener('pointerenter',()=>{state.hoverId=$('.network-native').dataset.partnerId;updateUI();});
-  $('.network-native')?.addEventListener('pointerleave',()=>{state.hoverId=null;updateUI();});
-  $('.network-native')?.addEventListener('focus',()=>{state.hoverId=$('.network-native').dataset.partnerId;updateUI();});
-  $('.network-native')?.addEventListener('blur',()=>{state.hoverId=null;updateUI();});
-  $('.network-native')?.addEventListener('click',()=>{state.lockedId=$('.network-native').dataset.partnerId;state.hoverId=null;updateUI();});
   root.addEventListener('keydown',e=>{ if(e.key==='Escape') resetSelection(); });
 
   // The cloud is static: draw only near the viewport and after an actual resize.

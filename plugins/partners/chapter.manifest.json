@@ -8,7 +8,8 @@
     "partners.upsert-organization"
   ],
   "consumes": [
-    "organizations"
+    "organizations",
+    "settings"
   ],
   "navigation": {
     "label": "PARTNERS",

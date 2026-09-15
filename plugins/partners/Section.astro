@@ -8,7 +8,6 @@ const partners = networkPartners(content.organizations);
 import { number } from '../../packages/content-loader-git/index.mjs';
 import { formatPosition, displayMode, locationNote } from './presentation.js';
 const selected = partners.find(p => p.id === 'org:010') ?? partners[0];
-const native = partners.find(p => p.group === 'native');
 const regional = partners.filter(p => p.group === 'gba');
 const europe = partners.filter(p => p.map === 'EURASIA / EUROPE');
 const beijing = partners.filter(p => p.city === '北京');
@@ -76,11 +75,10 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
             <button class="text-button" id="locate-index" type="button">LOCATE IN INDEX</button>
             <button class="text-button" id="clear-selection" type="button">RESET</button>
           </div>
-          {native && <button class="network-native" type="button" data-partner-id={native.id} aria-label={`选择 ${native.name}`}>
-            <span class="native-glyph" aria-hidden="true"></span>
-            <span><strong>{native.name}</strong><small>NETWORK-NATIVE / DISTRIBUTED OPEN SOURCE</small></span>
-            <span>{native.number} ↗</span>
-          </button>}
+          <div class="network-native">
+            <img class="native-logo" alt="" height="160" src={'/' + content.settings.brand.logo} width="103" />
+            <span><strong>{content.settings.brand.name}</strong><small>{content.settings.brand.slogan}</small></span>
+          </div>
         </article>
 
         <section class="gba-panel" id="gba-panel" aria-label="粤港澳大湾区合作单位局部图">
@@ -96,7 +94,6 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
           <div class="gba-footer"><span>PEARL RIVER DELTA + JIEYANG / POINT-CLOUD COASTLINE</span><span>ANCHOR DOT = GEOGRAPHIC POSITION</span></div>
         </section>
       </div>
-      <div class="map-caption"><span>短引线起点保留地址或校园锚点，信号头就近避让；虚线表示城市／省级近似位置，点划线表示所属校区。</span><span>WGS84 · LOCAL LEADERS · CANVAS CLOUD + SVG SIGNALS + HTML INDEX</span></div>
     </section>
 
     <section class="partners-index" id="partners-index" aria-labelledby="partners-index-title">

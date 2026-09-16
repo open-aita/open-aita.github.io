@@ -28,7 +28,7 @@ document.querySelector('#knight').onclick=async()=>{
   });
   const output=document.createElement('canvas');output.width=1920;output.height=384;
   const ctx=output.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(source,0,0,1920,384);
-  await publish(output,'aita-knight-1920.webp');status.textContent='骑士图已生成，点击下载后替换 apps/site/public/assets/images/projects-knight-1920.webp。';
+  await publish(output,'aita-knight-1920.webp');status.textContent='骑士图已生成，点击下载后替换 apps/site/public/assets/images/research/projects-knight-1920.webp。';
  }catch(error){status.textContent=String(error)}finally{frame.remove();button.disabled=false}
 };
 document.querySelector('#network').onclick=async()=>{
@@ -57,7 +57,7 @@ document.querySelector('#network').onclick=async()=>{
    }
    await publish(canvas,`aita-network-${key}.webp`);
   }
-  status.textContent='地图已生成，下载后分别替换 apps/site/public/assets/images/network-main.webp 与 network-gba.webp。';
+  status.textContent='地图已生成，下载后分别替换 apps/site/public/assets/images/partners/network-main.webp 与 network-gba.webp。';
  }catch(error){status.textContent=String(error)}finally{button.disabled=false}
 };
 </script></html>

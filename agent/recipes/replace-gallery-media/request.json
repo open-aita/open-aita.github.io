@@ -1,8 +1,8 @@
 {
   "id": "media:ijcai-2025",
   "patch": {
-    "path": "assets/images/ijcai-2025.webp",
-    "fallbackPath": "assets/images/ijcai-2025.jpg",
+    "path": "assets/images/activities/ijcai-2025.webp",
+    "fallbackPath": "assets/images/activities/ijcai-2025.jpg",
     "alt": {
       "zh": "Recipe 媒体替换验证"
     }

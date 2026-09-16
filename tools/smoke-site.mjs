@@ -29,7 +29,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       await page.route('**/*',async route=>{
         const request=route.request().url();
         if (/^https?:/.test(request) && !request.startsWith(url+'/')) {remote.push(request);return route.abort();}
-        if (request.includes('/assets/images/network-')) networkRequests.push(request);
+        if (request.includes('/assets/images/partners/network-')) networkRequests.push(request);
         if (width===1440 && request.includes('/network-gba.webp')) await delayedGba;
         return route.continue();
       });

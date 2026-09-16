@@ -25,7 +25,7 @@ iframe 由 `packages/kernel/effects.js` 排队启动；About、Outputs 在页面
 python -m http.server 4175 --bind 127.0.0.1
 ```
 
-打开 `http://127.0.0.1:4175/tools/artwork/export.html`。下载后分别替换 `apps/site/public/assets/images/projects-knight-1920.webp`、`network-main.webp`、`network-gba.webp`。普通网页预览使用 `npm run dev`，不是这个开发用文件服务器。
+打开 `http://127.0.0.1:4175/tools/artwork/export.html`。下载后分别替换 `apps/site/public/assets/images/research/projects-knight-1920.webp`、`partners/network-main.webp`、`partners/network-gba.webp`（均在 `apps/site/public/assets/images/` 下按章节分目录）。普通网页预览使用 `npm run dev`，不是这个开发用文件服务器。
 
 静态图片更新可使用新文件名并同步引用以避免旧缓存；主站 CSS 和脚本的产物引用由 Astro 管理。不要为内容或样式更新运行历史自动修订脚本。
 

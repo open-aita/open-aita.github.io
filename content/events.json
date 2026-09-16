@@ -40,6 +40,26 @@
     }
   },
   {
+    "id": "event:grok-bot-meetup",
+    "title": {
+      "zh": "Grok Bot 见面会"
+    },
+    "kind": "meetup",
+    "mediaAssetIds": [
+      "media:grok-bot-meetup"
+    ],
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-16",
+    "display": {
+      "title": "Grok Bot 见面会",
+      "caption": "Grok Bot 见面会",
+      "variant": "meetup"
+    }
+  },
+  {
     "id": "event:ai-summer-camp",
     "title": {
       "zh": "AI 夏令营"

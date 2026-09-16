@@ -31,8 +31,9 @@
   :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .62fr) minmax(0, .92fr) minmax(230px, .58fr); grid-template-rows: 370px 330px; border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card { position: relative; min-width: 0; padding: 0; border: 0; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); cursor: zoom-in; overflow: hidden; text-align: left; }
-  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1 / span 2; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1; }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { grid-row: 1 / span 2; }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--meetup { grid-column: 1; grid-row: 2; }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card picture, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card img { width: 100%; height: 100%; }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card img { object-fit: cover; filter: contrast(1.02) brightness(.88); transition: transform .55s ease; }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall img { object-position: 50% 13%; }
@@ -59,9 +60,9 @@
 
   @media (max-width: 980px) {
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { grid-template-columns: 1.28fr .72fr; grid-template-rows: 410px 330px 300px auto; }
-    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1 / span 2; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide { grid-row: 1; }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { grid-row: 1 / span 2; }
-    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card:not(.gallery-card--wide):not(.gallery-card--tall):not(.gallery-card--hackathon) { grid-column: 1; grid-row: 3; }
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card:not(.gallery-card--wide):not(.gallery-card--tall):not(.gallery-card--hackathon):not(.gallery-card--meetup) { grid-column: 1; grid-row: 3; }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--hackathon { grid-column: 2; grid-row: 3; }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { grid-column: 1 / -1; grid-row: 4; }
   }
@@ -72,6 +73,8 @@
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { display: block; border-top: 0; }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--wide, :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { width: 100%; height: 380px; border-top: 1px solid var(--border); }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--tall { height: 500px; }
+    /* Landscape group photo; a shorter box keeps the seated crowd out of the crop. */
+    :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card--meetup { height: 300px; }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index { display: block; min-height: 280px; border-top: 1px solid var(--border); }
     :where([data-plugin="activities"], [data-plugin-owner="activities"]) .activity-index ul { margin-top: 30px; }
   }

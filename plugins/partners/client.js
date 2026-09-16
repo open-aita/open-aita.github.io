@@ -15,7 +15,7 @@ export function mount(root) {
   const state = { filter: 'ALL', query: '', lockedId: partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null, hoverId: null };
   const cloudImages = {};
   let loading = false;
-  const scriptBase = new URL("/assets/images/", location.href);
+  const scriptBase = new URL("/assets/images/partners/", location.href);
   const drawRects = {};
 
   const $ = (sel, scope=root) => scope.querySelector(sel);

@@ -1,8 +1,8 @@
 [
   {
     "id": "media:ijcai-2025",
-    "path": "assets/images/ijcai-2025.webp",
-    "fallbackPath": "assets/images/ijcai-2025.jpg",
+    "path": "assets/images/activities/ijcai-2025.webp",
+    "fallbackPath": "assets/images/activities/ijcai-2025.jpg",
     "alt": {
       "zh": "AITA 团队成员参加 IJCAI 2025 活动合影"
     },
@@ -17,8 +17,8 @@
   },
   {
     "id": "media:ai-summer-camp",
-    "path": "assets/images/ai-summer-camp.webp",
-    "fallbackPath": "assets/images/ai-summer-camp.jpg",
+    "path": "assets/images/activities/ai-summer-camp.webp",
+    "fallbackPath": "assets/images/activities/ai-summer-camp.jpg",
     "alt": {
       "zh": "Datawhale AI 夏令营活动介绍海报"
     },
@@ -33,8 +33,8 @@
   },
   {
     "id": "media:ascend-developer-day",
-    "path": "assets/images/ascend-developer-day.webp",
-    "fallbackPath": "assets/images/ascend-developer-day.jpg",
+    "path": "assets/images/activities/ascend-developer-day.webp",
+    "fallbackPath": "assets/images/activities/ascend-developer-day.jpg",
     "alt": {
       "zh": "AITA 成员参加昇腾开发者创享日活动"
     },
@@ -55,11 +55,27 @@
     "evidenceRefs": [
       "evidence:activities"
     ],
-    "fallbackPath": "assets/images/hackathon1.png",
+    "fallbackPath": "assets/images/activities/hackathon1.png",
     "height": 2456,
     "id": "media:aiy-hackathon-2026",
-    "path": "assets/images/hackathon1.webp",
+    "path": "assets/images/activities/hackathon1.webp",
     "source": "用户提供的活动图片",
     "width": 3275
+  },
+  {
+    "id": "media:grok-bot-meetup",
+    "path": "assets/images/activities/grok-bot-meetup.webp",
+    "fallbackPath": "assets/images/activities/grok-bot-meetup.jpg",
+    "alt": {
+      "zh": "Grok Bot 见面会现场与会者合影，会议厅观众席满座"
+    },
+    "source": "用户提供的活动图片",
+    "width": 4032,
+    "height": 3024,
+    "copyrightStatus": "provided-for-site-demo",
+    "evidenceRefs": [
+      "evidence:activities"
+    ],
+    "verifiedAt": "2026-09-16"
   }
 ]

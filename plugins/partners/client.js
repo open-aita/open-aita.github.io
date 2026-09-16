@@ -7,7 +7,7 @@ export function mount(root) {
 
   if (!root) return;
 
-  const CLOUDS = {"main":{"bounds":[-12,15,147,80],"size":[1908,780],"count":22389},"gba":{"bounds":[110.45,20.85,117.75,24.5],"size":[1360,680],"count":10042}};
+  const CLOUDS = {"main":{"bounds":[-12,15,191.5,80],"size":[2442,780],"count":24359},"gba":{"bounds":[110.45,20.85,117.75,24.5],"size":[1360,680],"count":10042}};
 
   const partners = JSON.parse(root.querySelector('[data-network-data]').textContent);
 
@@ -145,7 +145,7 @@ export function mount(root) {
     const layer = $('#main-beacons');
     svg.replaceChildren(); layer.replaceChildren();
     svg.setAttribute('viewBox',`0 0 ${frame.clientWidth} ${frame.clientHeight}`);
-    const scale = frame.clientWidth / 1908;
+    const scale = frame.clientWidth / CLOUDS.main.size[0];
     partners.filter(p=>p.group==='main').forEach(p => {
       const anchor = project('main',p.lon,p.lat);
       const end = {x:anchor.x+p.dx*scale, y:anchor.y+p.dy*scale};

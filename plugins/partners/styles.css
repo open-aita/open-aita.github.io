@@ -85,7 +85,9 @@
   #network .filter-button { flex: 0 0 auto; height: 31px; padding: 0 11px; border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; font: 9px/1 var(--mono); letter-spacing: .07em; transition: color .16s ease, border-color .16s ease, background .16s ease; }
   #network .filter-button:hover { color: var(--text); border-color: var(--border); }
   #network .filter-button[aria-pressed="true"] { color: var(--heading-accent-brand); border-color: rgba(168,185,255,.42); background: rgba(168,185,255,.06); }
-  #network .map-frame { position: relative; isolation: isolate; height: clamp(410px, 41vw, 635px); overflow: hidden; border: 1px solid var(--border); background:
+  /* Must match CLOUDS.main.size in client.js: the cloud is contain-fitted, so any
+     mismatch leaves dead bands beside it and drifts the percentage-placed overlays. */
+  #network .map-frame { position: relative; isolation: isolate; aspect-ratio: 2442 / 780; overflow: hidden; border: 1px solid var(--border); background:
       radial-gradient(circle at 79% 72%, rgba(154,167,184,.055), transparent 22%),
       radial-gradient(circle at 10% 40%, rgba(168,185,255,.035), transparent 24%),
       var(--bg-deep); }
@@ -103,16 +105,16 @@
   #network .latitude-scale span { position: absolute; left: 0; color: rgba(137,137,137,.48); font: 8px/1 var(--mono); transform: translateY(-50%); }
   #network .latitude-scale span::after { content: ""; position: absolute; left: 25px; top: 4px; width: 10px; height: 1px; background: rgba(137,137,137,.25); }
   #network .continent-label { position: absolute; z-index: 2; pointer-events: none; color: rgba(197,197,197,.18); font: 9px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-  #network .continent-label.europe { left: 14%; top: 54%; }
-  #network .continent-label.central { left: 48%; top: 45%; }
-  #network .continent-label.china { left: 77.5%; top: 66%; color: rgba(168,185,255,.25); }
-  #network .continent-label.pacific { right: 3.5%; top: 58%; }
+  #network .continent-label.europe { left: 10.9%; top: 54%; }
+  #network .continent-label.central { left: 37.5%; top: 45%; }
+  #network .continent-label.china { left: 60.6%; top: 66%; color: rgba(168,185,255,.25); }
+  #network .continent-label.pacific { right: 10.6%; top: 58%; }
   #network .area-title { position: absolute; z-index: 3; pointer-events: none; color: rgba(197,197,197,.32); font-family: var(--mono); text-transform: uppercase; text-shadow: 0 0 16px rgba(10,10,10,.96); }
   #network .area-title strong { display: block; font: 600 clamp(11px, .9vw, 15px)/1.05 var(--mono); letter-spacing: .15em; white-space: nowrap; }
   #network .area-title small { display: block; margin-top: 5px; color: rgba(137,137,137,.40); font: 8px/1 var(--mono); letter-spacing: .10em; white-space: nowrap; }
   #network .area-title::after { content: ""; display: block; width: 56px; height: 1px; margin-top: 7px; background: linear-gradient(90deg, rgba(168,185,255,.36), transparent); }
-  #network .area-title--europe { left: 14.2%; top: 57%; color: rgba(197,197,197,.27); }
-  #network .area-title--beijing { left: 68.3%; top: 35.5%; color: rgba(168,185,255,.26); }
+  #network .area-title--europe { left: 11.1%; top: 57%; color: rgba(197,197,197,.27); }
+  #network .area-title--beijing { left: 53.4%; top: 35.5%; color: rgba(168,185,255,.26); }
   #network .line-layer, #network .beacon-layer { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   #network .beacon-layer { z-index: 6; }
   #network .signal-line { fill: none; stroke: rgba(154,167,184,.32); stroke-width: .8; stroke-linecap: round; vector-effect: non-scaling-stroke; transition: stroke .15s ease, opacity .15s ease; }
@@ -246,7 +248,7 @@
   #network .atlas-metric { min-height: 52px; padding: 0 10px; }
   #network .atlas-metric strong { font-size: 20px; }
   #network .atlas-metric span { font-size: 7px; }
-  #network .map-frame { height: clamp(360px, 70vw, 500px); }
+  #network .map-frame { aspect-ratio: auto; height: clamp(300px, 52vw, 420px); }
   #network .beacon-label { display: none; }
   #network .continent-label, #network .area-title { display: none; }
   #network .atlas-detail-grid { display: block; overflow: visible; }
@@ -267,7 +269,7 @@
   #network .atlas-metric strong { display: block; }
   #network .atlas-metric span { display: block; margin-top: 4px; }
   #network .filter-cluster { padding-inline: 5px; }
-  #network .map-frame { height: 245px; }
+  #network .map-frame { aspect-ratio: auto; height: 210px; }
   #network .map-topline span:last-child, #network .map-bottomline span:last-child { display: none; }
   #network .latitude-scale { display: none; }
   #network .cluster-beacon { transform: translate(-50%,-50%) scale(.86); }

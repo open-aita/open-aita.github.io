@@ -37,7 +37,9 @@ document.querySelector('#network').onclick=async()=>{
   const response=await fetch('./network-cloud-source.json');if(!response.ok)throw new Error('地图源数据加载失败');
   const clouds=await response.json();
   for(const [key,cloud] of Object.entries(clouds)){
-   const cssWidth=key==='main'?960:680,cssHeight=cssWidth*cloud.size[1]/cloud.size[0];
+   // Size from the cloud's own pixel grid, at 2x for high-DPI screens. Hardcoding a
+   // width here would silently change point density whenever the extent changes.
+   const cssWidth=cloud.size[0]/2,cssHeight=cloud.size[1]/2;
    const canvas=document.createElement('canvas');canvas.width=cssWidth*2;canvas.height=Math.round(cssHeight*2);
    const ctx=canvas.getContext('2d');ctx.scale(2,2);
    const raw=atob(cloud.data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0)),view=new DataView(bytes.buffer);

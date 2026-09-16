@@ -419,7 +419,9 @@
   .footer-grid a, .footer-grid > div > p { display: block; margin-bottom: 11px; color: var(--muted); font: 11px/1.5 var(--mono); letter-spacing: .04em; }
   .footer-grid a:hover { color: var(--brand-accent); }
   .footer-note { align-self: end; text-align: right; }
-  .footer-note p:first-child { color: var(--text); font: italic 19px/1.3 var(--serif); }
+  /* Upright: the line mixes Latin and CJK, and CJK has no italic — the browser would slant it
+     synthetically next to an upright word. */
+  .footer-note p:first-child { color: var(--text); font: 19px/1.3 var(--serif); }
   .footer-bottom { min-height: 58px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); color: var(--text-micro); font: 10px/1 var(--mono); letter-spacing: .06em; }
 }
 

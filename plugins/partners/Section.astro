@@ -86,6 +86,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
           <div class="gba-title"><strong>GREATER BAY AREA / DETAIL</strong><small>{number(regional.filter(p => p.city !== '揭阳').length)} GBA SIGNALS + {cityCount('揭阳')} JIEYANG HQ SIGNALS · {number(cities(regional))} REGIONAL ANCHORS</small></div>
           <div class="gba-meta">FIG.05-A<br>LOCAL LEADER LINES</div>
           <canvas class="map-canvas" id="gba-map" aria-hidden="true"></canvas>
+          <svg class="border-layer" id="gba-borders" aria-hidden="true"></svg>
           <svg class="line-layer" id="gba-lines" aria-hidden="true"></svg>
           <svg class="flare-layer" id="gba-flare" aria-hidden="true"></svg>
           <div class="beacon-layer" id="gba-beacons"></div>

@@ -21,7 +21,9 @@ export function mount(root) {
   const beaconPoints = { main: new Map(), gba: new Map() };
   let loading = false;
   const scriptBase = new URL("/assets/images/partners/", location.href);
+  const borderSource = new URL('/assets/geo/gba-borders.json', location.href).href;
   const drawRects = {};
+  let borders = null;
 
   const $ = (sel, scope=root) => scope.querySelector(sel);
   const $$ = (sel, scope=root) => [...scope.querySelectorAll(sel)];
@@ -162,6 +164,50 @@ export function mount(root) {
     return rect;
   }
 
+  function loadBorders() {
+    fetch(borderSource)
+      .then(response => { if (!response.ok) throw new Error(String(response.status)); return response.json(); })
+      .then(data => {
+        borders = data;
+        if (started) renderBorders();
+      })
+      .catch(error => console.warn('Network city outlines could not load:', error));
+  }
+
+  // The detail bitmap is a scatter of points with the coastline in it and nothing else: no reader
+  // can tell where one city stops. These are the real prefecture outlines, drawn in the cloud's
+  // own pixel grid and placed by viewBox, so a resize only rewrites one attribute.
+  function renderBorders() {
+    const panel = $('#gba-panel');
+    const svg = $('#gba-borders');
+    const rect = drawRects.gba;
+    if (!panel || !svg || !borders || !rect) return;
+    const [gridW, gridH] = borders.grid;
+    const scaleX = rect.width / gridW, scaleY = rect.height / gridH;
+    // The layer covers the panel, but the bitmap was blitted into `rect` — on a wide panel a crop
+    // of the cloud that starts left of the panel. Point the viewBox at that same part of the grid
+    // so every outline falls on the pixels the cloud was drawn to.
+    const viewX = -rect.x / scaleX, viewY = -rect.y / scaleY;
+    svg.setAttribute('viewBox', `${viewX} ${viewY} ${panel.clientWidth / scaleX} ${panel.clientHeight / scaleY}`);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    if (svg.childElementCount) return;
+    const [lon0, lat0, lon1, lat1] = borders.frame;
+    const gx = lon => ((lon - lon0) / (lon1 - lon0) * gridW).toFixed(1);
+    const gy = lat => ((lat1 - lat) / (lat1 - lat0) * gridH).toFixed(1);
+    const fragment = document.createDocumentFragment();
+    for (const city of borders.cities) {
+      const d = city.paths.map(path => {
+        let line = '';
+        for (let i = 0; i < path.length; i += 2) line += `${i ? 'L' : 'M'}${gx(path[i])} ${gy(path[i + 1])}`;
+        return line;
+      }).join('');
+      const shape = svgEl('g', { class: 'city-shape', 'data-city-en': city.en });
+      shape.append(svgEl('path', { class: 'city-border', d }));
+      fragment.append(shape);
+    }
+    svg.append(fragment);
+  }
+
   function project(key, lon, lat) {
     const cloud = CLOUDS[key];
     const rect = drawRects[key];
@@ -299,7 +345,7 @@ export function mount(root) {
     const regionalCount = partners.filter(p => p.group === 'gba').length;
     const hqCount = partners.filter(p => p.city === '揭阳').length;
     button.setAttribute('aria-label',`查看粤港澳大湾区与广东工业大学揭阳校区的 ${regionalCount} 个合作信号`);
-    button.innerHTML=`<span class="cluster-beacon-ring" aria-hidden="true"></span><span class="cluster-beacon-count">${regionalCount-hqCount}</span><span class="cluster-beacon-label">GREATER BAY AREA<small>+ ${String(hqCount).padStart(2,'0')} JIEYANG HQ / OPEN DETAIL ↘</small></span>`;
+    button.innerHTML=`<span class="cluster-beacon-ring" aria-hidden="true"></span><span class="cluster-beacon-label">GREATER BAY AREA<small>+ ${String(hqCount).padStart(2,'0')} JIEYANG HQ / OPEN DETAIL ↘</small></span>`;
     const hq = byId.get('org:029');
     if (hq) {
     const hqAnchor = project('main',hq.lon,hq.lat);
@@ -473,6 +519,7 @@ export function mount(root) {
     flare.clear();
     renderCloud($('#main-map'),'main');
     renderCloud($('#gba-map'),'gba');
+    renderBorders();
     renderMainOverlay();
     renderGbaOverlay();
     updateUI();
@@ -536,11 +583,12 @@ export function mount(root) {
     if (started) return;
     started = true;
     loadCloudImages();
+    loadBorders();
     renderAll();
   };
   // Fetch at low priority after the first page load; draw only near the viewport.
-  if (document.readyState === 'complete') loadCloudImages();
-  else window.addEventListener('load', loadCloudImages, { once: true });
+  if (document.readyState === 'complete') { loadCloudImages(); loadBorders(); }
+  else window.addEventListener('load', () => { loadCloudImages(); loadBorders(); }, { once: true });
   if (typeof IntersectionObserver === 'function') {
     const observer = new IntersectionObserver(entries => {
       if (!entries.some(entry => entry.isIntersecting)) return;

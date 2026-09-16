@@ -117,6 +117,12 @@
   #network .area-title--beijing { left: 53.4%; top: 35.5%; color: rgba(168,185,255,.26); }
   #network .line-layer, #network .beacon-layer, #network .flare-layer { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   #network .beacon-layer { z-index: 6; }
+  /* City outlines for the detail figure. The bitmap underneath is a scatter of points with no
+     inland borders, so the outlines are plotted as the same kind of dot chain the coastline is:
+     a round-capped stroke dashed to a near-zero dash, which draws beads rather than a line.
+     non-scaling-stroke keeps the beads one screen size whatever the panel scales the map to. */
+  #network .border-layer { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+  #network .city-border { fill: none; stroke: rgba(207,213,222,.42); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: .01 3.2; vector-effect: non-scaling-stroke; }
   #network .flare-line { fill: none; stroke: var(--heading-accent-brand); stroke-width: 1.3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
   #network .flare-glow { fill: none; stroke: rgba(168,185,255,.55); stroke-width: 3.8; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: .26; }
   #network .flare-origin { fill: none; stroke: rgba(168,185,255,.85); stroke-width: 1; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
@@ -163,14 +169,13 @@
   #network .cluster-beacon-ring { position: absolute; inset: 9px; border: 1px solid rgba(168,185,255,.72); border-radius: 50%; box-shadow: 0 0 0 7px rgba(168,185,255,.035), 0 0 24px rgba(168,185,255,.12); }
   #network .cluster-beacon-ring::before, #network .cluster-beacon-ring::after { content: ""; position: absolute; inset: 5px; border: 1px dotted rgba(168,185,255,.5); border-radius: 50%; }
   #network .cluster-beacon-ring::after { inset: 10px; background: var(--heading-accent-brand); border: 0; }
-  #network .cluster-beacon-count { position: absolute; left: 46px; top: -1px; min-width: 30px; color: var(--heading-accent-brand); font: 700 14px/1 var(--mono); }
   #network .cluster-beacon-label { position: absolute; left: 46px; top: 17px; color: var(--text); font: 600 clamp(12px, .96vw, 15px)/1.18 var(--mono); letter-spacing: .10em; white-space: nowrap; text-align: left; text-shadow: 0 0 12px var(--bg-deep); }
   #network .cluster-beacon small { display: block; margin-top: 5px; color: var(--muted); font: 8px/1.45 var(--mono); letter-spacing: .07em; }
   #network .hq-anchor-label { position: absolute; z-index: 9; pointer-events: none; color: rgba(168,185,255,.72); font: 600 8px/1.2 var(--mono); letter-spacing: .10em; white-space: nowrap; text-shadow: 0 0 10px var(--bg-deep); transform: translate(8px, 7px); }
   #network .hq-anchor-label small { display: block; margin-top: 3px; color: rgba(137,137,137,.62); font: 7px/1.2 var(--mono); letter-spacing: .08em; }
   #network .cluster-beacon:hover .cluster-beacon-ring, #network .cluster-beacon:focus-visible .cluster-beacon-ring, #network .cluster-beacon.is-active .cluster-beacon-ring { border-color: var(--text); box-shadow: 0 0 0 9px rgba(168,185,255,.05), 0 0 32px rgba(168,185,255,.22); }
   #network .cluster-beacon.is-filtered { opacity: .1; pointer-events: none; }
-  #network #main-map-frame :is(.map-topline, .map-bottomline, .latitude-scale span, .continent-label, .area-title, .area-title strong, .area-title small, .beacon-number, .beacon-label, .cluster-beacon-count, .cluster-beacon-label, .cluster-beacon small, .hq-anchor-label, .hq-anchor-label small) { color: #fff; }
+  #network #main-map-frame :is(.map-topline, .map-bottomline, .latitude-scale span, .continent-label, .area-title, .area-title strong, .area-title small, .beacon-number, .beacon-label, .cluster-beacon-label, .cluster-beacon small, .hq-anchor-label, .hq-anchor-label small) { color: #fff; }
   #network .atlas-detail-grid { display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1.48fr); }
   #network .selection-panel, #network .gba-panel { position: relative; min-width: 0; min-height: clamp(500px, 36vw, 690px); border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); }
   #network .gba-panel { border-right: 1px solid var(--border); overflow: hidden; background: var(--bg-deep); }
@@ -285,7 +290,6 @@
   #network .latitude-scale { display: none; }
   #network .cluster-beacon { transform: translate(-50%,-50%) scale(.86); }
   #network #gba-cluster-beacon .cluster-beacon-label { left: auto; right: 46px; text-align: right; font-size: 10px; }
-  #network #gba-cluster-beacon .cluster-beacon-count { left: auto; right: 46px; text-align: right; }
   #network #gba-cluster-beacon small { white-space: nowrap; }
   #network .hq-anchor-label { transform: translate(-100%, 8px); text-align: right; }
   #network .gba-meta { display: none; }

@@ -26,6 +26,7 @@ npm run preview
 - 三处“加入 AITA”链接：修改 `content/recruitment.json` 首条记录的 `formUrl`。未配置时统一跳到 `#join`。
 - 工作、实习、升学去向：`content/member-paths.json`。只保存机构、岗位和汇总人数，不增加姓名。
 - 图片：`apps/site/public/assets/images/`，按归属章节分子目录（`activities/`、`partners/`、`research/`，站点头部与图标共用 `brand/`）；活动图片的路径和替代文本由 `content/media-assets.json` 管理。
+- Network 细节图的市级边界：`apps/site/public/assets/geo/gba-borders.json`（生成的资源，不手工编辑）。改范围或精度改 `tools/artwork/build-gba-borders.mjs` 后重新运行 `node tools/artwork/build-gba-borders.mjs`。
 
 `node tools/aita.mjs preview create --json` 会重新构建并生成当前桌面、手机截图；不会复用历史截图。产物保存在忽略提交的 `.work/preview/`。
 

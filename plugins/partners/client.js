@@ -129,7 +129,7 @@ export function mount(root) {
     b.setAttribute('aria-label', `${p.number} ${p.name}，${p.anchor}，${p.precision}`);
     b.innerHTML = '<span class="beacon-core" aria-hidden="true"></span><span class="beacon-number"></span>';
     b.querySelector('.beacon-number').textContent = p.number;
-    if (!micro) {
+    if (!micro && !p.hideLabel) {
       const label = document.createElement('span');
       label.className = 'beacon-label';
       label.textContent = p.label || p.anchor;

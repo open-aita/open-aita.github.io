@@ -332,7 +332,7 @@
     "map": "EURASIA / CHINA",
     "dx": -24,
     "dy": -56,
-    "label": "JIANGXI · PROVINCIAL",
+    "hideLabel": true,
     "align": "left"
   },
   {

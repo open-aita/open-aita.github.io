@@ -115,8 +115,11 @@
   #network .area-title::after { content: ""; display: block; width: 56px; height: 1px; margin-top: 7px; background: linear-gradient(90deg, rgba(168,185,255,.36), transparent); }
   #network .area-title--europe { left: 11.1%; top: 57%; color: rgba(197,197,197,.27); }
   #network .area-title--beijing { left: 53.4%; top: 35.5%; color: rgba(168,185,255,.26); }
-  #network .line-layer, #network .beacon-layer { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  #network .line-layer, #network .beacon-layer, #network .flare-layer { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   #network .beacon-layer { z-index: 6; }
+  #network .flare-line { fill: none; stroke: var(--heading-accent-brand); stroke-width: 1.3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  #network .flare-glow { fill: none; stroke: rgba(168,185,255,.55); stroke-width: 3.8; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: .26; }
+  #network .flare-origin { fill: none; stroke: rgba(168,185,255,.85); stroke-width: 1; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
   #network .signal-line { fill: none; stroke: rgba(154,167,184,.32); stroke-width: .8; stroke-linecap: round; vector-effect: non-scaling-stroke; transition: stroke .15s ease, opacity .15s ease; }
   #network .signal-line-city { opacity: .76; }
   #network .line-group.is-approx .signal-line { stroke-dasharray: 3 5; opacity: .55; }

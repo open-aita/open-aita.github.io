@@ -1,4 +1,5 @@
 import { formatPosition, displayMode } from './presentation.js';
+import { createFlare } from './flare.js';
 /* Network Atlas: local point-cloud data and interaction.
    Location data: user-supplied AITA_Network_Address_Verified_v2.html.
    Precision describes the supplied location basis, not independent address verification. */
@@ -14,6 +15,10 @@ export function mount(root) {
   const byId = new Map(partners.map(p => [p.id, p]));
   const state = { filter: 'ALL', query: '', lockedId: partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null, hoverId: null };
   const cloudImages = {};
+  const cloudReady = {};
+  // Where each beacon actually sits in its layer, filled in by the overlay renders. The flare
+  // ends on these, not on the geographic anchor, so the arcs land on the markers a reader sees.
+  const beaconPoints = { main: new Map(), gba: new Map() };
   let loading = false;
   const scriptBase = new URL("/assets/images/partners/", location.href);
   const drawRects = {};
@@ -29,6 +34,11 @@ export function mount(root) {
   const ROTATE_CATEGORIES = new Set(['ACADEMIC','INSTITUTE']);
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const rotation = { enabled: !reducedMotion.matches, holding: false, visible: false, timer: 0 };
+  const flare = createFlare(reducedMotion);
+  let flareGeneration = 0;
+  const FLARE_DELAY = 260;   // let the scroll settle before the burst starts
+  // Which pool members have had their turn since the last full lap.
+  const rotationSeen = new Set();
 
   function rotationPool() {
     const listed = partners.filter(matches);
@@ -54,9 +64,18 @@ export function mount(root) {
       if (pool.length > 1) {
         state.lockedId = pool[(index + 1) % pool.length].id;
         updateUI();
+        noteVisited(pool);
       }
     }
     scheduleRotation();
+  }
+
+  function noteVisited(pool) {
+    if (!pool.length) return;
+    rotationSeen.add(state.lockedId);
+    if (!pool.every(p => rotationSeen.has(p.id))) return;
+    rotationSeen.clear();
+    onRotationCycle();
   }
 
   function setRotation(enabled) {
@@ -86,7 +105,7 @@ export function mount(root) {
       image.decoding = 'async';
       image.fetchPriority = 'low';
       image.src = new URL(`network-${key}.webp?v=20260905-2`, scriptBase).href;
-      image.decode().then(() => {
+      cloudReady[key] = image.decode().then(() => {
         cloudImages[key] = image;
         if (started) renderCloud($(key === 'main' ? '#main-map' : '#gba-map'), key);
       }).catch(error => {
@@ -153,6 +172,64 @@ export function mount(root) {
     };
   }
 
+  // One burst per map. Fired the first time each map is properly in view, and again every time
+  // the panel has walked the whole institute and university pool. Each leaves from the anchor
+  // its map is actually about: the continental map from the Greater Bay Area, the regional
+  // detail from the Jieyang campus.
+  const flares = [
+    { target: '#main-map-frame', layer: '#main-flare', key: 'main',
+      mine: p => p.group === 'main', origin: () => project('main',113.72,22.72) },
+    { target: '#gba-panel', layer: '#gba-flare', key: 'gba',
+      mine: p => p.group === 'gba' && p.id !== 'org:029',
+      origin: () => { const hq = byId.get('org:029'); return hq?.lon == null ? null : project('gba',hq.lon,hq.lat); } },
+  ];
+
+  function onScreen(selector) {
+    const el = $(selector);
+    if (!el) return false;
+    const box = el.getBoundingClientRect();
+    return Math.min(box.bottom, innerHeight) - Math.max(box.top, 0) > box.height * .5;
+  }
+
+  function fireFlares(specs) {
+    for (const spec of specs) {
+      const layer = $(spec.layer);
+      const origin = drawRects[spec.key] && spec.origin();
+      if (!layer || !origin) continue;
+      const points = partners
+        .filter(p => spec.mine(p) && matches(p))
+        .map(p => beaconPoints[spec.key].get(p.id))
+        .filter(Boolean);
+      const quiet = flare.fire(layer, origin, points);
+      const generation = flareGeneration;
+      if (quiet) setTimeout(() => { if (generation === flareGeneration) flare.clearLayer(layer); }, quiet);
+    }
+  }
+
+  // Runs from the flare observer, which is registered after the section observer that starts
+  // rendering, so the projection and the decoded bitmaps are already in place by then.
+  function launchFlare(spec) {
+    if (spec.fired || !drawRects[spec.key] || !cloudReady[spec.key]) return false;
+    spec.fired = true;
+    const frame = $(spec.target);
+    // A phone shows this map about 350px wide; the arcs would overlap into a single smear.
+    if (!frame || frame.clientWidth < 720 || reducedMotion.matches || document.hidden) return true;
+    if (!spec.origin()) return true;
+    const generation = flareGeneration;
+    cloudReady[spec.key].then(() => {
+      if (document.hidden || generation !== flareGeneration) return;
+      fireFlares([spec]);
+    });
+    return true;
+  }
+
+  // The panel walking the whole pool is the cue to shoot again — the map answers the directory.
+  // Setting the panel to HOLD stops this too, because it stops the walk.
+  function onRotationCycle() {
+    if (reducedMotion.matches || document.hidden) return;
+    fireFlares(flares.filter(spec => spec.fired && onScreen(spec.target)));
+  }
+
   function svgEl(tag, attrs={}) {
     const el = document.createElementNS('http://www.w3.org/2000/svg',tag);
     for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,String(v));
@@ -202,9 +279,11 @@ export function mount(root) {
     svg.replaceChildren(); layer.replaceChildren();
     svg.setAttribute('viewBox',`0 0 ${frame.clientWidth} ${frame.clientHeight}`);
     const scale = frame.clientWidth / CLOUDS.main.size[0];
+    beaconPoints.main.clear();
     partners.filter(p=>p.group==='main').forEach(p => {
       const anchor = project('main',p.lon,p.lat);
       const end = {x:anchor.x+p.dx*scale, y:anchor.y+p.dy*scale};
+      beaconPoints.main.set(p.id, end);
       createLineGroup(svg,p,anchor,end,false);
       createBeacon(layer,p,end,false);
     });
@@ -243,6 +322,7 @@ export function mount(root) {
     svg.replaceChildren(); layer.replaceChildren();
     svg.setAttribute('viewBox',`0 0 ${panel.clientWidth} ${panel.clientHeight}`);
     const placed = [];
+    beaconPoints.gba.clear();
     partners.filter(p=>p.group==='gba').forEach(p => {
       const anchor = project('gba',p.lon,p.lat);
       // Keep the reference's label direction, not its distant perimeter position.
@@ -262,6 +342,7 @@ export function mount(root) {
       }
       end ||= anchor;
       placed.push(end);
+      beaconPoints.gba.set(p.id, end);
       createLineGroup(svg,p,anchor,end,true);
       createBeacon(layer,p,end,true);
     });
@@ -379,6 +460,7 @@ export function mount(root) {
   function setFilter(value) {
     state.filter=value;
     state.hoverId=null;
+    rotationSeen.clear();
     $$('.filter-button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.networkFilter===value)));
     if (!state.lockedId || !matches(byId.get(state.lockedId))) state.lockedId = partners.find(matches)?.id || null;
     updateUI();
@@ -386,6 +468,9 @@ export function mount(root) {
   }
 
   function renderAll() {
+    // A re-render means the projection moved, so retract anything still in flight.
+    flareGeneration += 1;
+    flare.clear();
     renderCloud($('#main-map'),'main');
     renderCloud($('#gba-map'),'gba');
     renderMainOverlay();
@@ -398,6 +483,7 @@ export function mount(root) {
   $('#partner-search').addEventListener('input', e => {
     state.query = e.target.value;
     state.hoverId = null;
+    rotationSeen.clear();
     if (!state.lockedId || !matches(byId.get(state.lockedId))) {
       state.lockedId = partners.find(matches)?.id || null;
     }
@@ -469,6 +555,22 @@ export function mount(root) {
       if (rotation.visible) scheduleRotation(); else stopRotation();
     }, { threshold: 0 });
     visibilityObserver.observe($('.selection-panel'));
+    // Fires only once the map is genuinely in view — a burst at the first sliver of the frame
+    // is over before the reader has scrolled to it — and a beat after the page-level reveal
+    // (margin -8%, threshold .08), so the heading settles first and the map answers it.
+    const flareObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const spec = flares.find(item => item.target === `#${entry.target.id}`);
+        if (!spec || spec.fired || spec.pending) continue;
+        spec.pending = true;
+        setTimeout(() => {
+          spec.pending = false;
+          if (launchFlare(spec)) flareObserver.unobserve(entry.target);
+        }, FLARE_DELAY);
+      }
+    }, { threshold: .8, rootMargin: '0px 0px -8%' });
+    flares.forEach(spec => { const el = $(spec.target); if (el) flareObserver.observe(el); });
   } else {
     rotation.visible = true;
     startRendering();

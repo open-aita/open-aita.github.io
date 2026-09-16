@@ -45,6 +45,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
         <div class="map-topline"><span>FIG.05 / EURASIA COLLABORATION FIELD</span><span>N15°—N80° / W12°—E191.5°</span></div>
         <canvas class="map-canvas" id="main-map" aria-hidden="true"></canvas>
         <svg class="line-layer" id="main-lines" aria-hidden="true"></svg>
+        <svg class="flare-layer" id="main-flare" aria-hidden="true"></svg>
         <div class="beacon-layer" id="main-beacons"></div>
         <div class="latitude-scale" aria-hidden="true"><span style="top:0">80°N</span><span style="top:30.8%">60°N</span><span style="top:61.5%">40°N</span><span style="top:92.3%">20°N</span></div>
         <span class="area-title area-title--europe"><strong>EUROPE AREA</strong><small>{number(europe.length)} SIGNALS / {number(cities(europe))} CITIES</small></span>
@@ -86,6 +87,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
           <div class="gba-meta">FIG.05-A<br>LOCAL LEADER LINES</div>
           <canvas class="map-canvas" id="gba-map" aria-hidden="true"></canvas>
           <svg class="line-layer" id="gba-lines" aria-hidden="true"></svg>
+          <svg class="flare-layer" id="gba-flare" aria-hidden="true"></svg>
           <div class="beacon-layer" id="gba-beacons"></div>
           <span class="gba-city-label" data-city-label="GUANGZHOU">GUANGZHOU / {cityCount('广州')}</span>
           <span class="gba-city-label" data-city-label="SHENZHEN">SHENZHEN / {cityCount('深圳')}</span>

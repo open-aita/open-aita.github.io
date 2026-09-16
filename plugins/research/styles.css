@@ -65,7 +65,7 @@
     --diagram-line-accent: #b7eaff;
     --diagram-line-mid: #666666;
     --diagram-line-faint: #262626;
-    --diagram-label-lime: #8ff25f;
+    --diagram-label-lime: var(--accent-lime);
     --diagram-label-amber: #ffc15c;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

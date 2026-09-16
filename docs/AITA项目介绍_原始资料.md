@@ -156,6 +156,8 @@ CompathicalLM：基于多模态情感分析与RAG的心理危机干预系统（�
 
 果树智能检测系统的深度学习方法研究与应用（李嘉）
 
+基于VIT与多模态表征融合的3DMRI医学图像分析（杨鹏）
+
 
 
 ## 5、省级大创项目：
@@ -179,6 +181,8 @@ CompathicalLM：基于多模态情感分析与RAG的心理危机干预系统（�
 第四届中国移动“梧桐杯”大数据创新大赛【第8】（谷岩、黎韵童）
 
 2023年天池大赛全球智能汽车AI挑战赛【第38】（徐烨灵）
+
+2026AIY黑客松【银奖】（吴奕均、谢礼同）
 
 2024年世界人工智能大会第二届世界科学智能大赛【第58】（徐烨灵）
 
@@ -280,7 +284,7 @@ CompathicalLM：基于多模态情感分析与RAG的心理危机干预系统（�
 
 第十一届全国大学生数字媒体科技作品及创意竞赛【省三】（周永波）
 
-2024中国高校计算机大赛AIGC创新赛【省奖】（徐烨灵）
+2024中国高校计算机大赛AIGC创新赛【省级】（徐烨灵）
 
 第十二届“挑战杯”广东工业大学学生创业计划竞赛【校级银奖】（吴梦淇）
 
@@ -326,7 +330,9 @@ CompathicalLM：基于多模态情感分析与RAG的心理危机干预系统（�
 
 第十七届蓝桥杯全国大学生软件和信息技术大赛软件赛—G/C\+\+程序设计大学B组广东赛区【二等奖】\(王书畅）
 
-广东工业大学第一届校国生活智能体创作大赛（队长）【优秀团队奖】（王书畅）
+广东工业大学第一届校国生活智能体创作大赛【优秀团队奖】（王书畅）
+
+
 
 ## 7、其他项目：
 
@@ -334,29 +340,41 @@ AI竞赛平台【已落地】
 
 新一代人工智能应用研究院Atlas800\-9000训练中心系统升级与大模型国产化适配【已交付】
 
-DataForge多智能体协作数据合成与优化平台【开发中】
+DataForge多智能体协作数据合成与优化平台
 
 端侧心理咨询大模型【Huggingface下载次数800\+】
 
+事实核查研究平台 https://github\.com/SubmergeDan/Fact\-Shield
 
+Dwo\-Agent精简Agent框架 https://github\.com/Slipstream\-Max/DwoAgent
+
+Kvasir\-agent自主研究科学Agent https://github\.com/Rycen7822/Kvasir\-agent
 
 
 
 ## 8、论文发表情况：
 
-1. Shao Y, He H, Li S, et al\. Eventvad: Training\-free event\-aware video anomaly detection\[J\]\. arXiv preprint arXiv:2504\.13092, 2025\. \[https://doi\.org/10\.48550/arXiv\.2504\.13092\]\[**CCF\-A**\]（何昊锦）
+1. Shao Y, He H, Li S, et al\. Eventvad: Training\-free event\-aware video anomaly detection\[J\]\. arXiv preprint arXiv:2504\.13092, 2025\. \[https://doi\.org/10\.48550/arXiv\.2504\.13092\]\[ACM\-MM **CCF\-A**\]（何昊锦）
 
-2. Quanju, Li, et al\. "DPPAD\-IE: Dynamic Polyhedra Permutating and Arnold Diffusing Medical Image Encryption Using 2D Cross Gaussian Hyperchaotic Map\." [IEEE Transactions on Consumer Electronics](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=30)\(2025\)\.\[https://ieeexplore\.ieee\.org/document/10909287\]\[**SCI**** Q2**\]（李权俊）
+2. Quanju, Li, et al\. "DPPAD\-IE: Dynamic Polyhedra Permutating and Arnold Diffusing Medical Image Encryption Using 2D Cross Gaussian Hyperchaotic Map\." [IEEE Transactions on Consumer Electronics](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=30)\(2025\)\.\[https://ieeexplore\.ieee\.org/document/10909287\]\[TCE **SCI**** Q1**\]（李权俊）
 
-3. Shao Y, Xu Y, Long X, et al\. AccidentBlip: Agent of Accident Warning based on MA\-former\[C\]//2025 IEEE Intelligent Vehicles Symposium \(IV\)\. IEEE, 2025: 2156\-2161 \[https://ieeexplore\.ieee\.org/document/11097578/\]\[**智能交通Top**\]（徐烨灵）
+3. Shao Y, Xu Y, Long X, et al\. AccidentBlip: Agent of Accident Warning based on MA\-former\[C\]//2025 IEEE Intelligent Vehicles Symposium \(IV\)\. IEEE, 2025: 2156\-2161 \[https://ieeexplore\.ieee\.org/document/11097578/\]\[IEEE\-IV **CORE\-B**\]（徐烨灵）
 
 4. Le, Zhen, et al\. "Medical image encryption system based on a simultaneous permutation and diffusion framework utilizing a new chaotic map\." *Physica Scripta* 99\.5 \(2024\): 055249\. \[https://iopscience\.iop\.org/article/10\.1088/1402\-4896/ad3bf4\]\[SCI Q3\]（乐桢、李权俊）
 
-5. Shao Y, Gu Y, Chen S, et al\. Gwq: Gradient\-aware weight quantization for large language models\[J\]\. arXiv preprint arXiv:2411\.00850, 2024\. （谷岩）
+5. Zhong G, Chu Y, Li Q, et al\. Image encryption based on 2D\-CPHM hyperchaotic map using cross\-plane grouping permutation and cipher diffusion: G\. Zhong et al\[J\]\. Nonlinear Dynamics, 2025: 1\-36\.\[https://doi\.org/10\.1007/s11071\-025\-11526\-0\]\[Nonlinear Dynamics **SCI\-Q1**\]（钟广祺）
 
-6. Zhong G, Chu Y, Li Q, et al\. Image encryption based on 2D\-CPHM hyperchaotic map using cross\-plane grouping permutation and cipher diffusion: G\. Zhong et al\[J\]\. Nonlinear Dynamics, 2025: 1\-36\.\[https://doi\.org/10\.1007/s11071\-025\-11526\-0\] （钟广祺）
+6. Shao Y, Gu Y, Yan M, et al\. Gradient Enhancement Task Aware Post\-training Quantization\[C\]//35th International Joint Conference on Artificial Intelligence \(IJCAI 2026\)\. 2026\. \[IJCAI **CORE\-A**\]（谷岩）
 
-7. Shao Y, Gu Y, Yan M, et al\. Gradient Enhancement Task Aware Post\-training Quantization\[C\]//35th International Joint Conference on Artificial Intelligence \(IJCAI 2026\)\. 2026\. \[**CCF\-B**\]（谷岩）
+7. Shao Y, Li J, Chen S, et al\. LiST: Local\-Simplex Test\-Time LoRA Fusion\[J\]\. arXiv preprint arXiv:2608\.22370, 2026\[https://arxiv\.org/abs/2608\.22370\]\[EMNLP **CCF\-B**\]（李嘉）
+
+8. Li A, Lv H, Xu H, et al\. ATRIE: Adaptive Tuning for Robust Inference and Emotion in Persona\-Driven Speech Synthesis\[C\]//Proceedings of the 2026 International Conference on Multimedia Retrieval\. 2026: 2561\-2570\.\[https://dl\.acm\.org/doi/10\.1145/3805622\.3810570\]\[ICMR **CCF\-B**\]（李奥多）
+
+9. Li A, Li J, Lin P, et al\. A Redundancy\-Aware Multimodal Emotion Recognition Network via Cross\-Modal Native Sparse Attention\[J\]\. IEEE Transactions on Consumer Electronics, 2026\.\[https://ieeexplore\.ieee\.org/document/11586066\]\[TCE **SCI\-Q1**\]（李奥多）
+
+10. Li A, Lin P, Li J, et al\. NaCo: Realizing Human\-Like Naturalistic Psychological Counseling with CoRA\-MCTS Planning and Progressive\-SimPO Alignment\[J\]\. IEEE Transactions on Consumer Electronics, 2026\.\[https://ieeexplore\.ieee\.org/document/11543262\]\[TCE **SCI\-Q1**\]（李奥多、徐烨灵、李嘉、谷岩）
+
+11. He H, Tan H, Tan Z, et al\. MotionPhys: Detecting AI\-Generated Videos via Physical Consistency of Optical\-Flow Trajectories\[J\]\. arXiv preprint arXiv:2608\.20770, 2026\.\[https://arxiv\.org/abs/2608\.20770\]（何昊锦）
 
 
 
@@ -388,9 +406,29 @@ DataForge多智能体协作数据合成与优化平台【开发中】
 
 广州微调科技有限公司——技术总监（徐烨灵）
 
+字节跳动——前端开发工程师（凌子奇）
 
+广州商科信息科技有限公司（铭瑄）——产品经理（龙祖熹）
+
+上海必有回响智能科技有限公司——大模型算法工程师（王书畅）
 
 ## 10、优秀成员升学去向：
+
+22级：
+
+中国科学院大学自动化研究所：何昊锦（直博）
+
+香港科技大学（广州）：谷言（直博）、李权俊、夏涵
+
+澳门大学：蔡俊杰
+
+厦门大学：朱苗
+
+东北大学：魏锦辉
+
+
+
+21级：
 
 香港科技大学（广州）：吴梦淇
 
@@ -400,17 +438,19 @@ DataForge多智能体协作数据合成与优化平台【开发中】
 
 深圳大学：周永波
 
-澳门大学：蔡俊杰
+澳门大学：张浏磊
 
-香港科技大学（广州）：李权俊
 
-中国科学院大学自动化研究所（直博）：何昊锦
 
 # 三、对外交流与活动
 
 第三十四届国际人工智能联合会议（徐烨灵，谷岩，何昊锦）
 
 ![559db2919119458c1a10f88cf39888a2\.jpg](图片和附件/559db2919119458c1a10f88cf39888a2.jpg)
+
+AIY 黑客松（吴奕均）
+
+![hackathon1\.png](图片和附件/hackathon1.png)
 
 
 
@@ -456,6 +496,13 @@ https://mp\.weixin\.qq\.com/s/Zj\_baxTpWEPXzpM\_MqSl0Q
 华为昇腾开发者创享日
 
 ![image\.png](图片和附件/image.png)
+
+
+
+Grok Bot 见面会：
+
+
+![image\.png](图片和附件/image%201.png)
 
 
 

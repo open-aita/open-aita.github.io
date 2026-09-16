@@ -10,7 +10,7 @@
     "status": "preprint",
     "labels": [
       "J",
-      "CCF-A"
+      "ACM-MM CCF-A"
     ],
     "url": "https://doi.org/10.48550/arXiv.2504.13092",
     "contributors": [
@@ -26,9 +26,10 @@
     ],
     "verifiedAt": "2026-09-01",
     "display": {
-      "venue": "VIDEO ANOMALY DETECTION",
-      "linkLabel": "ARXIV"
-    }
+      "linkLabel": "ARXIV",
+      "venue": "ACM MM"
+    },
+    "grade": "CCF-A"
   },
   {
     "id": "output:paper-002",
@@ -41,7 +42,7 @@
     "status": "recorded",
     "labels": [
       "IEEE Transactions on Consumer Electronics",
-      "SCI Q2"
+      "SCI Q1"
     ],
     "url": "https://ieeexplore.ieee.org/document/10909287",
     "contributors": [
@@ -59,7 +60,8 @@
     "display": {
       "venue": "IEEE TCE",
       "linkLabel": "PAPER"
-    }
+    },
+    "grade": "SCI-Q1"
   },
   {
     "id": "output:paper-003",
@@ -72,7 +74,7 @@
     "status": "recorded",
     "labels": [
       "C",
-      "智能交通Top"
+      "IEEE-IV CORE-B"
     ],
     "url": "https://ieeexplore.ieee.org/document/11097578/",
     "contributors": [
@@ -90,7 +92,8 @@
     "display": {
       "venue": "IEEE IV",
       "linkLabel": "PAPER"
-    }
+    },
+    "grade": "CORE-B"
   },
   {
     "id": "output:paper-004",
@@ -126,7 +129,8 @@
     "display": {
       "venue": "PHYSICA SCRIPTA",
       "linkLabel": "PAPER"
-    }
+    },
+    "grade": "SCI-Q3"
   },
   {
     "id": "output:paper-005",
@@ -136,7 +140,7 @@
     },
     "citation": "Shao Y, Gu Y, Chen S, et al. Gwq: Gradient-aware weight quantization for large language models. arXiv preprint arXiv:2411.00850, 2024.",
     "year": 2024,
-    "status": "preprint",
+    "status": "archived",
     "labels": [
       "J"
     ],
@@ -152,7 +156,7 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01",
+    "verifiedAt": "2026-09-17",
     "sourceTitle": "Gwq: Gradient-aware weight quantization for large language models",
     "display": {
       "venue": "ARXIV"
@@ -168,7 +172,8 @@
     "year": 2025,
     "status": "recorded",
     "labels": [
-      "J"
+      "J",
+      "SCI Q1"
     ],
     "url": "https://doi.org/10.1007/s11071-025-11526-0",
     "contributors": [
@@ -187,7 +192,8 @@
     "display": {
       "venue": "NONLINEAR DYNAMICS",
       "linkLabel": "DOI"
-    }
+    },
+    "grade": "SCI-Q1"
   },
   {
     "id": "output:paper-007",
@@ -200,7 +206,7 @@
     "status": "recorded",
     "labels": [
       "C",
-      "CCF-B"
+      "IJCAI CORE-A"
     ],
     "url": null,
     "contributors": [
@@ -217,7 +223,184 @@
     "verifiedAt": "2026-09-01",
     "display": {
       "venue": "IJCAI"
-    }
+    },
+    "grade": "CORE-A"
+  },
+  {
+    "citation": "Shao Y, Li J, Chen S, et al. LiST: Local-Simplex Test-Time LoRA Fusion. arXiv preprint arXiv:2608.22370, 2026.",
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "externalUrl": null,
+        "order": 1,
+        "role": "author"
+      }
+    ],
+    "display": {
+      "linkLabel": "ARXIV",
+      "venue": "EMNLP"
+    },
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:paper-008",
+    "labels": [
+      "J",
+      "EMNLP CCF-B"
+    ],
+    "status": "preprint",
+    "title": {
+      "en": "LiST: Local-Simplex Test-Time LoRA Fusion"
+    },
+    "type": "paper",
+    "url": "https://arxiv.org/abs/2608.22370",
+    "verifiedAt": "2026-09-17",
+    "year": 2026,
+    "grade": "CCF-B"
+  },
+  {
+    "citation": "Li A, Lv H, Xu H, et al. ATRIE: Adaptive Tuning for Robust Inference and Emotion in Persona-Driven Speech Synthesis//Proceedings of the 2026 International Conference on Multimedia Retrieval. 2026: 2561-2570.",
+    "contributors": [
+      {
+        "displayName": "李奥多",
+        "externalUrl": null,
+        "order": 1,
+        "role": "author"
+      }
+    ],
+    "display": {
+      "linkLabel": "PAPER",
+      "venue": "ICMR"
+    },
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:paper-009",
+    "labels": [
+      "C",
+      "ICMR CCF-B"
+    ],
+    "status": "recorded",
+    "title": {
+      "en": "ATRIE: Adaptive Tuning for Robust Inference and Emotion in Persona-Driven Speech Synthesis"
+    },
+    "type": "paper",
+    "url": "https://dl.acm.org/doi/10.1145/3805622.3810570",
+    "verifiedAt": "2026-09-17",
+    "year": 2026,
+    "grade": "CCF-B"
+  },
+  {
+    "citation": "Li A, Li J, Lin P, et al. A Redundancy-Aware Multimodal Emotion Recognition Network via Cross-Modal Native Sparse Attention. IEEE Transactions on Consumer Electronics, 2026.",
+    "contributors": [
+      {
+        "displayName": "李奥多",
+        "externalUrl": null,
+        "order": 1,
+        "role": "author"
+      }
+    ],
+    "display": {
+      "linkLabel": "PAPER",
+      "venue": "IEEE TCE"
+    },
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:paper-010",
+    "labels": [
+      "IEEE Transactions on Consumer Electronics",
+      "SCI Q1"
+    ],
+    "status": "recorded",
+    "title": {
+      "en": "A Redundancy-Aware Multimodal Emotion Recognition Network via Cross-Modal Native Sparse Attention"
+    },
+    "type": "paper",
+    "url": "https://ieeexplore.ieee.org/document/11586066",
+    "verifiedAt": "2026-09-17",
+    "year": 2026,
+    "grade": "SCI-Q1"
+  },
+  {
+    "citation": "Li A, Lin P, Li J, et al. NaCo: Realizing Human-Like Naturalistic Psychological Counseling with CoRA-MCTS Planning and Progressive-SimPO Alignment. IEEE Transactions on Consumer Electronics, 2026.",
+    "contributors": [
+      {
+        "displayName": "李奥多",
+        "externalUrl": null,
+        "order": 1,
+        "role": "author"
+      },
+      {
+        "displayName": "徐烨灵",
+        "externalUrl": null,
+        "order": 2,
+        "role": "author"
+      },
+      {
+        "displayName": "李嘉",
+        "externalUrl": null,
+        "order": 3,
+        "role": "author"
+      },
+      {
+        "displayName": "谷岩",
+        "externalUrl": null,
+        "order": 4,
+        "role": "author"
+      }
+    ],
+    "display": {
+      "linkLabel": "PAPER",
+      "venue": "IEEE TCE"
+    },
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:paper-011",
+    "labels": [
+      "IEEE Transactions on Consumer Electronics",
+      "SCI Q1"
+    ],
+    "status": "recorded",
+    "title": {
+      "en": "NaCo: Realizing Human-Like Naturalistic Psychological Counseling with CoRA-MCTS Planning and Progressive-SimPO Alignment"
+    },
+    "type": "paper",
+    "url": "https://ieeexplore.ieee.org/document/11543262",
+    "verifiedAt": "2026-09-17",
+    "year": 2026,
+    "grade": "SCI-Q1"
+  },
+  {
+    "citation": "He H, Tan H, Tan Z, et al. MotionPhys: Detecting AI-Generated Videos via Physical Consistency of Optical-Flow Trajectories. arXiv preprint arXiv:2608.20770, 2026.",
+    "contributors": [
+      {
+        "displayName": "何昊锦",
+        "externalUrl": null,
+        "order": 1,
+        "role": "author"
+      }
+    ],
+    "display": {
+      "linkLabel": "ARXIV",
+      "venue": "ARXIV"
+    },
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:paper-012",
+    "labels": [
+      "J"
+    ],
+    "status": "preprint",
+    "title": {
+      "en": "MotionPhys: Detecting AI-Generated Videos via Physical Consistency of Optical-Flow Trajectories"
+    },
+    "type": "paper",
+    "url": "https://arxiv.org/abs/2608.20770",
+    "verifiedAt": "2026-09-17",
+    "year": 2026
   },
   {
     "id": "output:ip-001",
@@ -322,7 +505,8 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "featuredRank": 5
   },
   {
     "id": "output:ip-006",
@@ -343,7 +527,8 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "featuredRank": 6
   },
   {
     "id": "output:ip-007",
@@ -364,7 +549,8 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "featuredRank": 3
   },
   {
     "id": "output:ip-008",
@@ -460,7 +646,8 @@
     "evidenceRefs": [
       "evidence:outputs"
     ],
-    "verifiedAt": "2026-09-01"
+    "verifiedAt": "2026-09-01",
+    "featuredRank": 4
   },
   {
     "id": "output:ip-012",
@@ -482,6 +669,66 @@
       "evidence:outputs"
     ],
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "externalUrl": null,
+        "order": 1,
+        "role": "contributor"
+      },
+      {
+        "displayName": "杨鹏",
+        "externalUrl": null,
+        "order": 2,
+        "role": "contributor"
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:ip-013",
+    "status": "accepted",
+    "title": {
+      "zh": "发明专利《基于人脸识别与语音识别多模态融合的系统、方法》"
+    },
+    "type": "patent",
+    "verifiedAt": "2026-09-17",
+    "featuredRank": 1
+  },
+  {
+    "contributors": [
+      {
+        "displayName": "李嘉",
+        "externalUrl": null,
+        "order": 1,
+        "role": "contributor"
+      },
+      {
+        "displayName": "李奥多",
+        "externalUrl": null,
+        "order": 2,
+        "role": "contributor"
+      },
+      {
+        "displayName": "徐烨灵",
+        "externalUrl": null,
+        "order": 3,
+        "role": "contributor"
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:ip-014",
+    "status": "accepted",
+    "title": {
+      "zh": "发明专利《一种基于强化学习的动态数据生成系统及方法》"
+    },
+    "type": "patent",
+    "verifiedAt": "2026-09-17",
+    "featuredRank": 2
   },
   {
     "id": "output:system-001",
@@ -518,7 +765,6 @@
       "zh": "DataForge多智能体协作数据合成与优化平台"
     },
     "status": "recorded",
-    "statusLabel": "开发中",
     "contributors": [],
     "evidenceRefs": [
       "evidence:outputs"
@@ -538,5 +784,50 @@
       "evidence:outputs"
     ],
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:repo-001",
+    "status": "recorded",
+    "title": {
+      "zh": "事实核查研究平台"
+    },
+    "type": "openSource",
+    "url": "https://github.com/SubmergeDan/Fact-Shield",
+    "verifiedAt": "2026-09-17",
+    "statusLabel": "开源仓库"
+  },
+  {
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:repo-002",
+    "status": "recorded",
+    "title": {
+      "zh": "Dwo-Agent精简Agent框架"
+    },
+    "type": "openSource",
+    "url": "https://github.com/Slipstream-Max/DwoAgent",
+    "verifiedAt": "2026-09-17",
+    "statusLabel": "开源仓库"
+  },
+  {
+    "contributors": [],
+    "evidenceRefs": [
+      "evidence:outputs"
+    ],
+    "id": "output:repo-003",
+    "status": "recorded",
+    "title": {
+      "zh": "Kvasir-agent自主研究科学Agent"
+    },
+    "type": "openSource",
+    "url": "https://github.com/Rycen7822/Kvasir-agent",
+    "verifiedAt": "2026-09-17",
+    "statusLabel": "开源仓库"
   }
 ]

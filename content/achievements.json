@@ -126,6 +126,25 @@
     "verifiedAt": "2026-09-01"
   },
   {
+    "contributors": [
+      {
+        "displayName": "杨鹏",
+        "externalUrl": null,
+        "order": 1,
+        "role": "contributor"
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:achievements"
+    ],
+    "id": "achievement:national-007",
+    "title": {
+      "zh": "基于VIT与多模态表征融合的3DMRI医学图像分析"
+    },
+    "type": "nationalInnovationProject",
+    "verifiedAt": "2026-09-17"
+  },
+  {
     "id": "achievement:provincial-001",
     "type": "provincialInnovationProject",
     "title": {
@@ -291,6 +310,32 @@
       "evidence:achievements"
     ],
     "verifiedAt": "2026-09-01"
+  },
+  {
+    "contributors": [
+      {
+        "displayName": "吴奕均",
+        "externalUrl": null,
+        "order": 1,
+        "role": "recipient"
+      },
+      {
+        "displayName": "谢礼同",
+        "externalUrl": null,
+        "order": 2,
+        "role": "recipient"
+      }
+    ],
+    "evidenceRefs": [
+      "evidence:achievements"
+    ],
+    "id": "achievement:award-078",
+    "level": "银奖",
+    "title": {
+      "zh": "2026 AIY 黑客松"
+    },
+    "type": "competition",
+    "verifiedAt": "2026-09-17"
   },
   {
     "id": "achievement:award-004",
@@ -1370,7 +1415,7 @@
     "title": {
       "zh": "2024中国高校计算机大赛AIGC创新赛"
     },
-    "level": "省奖",
+    "level": "省级",
     "contributors": [
       {
         "displayName": "徐烨灵",
@@ -1828,7 +1873,7 @@
     "id": "achievement:award-077",
     "type": "competition",
     "title": {
-      "zh": "广东工业大学第一届校国生活智能体创作大赛（队长）"
+      "zh": "广东工业大学第一届校国生活智能体创作大赛"
     },
     "level": "优秀团队奖",
     "contributors": [

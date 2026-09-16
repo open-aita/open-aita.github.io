@@ -34,6 +34,7 @@ const definitions = {
     citation: text, year: { type: ['integer', 'null'], minimum: 1900 },
     status: enumeration('draft', 'recorded', 'preprint', 'accepted', 'published', 'authorized', 'registered', 'archived'),
     statusLabel: text, labels: strings, url, sourceTitle: text, summary: local,
+    grade: text, featuredRank: { type: 'integer', minimum: 1 },
     display: object({ venue: text, linkLabel: text }, []),
   }, ['title', 'type', 'status']),
   achievement: entity('achievement', {
@@ -69,7 +70,7 @@ const definitions = {
     meta: object({ title: text, description: text }),
   }, ['schemaVersion', 'brand', 'locale', 'hero', 'about', 'meta', 'evidenceRefs']),
   paths: object({ evidenceRefs: refs, sourceSections: strings,
-    careers: array(object({ organization: text, role: text })),
+    careers: array(object({ organization: text, role: text, memberCount: { type: 'integer', minimum: 1 } })),
     furtherStudy: array(object({ organization: text, note: { type: ['string', 'null'] }, memberCount: { type: 'integer', minimum: 1 } })),
   }),
 };

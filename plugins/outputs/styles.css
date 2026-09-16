@@ -77,7 +77,10 @@
   }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row:hover { background: var(--surface); }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-index { color: var(--accent-projects); font: 11px/1 var(--mono); }
-  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-meta { margin-bottom: 7px; color: var(--text-micro); font: 10px/1.4 var(--mono); letter-spacing: .06em; }
+  /* The venue / year / grade line is the row's index, so it reads at a glance rather than as a caption. */
+  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-meta { margin-bottom: 9px; color: var(--text-micro); font: 13px/1.4 var(--mono); letter-spacing: .06em; }
+  /* The lime the Research figures label with: the one saturated mark in an otherwise warm-grey row. */
+  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-grade { color: var(--accent-lime); font-weight: 700; white-space: nowrap; }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row h4 { color: var(--text-soft); font: 600 clamp(16px, 1.4vw, 21px)/1.35 var(--sans); letter-spacing: -.01em; text-wrap: balance; transition: color .18s ease; }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row:hover h4,
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row:focus-within h4 { color: var(--text); }
@@ -109,11 +112,14 @@
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-grid article:hover h4 { color: var(--text); }
 
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .output-archive { border-left: 1px solid var(--border); }
-  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index { border-right: 1px solid var(--border); box-shadow: inset 0 -1px 0 var(--border); }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index .list-header { border-bottom: 1px solid var(--border); }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index > div:last-child { display: grid; grid-template-columns: repeat(4, 1fr); }
-  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article { min-height: 190px; display: flex; flex-direction: column; padding: 18px; border-right: 1px solid var(--border); }
-  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:last-child { border-right: 0; }
+  /* Every card carries its own bottom rule so a full row draws the divider beneath it across the whole
+     width; a partially filled last row cannot, so the grid's own bottom edge is an inset shadow that
+     sits in the same pixel as those rules rather than adding a second one. */
+  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article { min-height: 190px; display: flex; flex-direction: column; padding: 18px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:nth-child(4n) { border-right: 0; }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article span { color: var(--muted-2); font: 10px/1 var(--mono); letter-spacing: .06em; }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article h4 { margin: 40px 0 16px; color: var(--text-soft); font: 600 15px/1.5 var(--sans); letter-spacing: -.01em; transition: color .18s ease; }
   :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:hover h4 { color: var(--text); }
@@ -124,8 +130,7 @@
 
   @media (max-width: 1260px) {
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index > div:last-child { grid-template-columns: repeat(2, 1fr); }
-    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:nth-child(2) { border-right: 0; }
-    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:nth-child(2n) { border-right: 0; }
   }
 
   @media (max-width: 980px) {
@@ -147,6 +152,7 @@
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .output-art-frame { right: -34%; top: -8%; width: 136%; height: 74%; mask-image: linear-gradient(180deg, #000 0, #000 62%, transparent 100%); }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .output-art-frame.is-loaded { opacity: .72; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row { grid-template-columns: 32px 1fr; gap: 14px; padding: 18px 14px; }
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-meta { font-size: 12px; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-row > a, :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .publication-pending { grid-column: 2; justify-self: start; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .list-header span { display: none; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-intro { min-height: 340px; }

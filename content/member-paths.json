@@ -9,54 +9,100 @@
   "careers": [
     {
       "organization": "中国科学院鹏城实验室",
-      "role": "大模型算法工程师实习"
+      "role": "大模型算法工程师实习",
+      "memberCount": 1
     },
     {
       "organization": "广汽研究院",
-      "role": "大模型算法工程师实习"
+      "role": "大模型算法工程师实习",
+      "memberCount": 1
     },
     {
       "organization": "中国海油",
-      "role": "大模型算法工程师实习"
+      "role": "大模型算法工程师实习",
+      "memberCount": 1
     },
     {
       "organization": "琶洲实验室（黄埔）",
-      "role": "算法工程师实习"
+      "role": "算法工程师实习",
+      "memberCount": 1
     },
     {
       "organization": "微软亚洲研究院",
-      "role": "数据分析实习"
+      "role": "数据分析实习",
+      "memberCount": 1
     },
     {
       "organization": "广州光锥元信息科技有限公司",
-      "role": "Diffusion算法工程师"
+      "role": "Diffusion算法工程师",
+      "memberCount": 1
     },
     {
       "organization": "深圳市浩瑞泰科技有限公司",
-      "role": "前端开发工程师"
+      "role": "前端开发工程师",
+      "memberCount": 1
     },
     {
       "organization": "英国SimpleTex团队",
-      "role": "Redteam实习"
+      "role": "Redteam实习",
+      "memberCount": 1
     },
     {
       "organization": "清华大学智能产业研究院",
-      "role": "科研实习"
+      "role": "科研实习",
+      "memberCount": 2
     },
     {
       "organization": "中国科学院自动化研究所",
-      "role": "科研实习"
+      "role": "科研实习",
+      "memberCount": 3
     },
     {
       "organization": "广州微调科技有限公司",
-      "role": "技术总监"
+      "role": "技术总监",
+      "memberCount": 1
+    },
+    {
+      "organization": "字节跳动",
+      "role": "前端开发工程师",
+      "memberCount": 1
+    },
+    {
+      "organization": "广州商科信息科技有限公司（铭瑄）",
+      "role": "产品经理",
+      "memberCount": 1
+    },
+    {
+      "organization": "上海必有回响智能科技有限公司",
+      "role": "大模型算法工程师",
+      "memberCount": 1
     }
   ],
   "furtherStudy": [
     {
+      "organization": "中国科学院大学自动化研究所",
+      "note": "直博",
+      "memberCount": 1
+    },
+    {
       "organization": "香港科技大学（广州）",
+      "note": "1 位成员直博",
+      "memberCount": 4
+    },
+    {
+      "organization": "澳门大学",
       "note": null,
       "memberCount": 2
+    },
+    {
+      "organization": "厦门大学",
+      "note": null,
+      "memberCount": 1
+    },
+    {
+      "organization": "东北大学",
+      "note": null,
+      "memberCount": 1
     },
     {
       "organization": "北京邮电大学",
@@ -71,16 +117,6 @@
     {
       "organization": "深圳大学",
       "note": null,
-      "memberCount": 1
-    },
-    {
-      "organization": "澳门大学",
-      "note": null,
-      "memberCount": 1
-    },
-    {
-      "organization": "中国科学院大学自动化研究所",
-      "note": "直博",
       "memberCount": 1
     }
   ]

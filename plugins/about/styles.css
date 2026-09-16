@@ -26,7 +26,9 @@
     border-bottom: 1px solid var(--border);
     overflow: hidden;
     isolation: isolate;
-    background: var(--surface);
+    /* The field document is its own black canvas, so the panel takes the same black underneath it;
+       a lighter surface here reads as a grey card behind the lines. */
+    background: #000;
   }
   :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy::after {
     content: "";
@@ -35,8 +37,8 @@
     z-index: 1;
     pointer-events: none;
     background:
-      linear-gradient(90deg, var(--surface) 0%, var(--surface) 18%, transparent 84%),
-      linear-gradient(to bottom, transparent 55%, var(--surface) 100%);
+      linear-gradient(90deg, #000 0%, #000 18%, transparent 84%),
+      linear-gradient(to bottom, transparent 55%, #000 100%);
   }
   :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy > :not(.about-field-frame) { position: relative; z-index: 2; }
   :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame {

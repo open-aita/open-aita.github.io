@@ -1,4 +1,4 @@
-import { formatPosition, displayMode, locationNote } from './presentation.js';
+import { formatPosition, displayMode } from './presentation.js';
 /* Network Atlas: local point-cloud data and interaction.
    Location data: user-supplied AITA_Network_Address_Verified_v2.html.
    Precision describes the supplied location basis, not independent address verification. */
@@ -21,6 +21,62 @@ export function mount(root) {
   const $ = (sel, scope=root) => scope.querySelector(sel);
   const $$ = (sel, scope=root) => [...scope.querySelectorAll(sel)];
   const activeId = () => state.hoverId || state.lockedId;
+
+  // The detail panel cycles on its own so the section reads as a live atlas instead of a
+  // directory that needs clicking. It walks the research institutes and universities only,
+  // narrowed by whatever filter or search is active.
+  const ROTATE_INTERVAL = 3300;
+  const ROTATE_CATEGORIES = new Set(['ACADEMIC','INSTITUTE']);
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const rotation = { enabled: !reducedMotion.matches, holding: false, visible: false, timer: 0 };
+
+  function rotationPool() {
+    const listed = partners.filter(matches);
+    const institutes = listed.filter(p => ROTATE_CATEGORIES.has(p.category));
+    // Cycling a single entry is not a rotation; when the filter leaves fewer than two,
+    // show everything it left.
+    return institutes.length > 1 ? institutes : listed;
+  }
+  const rotationRunning = () => rotation.enabled && rotation.visible && !rotation.holding && !state.hoverId && !document.hidden;
+
+  function stopRotation() { clearTimeout(rotation.timer); rotation.timer = 0; }
+
+  function scheduleRotation() {
+    stopRotation();
+    if (rotationRunning()) rotation.timer = setTimeout(advanceRotation, ROTATE_INTERVAL);
+  }
+
+  function advanceRotation() {
+    rotation.timer = 0;
+    if (rotationRunning()) {
+      const pool = rotationPool();
+      const index = pool.findIndex(p => p.id === state.lockedId);
+      if (pool.length > 1) {
+        state.lockedId = pool[(index + 1) % pool.length].id;
+        updateUI();
+      }
+    }
+    scheduleRotation();
+  }
+
+  function setRotation(enabled) {
+    rotation.enabled = enabled;
+    updateUI();
+    scheduleRotation();
+  }
+
+  function updateRotationToggle() {
+    const button = $('#rotation-toggle');
+    if (!button) return;
+    const mode = rotation.enabled ? 'auto' : 'hold';
+    // Runs on every hover, so leave the button alone once it already says the right thing.
+    if (!button.hidden && button.dataset.mode === mode) return;
+    button.hidden = false;
+    button.textContent = rotation.enabled ? 'AUTO' : 'HOLD';
+    button.dataset.mode = mode;
+    button.setAttribute('aria-pressed', String(rotation.enabled));
+    button.setAttribute('aria-label', rotation.enabled ? '暂停合作单位自动轮询' : '在各科研机构、院校之间自动轮询');
+  }
 
   function loadCloudImages() {
     if (loading) return;
@@ -176,7 +232,7 @@ export function mount(root) {
     hqLabel.innerHTML = `AITA HQ / ${String(hqCount).padStart(2,'0')}<small>JIEYANG CAMPUS</small>`;
     layer.append(hqLabel);
     }
-    button.addEventListener('click',()=>{ state.lockedId=partners.find(p=>p.group==='gba' && p.city!=='揭阳' && matches(p))?.id || null; state.hoverId=null; updateUI(); $('#gba-panel').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'}); });
+    button.addEventListener('click',()=>{ state.lockedId=partners.find(p=>p.group==='gba' && p.city!=='揭阳' && matches(p))?.id || null; state.hoverId=null; setRotation(false); $('#gba-panel').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'}); });
     layer.append(button);
   }
 
@@ -229,7 +285,7 @@ export function mount(root) {
     el.addEventListener('pointerleave',()=>{ state.hoverId=null; updateUI(); });
     el.addEventListener('focus',()=>{ state.hoverId=id; updateUI(); });
     el.addEventListener('blur',()=>{ state.hoverId=null; updateUI(); });
-    el.addEventListener('click',()=>{ state.lockedId=id; state.hoverId=null; updateUI(); });
+    el.addEventListener('click',()=>{ state.lockedId=id; state.hoverId=null; setRotation(false); });
   }
 
   function matches(p) {
@@ -266,7 +322,8 @@ export function mount(root) {
     $('#selection-precision').textContent = p.precision;
     $('#selection-category').textContent = p.category;
     $('#selection-display').textContent = displayMode(p);
-    $('#selection-note').textContent = locationNote(p);
+    // The note line only speaks up when nothing matches, to point back at the controls.
+    $('#selection-note').textContent = '';
   }
 
   function updateUI() {
@@ -312,6 +369,7 @@ export function mount(root) {
     $('#search-count').textContent=`${String(visible).padStart(2,'0')} / ${partners.length}`;
     $('#index-empty').classList.toggle('is-visible',visible===0);
     updateSelection();
+    updateRotationToggle();
   }
 
   function buildIndex() {
@@ -324,6 +382,7 @@ export function mount(root) {
     $$('.filter-button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.networkFilter===value)));
     if (!state.lockedId || !matches(byId.get(state.lockedId))) state.lockedId = partners.find(matches)?.id || null;
     updateUI();
+    scheduleRotation();
   }
 
   function renderAll() {
@@ -343,16 +402,33 @@ export function mount(root) {
       state.lockedId = partners.find(matches)?.id || null;
     }
     updateUI();
+    scheduleRotation();
   });
   $('#locate-index').addEventListener('click',()=>{ const el=$(`.partner-index-item[data-partner-id="${activeId()}"]`); if(el) el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'}); });
   function resetSelection() {
     state.lockedId = partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null;
     state.query = '';
     $('#partner-search').value = '';
+    rotation.enabled = !reducedMotion.matches;
     setFilter('ALL');
   }
   $('#clear-selection').addEventListener('click', resetSelection);
   root.addEventListener('keydown',e=>{ if(e.key==='Escape') resetSelection(); });
+  $('#rotation-toggle').addEventListener('click', () => setRotation(!rotation.enabled));
+  reducedMotion.addEventListener('change', () => setRotation(!reducedMotion.matches));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopRotation(); else scheduleRotation(); });
+  // Reading the panel holds it. The pointer resting on a control does not, so the toggle
+  // below never looks stuck while the cursor is still on it.
+  const selectionPanel = $('.selection-panel');
+  selectionPanel.addEventListener('pointerover', event => {
+    rotation.holding = !(event.target instanceof Element && event.target.closest('button, a, input'));
+    if (rotation.holding) stopRotation(); else scheduleRotation();
+  });
+  selectionPanel.addEventListener('pointerout', event => {
+    if (event.relatedTarget && selectionPanel.contains(event.relatedTarget)) return;
+    rotation.holding = false;
+    scheduleRotation();
+  });
 
   // The cloud is static: draw only near the viewport and after an actual resize.
   let started = false;
@@ -386,7 +462,15 @@ export function mount(root) {
       observer.disconnect();
     }, { rootMargin: '400px' });
     observer.observe(root);
+    // Only cycle while the panel is actually on screen; off-screen it would burn through
+    // the pool the reader never sees.
+    const visibilityObserver = new IntersectionObserver(entries => {
+      rotation.visible = entries.some(entry => entry.isIntersecting);
+      if (rotation.visible) scheduleRotation(); else stopRotation();
+    }, { threshold: 0 });
+    visibilityObserver.observe($('.selection-panel'));
   } else {
+    rotation.visible = true;
     startRendering();
   }
 }

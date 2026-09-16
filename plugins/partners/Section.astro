@@ -6,7 +6,7 @@ const { content } = Astro.props;
 import { networkPartners } from './data.mjs';
 const partners = networkPartners(content.organizations);
 import { number } from '../../packages/content-loader-git/index.mjs';
-import { formatPosition, displayMode, locationNote } from './presentation.js';
+import { formatPosition, displayMode } from './presentation.js';
 const selected = partners.find(p => p.id === 'org:010') ?? partners[0];
 const regional = partners.filter(p => p.group === 'gba');
 const europe = partners.filter(p => p.map === 'EURASIA / EUROPE');
@@ -57,7 +57,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
 
       <div class="atlas-detail-grid">
         <article class="selection-panel" aria-live="polite" aria-atomic="true">
-          <div class="panel-topline"><span>SELECTED SIGNAL</span><span id="selection-status">{selected?.number ?? '00'} / {partners.length}</span></div>
+          <div class="panel-topline"><span>SELECTED SIGNAL<button class="rotation-toggle" id="rotation-toggle" type="button" aria-pressed="true" hidden>AUTO</button></span><span id="selection-status">{selected?.number ?? '00'} / {partners.length}</span></div>
           <div class="selection-code" id="selection-code">NODE:{selected?.number ?? '00'} / {selected?.category ?? '—'}</div>
           <h3 class="selection-name" id="selection-name">{selected?.name ?? '暂无合作单位'}</h3>
           <div class="selection-meta"><span>ANCHOR <b id="selection-anchor">{selected?.anchor ?? "—"}</b></span><span>MAP <b id="selection-map">{selected?.map ?? "—"}</b></span></div>
@@ -70,7 +70,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
             <dt>CATEGORY</dt><dd id="selection-category">{selected?.category ?? "—"}</dd>
             <dt>DISPLAY</dt><dd id="selection-display">{displayMode(selected)}</dd>
           </dl>
-          <p class="selection-note" id="selection-note">{locationNote(selected)}</p>
+          <p class="selection-note" id="selection-note"></p>
           <div class="selection-actions">
             <button class="text-button" id="locate-index" type="button">LOCATE IN INDEX</button>
             <button class="text-button" id="clear-selection" type="button">RESET</button>

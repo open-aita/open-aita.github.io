@@ -5,7 +5,7 @@
 
   :where([data-plugin="partners"], [data-plugin-owner="partners"]).network-section .section-heading h2 .heading-chapter,
   :where([data-plugin="partners"], [data-plugin-owner="partners"]).network-section .section-kicker { color: var(--brand-accent); }
-  :where([data-plugin="partners"], [data-plugin-owner="partners"]).network-section .section-heading h2 .heading-chapter { color: var(--heading-accent-brand); }
+  :where([data-plugin="partners"], [data-plugin-owner="partners"]).network-section .section-heading h2 .heading-chapter { color: var(--heading-accent-projects); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]).partner-strip { margin-top: 0; margin-bottom: var(--section-gap); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading {
     min-height: 62px;

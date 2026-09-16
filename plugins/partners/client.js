@@ -300,6 +300,7 @@ export function mount(root) {
     b.type = 'button';
     b.className = `beacon${micro?' beacon--micro':''}`;
     b.dataset.partnerId = p.id;
+    b.dataset.family = p.family;
     b.dataset.shape = p.shape;
     b.dataset.precisionKind = p.precisionKind;
     b.dataset.labelAlign = p.align || 'right';

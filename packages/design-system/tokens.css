@@ -29,6 +29,14 @@
     --text-on-statement: #141414;
     --text-micro: rgba(255, 255, 255, .5);
     --decorative-neutral: #c5c5c5;
+    /* Partner families are index data, the one axis in the site that needs more than one hue:
+       the network atlas classifies by type, and the reader has to see that classification.
+       Four of the five reuse an accent the site already spends; only medical is new ink. */
+    --family-academic: #a8b9ff;
+    --family-research: #72dbff;
+    --family-medical: #ff8fb0;
+    --family-industry: #ffb45e;
+    --family-other: #c5c5c5;
     --status-danger: #ff6e67;
     --header-height: 76px;
     --page-pad: clamp(18px, 1.5vw, 24px);

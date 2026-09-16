@@ -24,10 +24,10 @@
 
 @layer sections {
 
+  /* Chapter word, kicker and list numbers are one voice, in this section's own accent. */
   :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-heading h2 .heading-chapter,
   :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-kicker,
-  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .activity-index li span { color: var(--brand-accent); }
-  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .section-heading h2 .heading-chapter { color: var(--heading-accent-brand); }
+  :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section .activity-index li span { color: var(--heading-accent-brand); }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]).activities-section { scroll-margin-top: calc(var(--header-height) + 18px); margin-bottom: var(--section-gap); }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .62fr) minmax(0, .92fr) minmax(230px, .58fr); grid-template-rows: 370px 330px; border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
   :where([data-plugin="activities"], [data-plugin-owner="activities"]) .gallery-card { position: relative; min-width: 0; padding: 0; border: 0; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); cursor: zoom-in; overflow: hidden; text-align: left; }

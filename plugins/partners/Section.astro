@@ -104,7 +104,7 @@ const cityCount = (city: string) => number(regional.filter(p => p.city === city)
         <div><p class="micro-label">DIRECTORY / COMPLETE INDEX</p><h3 id="partners-index-title">全部合作单位 / {partners.length}</h3></div>
         <label class="search-field"><span>⌕</span><input id="partner-search" type="search" autocomplete="off" placeholder="检索合作单位、城市或类别" aria-label="检索合作单位"><span class="search-count" id="search-count" role="status">{partners.length} / {partners.length}</span></label>
       </div>
-      <div class="partner-index-grid" id="partner-index-grid" aria-label="AITA 合作单位列表">{partners.map(p => <button class="partner-index-item" type="button" data-partner-id={p.id} aria-label={`${p.number} ${p.name}，${p.anchor}，${p.precision}`}><span class="index-number">{p.number}</span><span class="index-copy"><strong>{p.name}</strong><small>{p.anchor} · {p.category}</small></span><span class="index-symbol" data-shape={p.shape} aria-hidden="true"></span></button>)}
+      <div class="partner-index-grid" id="partner-index-grid" aria-label="AITA 合作单位列表">{partners.map(p => <button class="partner-index-item" type="button" data-partner-id={p.id} data-family={p.family} aria-label={`${p.number} ${p.name}，${p.anchor}，${p.precision}`}><span class="index-number">{p.number}</span><span class="index-copy"><strong>{p.name}</strong><small>{p.anchor} · {p.category}</small></span><span class="index-symbol" data-shape={p.shape} aria-hidden="true"></span></button>)}
       </div>
       <div class="index-empty" id="index-empty" role="status">NO MATCHING PARTNER SIGNALS</div>
     </section>

@@ -6,50 +6,29 @@
 <title>AITA Outputs · Dynamic Particle Cloud</title>
 <meta name="robots" content="noindex,nofollow">
 <!--
-  本文件由原站（openai.com/zh-Hans-CN/index/hugging-face-incident-and-the-road-ahead/）
-  保存下来的 Turbopack 模块经本地 vendor 文件按原顺序组装而成。
-  效果沿用原站模块；AITA 集成调整了播放生命周期与画质策略：
-    - 模块 951947  CloudMeshHero 本体（vendor/14-cloud-mesh-hero.js）
-    - 模块 695418  three r180（vendor/07-three.js）
-    - 模块 218547 等 @react-three/fiber（vendor/09-r3f-reconciler.js / 10-r3f-canvas-gpu-profile.js）
-    - 模块 939951/409703  postprocessing 景深后处理（vendor/11-postprocessing.js）
-    - 模块 215453   GPU 性能分级 Provider（vendor/10-r3f-canvas-gpu-profile.js）
-    - 模块 841685   detect-gpu 6.0.5（vendor/13-detect-gpu.js）
-    - 模块 376151   react-dom 19.3 client（vendor/06-react-dom.js）
-  手写胶水仅两处，均已注释标注：
-    1. detect-gpu 桩（模块 523651）：原站按 URL 动态加载 chunk，单文件内直接解析到 841685；
-    2. 引导模块（990001）：createRoot 挂载 GpuPerformanceProvider + Hero，
-       detector 保留显式画质覆盖，本地 WebGL 探测默认 tier 2；
-       effect-budget.js 按实际帧间隔调整分辨率、粒子容量与后处理，不请求外部基准。
-  场景定制保留在 vendor/14-cloud-mesh-hero.js；启动和画质接入在 bootstrap.js。
-  运行条件：通过网站的本地 HTTP 预览或静态托管访问，浏览器支持 WebGL。
+  Outputs 章节的动态粒子云，作为 iframe 独立运行，拥有自己的渲染上下文。
+
+  组成：
+    - cloud-field.js  云场本体：形变、流光、自适应取景与景深，纯 WebGL2，无第三方运行时
+    - bootstrap.js    挂载、宿主消息桥接与画质分级
+    - diagnostics.js  启动错误收集（控制台 window.__errs）
+    - effect-budget.js 由构建复制进来，两个 effect 共用，按真实帧间隔调整画质
+
+  宿主通过 aita:output-cloud-active 控制播放，并等待 aita:output-cloud-ready 后再淡入。
   验证：控制台执行 document.querySelector("[data-particle-count]")?.getAttribute("data-particle-count")
-       应返回粒子数（按原站 GPU tier 逻辑动态取值，如 "26000"）。
+       应返回粒子数（按画质分级动态取值，如 "12000"）。
+  运行条件：通过本地 HTTP 预览或静态托管访问，浏览器支持 WebGL2。
 -->
 <script src="../effect-budget.js"></script>
 <script src="./diagnostics.js"></script>
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<section data-cloud-mesh-hero aria-label="Cloud Mesh Hero">
+<section data-cloud-mesh-hero aria-label="AITA Outputs 粒子云">
   <div data-cloud-mesh-media>
     <div id="hero-root"></div>
   </div>
 </section>
-<script src="./vendor/01-runtime-turbopack.js"></script>
-<script src="./vendor/02-react-core.js"></script>
-<script src="./vendor/03-utils-clsx.js"></script>
-<script src="./vendor/04-react-hooks.js"></script>
-<script src="./vendor/05-hooks-media-observer.js"></script>
-<script src="./vendor/06-react-dom.js"></script>
-<script src="./vendor/07-three.js"></script>
-<script src="./vendor/08-site-modules.js"></script>
-<script src="./vendor/09-r3f-reconciler.js"></script>
-<script src="./vendor/10-r3f-canvas-gpu-profile.js"></script>
-<script src="./vendor/11-postprocessing.js"></script>
-<script src="./vendor/12-scene-time.js"></script>
-<script src="./vendor/13-detect-gpu.js"></script>
-<script src="./vendor/14-cloud-mesh-hero.js"></script>
-<script src="./bootstrap.js"></script>
+<script src="./bootstrap.js" type="module"></script>
 </body>
 </html>

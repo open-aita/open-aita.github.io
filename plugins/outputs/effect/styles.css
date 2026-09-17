@@ -1,16 +1,29 @@
-html, body { height: 100%; }  body {
-    margin: 0;
-    /* 原站深色主题变量（模块 615262 从 body 计算样式读取） */
-    --color-background: #000;
-    --color-primary-100: #fff;
-    --color-syntax-keyword: #4080ff;
-    --color-syntax-string: #03a354;
-    --color-syntax-function: #916bff;
-    --color-syntax-operator: #ed4b00;
-    background: var(--color-background);
-  }
-  [data-cloud-mesh-hero] { position: relative; height: 100%; min-height: 100svh; overflow: clip; }
-  [data-cloud-mesh-media] { position: absolute; inset: 0; }
-  #hero-root { position: absolute; inset: 0; }
-  .size-full { width: 100%; height: 100%; }
-  .touch-pan-y { touch-action: pan-y; }
+/* Styles confined to the Outputs effect iframe. */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  /* The cloud reads its ink and its ground from these two properties, so a theme
+     change here is enough to restyle the flock. */
+  --color-background: #000;
+  --color-primary-100: #fff;
+  background: var(--color-background);
+}
+
+[data-cloud-mesh-hero] { position: relative; height: 100%; min-height: 100svh; overflow: clip; }
+[data-cloud-mesh-media] { position: absolute; inset: 0; }
+#hero-root { position: absolute; inset: 0; }
+.size-full { width: 100%; height: 100%; display: block; }
+
+.fallback {
+  height: 100%;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #888;
+  font: 14px/1.6 system-ui, sans-serif;
+  text-align: center;
+}

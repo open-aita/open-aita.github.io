@@ -6,7 +6,7 @@
 
 - Research：`plugins/research/client.js` 与 `galaxy.js`。
 - About：`plugins/about/effect/scene.js`，本地 Three.js 位于同目录 vendor。
-- Outputs：`plugins/outputs/effect/`；原有预打包模块的边界见该目录 README。
+- Outputs：`plugins/outputs/effect/cloud-field.js`，本仓库自有的 WebGL2 实现，无第三方运行时；宿主消息与画质分级见同目录 README。
 - IP 静态粒子：`plugins/outputs/client.js`。
 - Join：`plugins/join/client.js`。
 - 地图交互：`plugins/partners/client.js`；事实数据由 organizations.json 提供，图形避让参数在 map-layout.json。

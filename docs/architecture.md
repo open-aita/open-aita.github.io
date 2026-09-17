@@ -57,7 +57,7 @@ Apply 写入结构化文件及 `.aita/history/`，不会偷偷构建或发布。
 
 ## 特效与产物
 
-About、Outputs 保留原有效果并继续使用 iframe 隔离。源码、样式与本地依赖分别放在各自 `effect/` 下。About 的 Three.js 已从 base64 中解出；Outputs 的既有预打包模块拆到本地 `vendor/`，保留原始模块结构。这些文件是固定的第三方输入，不冒充已经恢复出的上游 TypeScript 工程。
+About、Outputs 保留原有效果并继续使用 iframe 隔离。源码、样式与本地依赖分别放在各自 `effect/` 下。About 的 Three.js 已从 base64 中解出，作为固定的第三方输入保留在同目录 `vendor/`，不冒充已经恢复出的上游工程。Outputs 的云场是本仓库自己的 WebGL2 实现（`cloud-field.js`），不携带任何预打包模块，也不引入 React、Three.js 或后处理库。
 
 `tools/prepare-effects.mjs` 生成公共特效文件，Astro 构建的 `dist/` 是唯一发布目录。`content/`、CLI、原始证据、测试副本、历史截图和开发用艺术素材不会进入网页产物。普通静态图片放在 `apps/site/public/assets/images/`，按归属章节分子目录（`activities/`、`partners/`、`research/`、站点头部与图标共用 `brand/`）；Network 细节图的市级边界放在 `apps/site/public/assets/geo/gba-borders.json`，由 `tools/artwork/build-gba-borders.mjs` 从 DataV.GeoAtlas 重新生成，生成器负责裁剪到画框并简化，网页只按点云自己的网格投影；骑士图和地图的再导出工具留在 `tools/artwork/`，使用方式见 `tools/PERFORMANCE.md`。
 

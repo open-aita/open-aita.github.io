@@ -12,12 +12,22 @@ export function mount(root) {
     loop: true,
     lineColor: '168, 187, 209',
     lightColor: '224, 237, 250',
+    frontBoost: 3,            // 起点处生长前沿的速度倍率，越走越回到 1
+    frontSpan: 600,           // 衰减尺度（设计坐标）：走出这么远，多出的速度剩 1/e
   });
   const W = 1440, H = 480, TAU = Math.PI * 2, STEP = 1 / 60;
   const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
   const smooth = v => { const x = clamp(v); return x * x * (3 - 2 * x); };
   const mix = (a, b, t) => a + (b - a) * t;
   const rgba = (rgb, a) => `rgba(${rgb},${clamp(a)})`;
+  // 生长前沿不能等速：起点附近只有一两条线在长，匀速会让人以为动画停住了；
+  // 离起点越远同屏的分枝越多，同样的速度就够用。设 d 为距起点的弧长，速度取
+  // velocity·(1 + BOOST·e^(-d/SPAN))，于是「走完 d 要多久」和「走了 t 到了哪」
+  // 都有闭式解——直接把长度除以速度算时长，在这里会失真。
+  const BOOST = CONFIG.frontBoost - 1, SPAN = CONFIG.frontSpan;
+  const travelCost = d => d + SPAN * Math.log(1 + BOOST * Math.exp(-d / SPAN));
+  const costToDistance = m => SPAN * Math.log(Math.exp(m / SPAN) - BOOST);
+
   function random(seed) {
     let n = seed >>> 0;
     return () => {
@@ -163,7 +173,7 @@ export function mount(root) {
       return canvas;
     }
     node(x, y, depth = 0, terminal = false) {
-      return { id: this.serial++, x, y, depth, terminal, born: Infinity, incoming: null };
+      return { id: this.serial++, x, y, depth, terminal, born: Infinity, incoming: null, travel: 0 };
     }
     edge(from, to, options = {}) {
       const rng = this.rng;
@@ -176,8 +186,12 @@ export function mount(root) {
         group: options.group || null,
         delay: options.delay ?? .18 + rng() * .3,
         velocity: (options.velocity ?? 178) * (.88 + rng() * .26),
+        travel: from.travel,
+        cost0: travelCost(from.travel),
+        cost1: travelCost(from.travel + path.length),
         start: Infinity, end: Infinity, state: 'waiting',
       };
+      to.travel = from.travel + path.length;
       to.incoming = edge;
       return edge;
     }
@@ -300,7 +314,7 @@ export function mount(root) {
           if (free-- <= 0) break;
           edge.state = 'growing';
           edge.start = t;
-          edge.end = t + edge.path.length / edge.velocity;
+          edge.end = t + (edge.cost1 - edge.cost0) / edge.velocity;
         }
       }
     }
@@ -325,8 +339,9 @@ export function mount(root) {
       return 1 - smooth((this.time - begin) / 2.6);
     }
     distance(edge) {
-      return edge.state === 'done' ? edge.path.length
-        : clamp((this.time - edge.start) / (edge.end - edge.start)) * edge.path.length;
+      if (edge.state === 'done') return edge.path.length;
+      const walked = costToDistance(edge.cost0 + (this.time - edge.start) * edge.velocity);
+      return clamp(walked - edge.travel, 0, edge.path.length);
     }
     glowAt(x, y, diameter, alpha = 1) {
       this.ctx.globalAlpha = alpha;

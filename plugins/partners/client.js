@@ -81,11 +81,25 @@ export function mount(root) {
     button.setAttribute('aria-label', rotation.enabled ? '暂停合作单位自动轮询' : '在各科研机构、院校之间自动轮询');
   }
 
+  // The main cloud is exported on the point grid's own resolution, which on a phone is 3.5x the
+  // pixels the map can draw, and that resample is the one part of the chapter's first render a
+  // phone notices. The half cut is the same drawing at half the grid; pick by what the map will
+  // actually draw, so a narrow or low-density screen takes it and a wide one keeps the full grid.
+  const HALF_GRID = CLOUDS.main.size[0] / 2;
+  function cloudFile(key) {
+    if (key !== 'main') return `network-${key}.webp`;
+    const frame = $('#main-map-frame'); const [dataW, dataH] = CLOUDS.main.size;
+    const drawn = frame ? Math.min(frame.clientWidth, frame.clientHeight * dataW / dataH) : 0;
+    // A frame that has not been laid out reads as zero; the full grid is the safe answer there.
+    const need = drawn * Math.min(window.devicePixelRatio || 1, 2);
+    return need > 0 && need <= HALF_GRID ? 'network-main-half.webp' : `network-${key}.webp`;
+  }
+
   function loadCloudImages() {
     if (loading) return; loading = true;
     Object.keys(CLOUDS).forEach(key => {
       const image = new Image(); image.decoding = 'async'; image.fetchPriority = 'low';
-      image.src = new URL(`network-${key}.webp?v=20260905-2`, scriptBase).href;
+      image.src = new URL(`${cloudFile(key)}?v=20260905-2`, scriptBase).href;
       cloudReady[key] = image.decode().then(() => {
         cloudImages[key] = image; if (started) renderCloud($(key === 'main' ? '#main-map' : '#gba-map'), key);
       }).catch(error => {

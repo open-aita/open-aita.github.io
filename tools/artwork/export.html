@@ -56,8 +56,17 @@ document.querySelector('#network').onclick=async()=>{
     }ctx.restore();
    }
    await publish(canvas,`aita-network-${key}.webp`);
+   // A phone draws this map about 700 device pixels wide, a quarter of the drawing's own grid,
+   // and the resample is the one part of the chapter's first render a phone notices. The half
+   // cut is the same drawing at half the grid, for screens the smaller file already covers.
+   if(key==='main'){
+    const half=document.createElement('canvas');half.width=canvas.width/2;half.height=Math.round(canvas.height/2);
+    const halfCtx=half.getContext('2d');halfCtx.imageSmoothingEnabled=true;halfCtx.imageSmoothingQuality='high';
+    halfCtx.drawImage(canvas,0,0,half.width,half.height);
+    await publish(half,'aita-network-main-half.webp');
+   }
   }
-  status.textContent='地图已生成，下载后分别替换 apps/site/public/assets/images/partners/network-main.webp 与 network-gba.webp。';
+  status.textContent='地图已生成，下载后分别替换 apps/site/public/assets/images/partners/ 下的 network-main.webp、network-main-half.webp 与 network-gba.webp。';
  }catch(error){status.textContent=String(error)}finally{button.disabled=false}
 };
 </script></html>

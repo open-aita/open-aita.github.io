@@ -11,7 +11,7 @@
 - Join：`plugins/join/client.js`。
 - 地图交互：`plugins/partners/client.js`；事实数据由 organizations.json 提供，图形避让参数在 map-layout.json。
 
-iframe 由 `packages/kernel/effects.js` 排队启动；About、Outputs 在页面首次加载完成后利用空闲队列提前准备，都只在进入视野且页面可见时播放。减少动态效果时不加载装饰 iframe。Network 的两张静态点云图在首次加载后以低优先级下载，到附近再绘制，各自就绪后独立显示。`packages/kernel/effect-budget.js` 继续使用真实帧间隔控制画质，不新增外部 GPU 基准请求。
+iframe 由 `packages/kernel/effects.js` 排队启动；About、Outputs 在页面首次加载完成后利用空闲队列提前准备，都只在进入视野且页面可见时播放。减少动态效果时不加载装饰 iframe。Network 的两张静态点云图在首次加载后以低优先级下载，到附近再绘制，各自就绪后独立显示；主图另有一份半尺寸版本，按地图实际绘制的像素数取用，窄屏或低像素密度用小的那份。`packages/kernel/effect-budget.js` 继续使用真实帧间隔控制画质，不新增外部 GPU 基准请求。
 
 首屏原图放在 `plugins/home/assets/`，Astro 生成三档 WebP，按屏幕尺寸选择；不要重新发布完整 PNG。活动弹窗复用浏览器已选择的图片。Research、获奖滚动区与 Join 在距离视口约 800px 时才导入并初始化，IP 静态粒子在附近绘制，避免首屏同时处理下方章节。
 
@@ -25,7 +25,7 @@ iframe 由 `packages/kernel/effects.js` 排队启动；About、Outputs 在页面
 python -m http.server 4175 --bind 127.0.0.1
 ```
 
-打开 `http://127.0.0.1:4175/tools/artwork/export.html`。下载后分别替换 `apps/site/public/assets/images/research/projects-knight-1920.webp`、`partners/network-main.webp`、`partners/network-gba.webp`（均在 `apps/site/public/assets/images/` 下按章节分目录）。普通网页预览使用 `npm run dev`，不是这个开发用文件服务器。
+打开 `http://127.0.0.1:4175/tools/artwork/export.html`。下载后分别替换 `apps/site/public/assets/images/research/projects-knight-1920.webp`、`partners/network-main.webp`、`partners/network-main-half.webp`、`partners/network-gba.webp`（均在 `apps/site/public/assets/images/` 下按章节分目录）。主图的两份要一起换，小的那份是同一张画的一半网格。普通网页预览使用 `npm run dev`，不是这个开发用文件服务器。
 
 静态图片更新可使用新文件名并同步引用以避免旧缓存；主站 CSS 和脚本的产物引用由 Astro 管理。不要为内容或样式更新运行历史自动修订脚本。
 

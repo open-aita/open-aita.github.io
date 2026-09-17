@@ -286,8 +286,14 @@
     .footer-wordmark img { align-self: flex-start; height: 24px; transform: translateY(1px); }
     .footer-wordmark b { font-size: 30px; }
     .footer-wordmark i { font-size: 18px; }
-    .footer-grid { grid-template-columns: 1fr; min-height: 0; }
-    .footer-bottom { min-height: 76px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; }
+    /* The three link columns still fit a phone once the micro type drops with them; stacking
+       them only ever turned one screen of links into two screens of empty air. */
+    .footer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: 0; gap: 22px 12px; padding-block: 30px; }
+    .footer-grid h3 { margin-bottom: 11px; font-size: 9px; }
+    .footer-grid a, .footer-grid > div > p { margin-bottom: 8px; font-size: 10px; }
+    .footer-note { grid-column: 1 / -1; }
+    .footer-note p:first-child { font-size: 17px; }
+    .footer-bottom { min-height: 48px; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; font-size: 9px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

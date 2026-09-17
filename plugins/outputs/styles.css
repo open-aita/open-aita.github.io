@@ -125,9 +125,15 @@
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-intro { min-height: 340px; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-intro > strong { font-size: 110px; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-grid { grid-template-columns: 1fr; }
-    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-grid article { min-height: 210px; }
+    /* One column has no neighbour to line up with, so the card's 210px floor only ever bought empty
+       space under the title. Hug the copy instead, and pull the label and title back together. */
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-grid article { min-height: 0; }
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .ip-grid article h4 { margin: 20px 0 0; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index > div:last-child { grid-template-columns: 1fr; }
-    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article { min-height: 160px; border-right: 0; border-bottom: 1px solid var(--border); }
+    /* Same as the IP cards above: one column, nothing to line up with, so the floor only bought a gap
+       between the title and its note. Hug the copy and close the number-to-title gap. */
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article { min-height: 0; border-right: 0; border-bottom: 1px solid var(--border); }
+    :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article h4 { margin: 20px 0 14px; }
     :where([data-plugin="outputs"], [data-plugin-owner="outputs"]) .systems-index article:last-child { border-bottom: 0; }
   }
 }

@@ -45,10 +45,20 @@
 
   @media (max-width: 680px) {
 
-    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading { grid-template-columns: 1fr; }
-    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading p:last-child { border-left: 0; border-top: 1px solid var(--border); }
+    /* One row, label against count, as on desktop: stacked, the pair read as two unrelated boxes.
+       The label keeps its natural width instead of the desktop 1fr, which a phone cannot spare. The
+       caption then has vw minus the page gutter (40), the two hairlines (2), the label (~149) and
+       its own padding (32) left to live in, and needs about 8.4x its font-size to say itself, so it
+       tracks the viewport until it has room for the full 13px again. */
+    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading { grid-template-columns: auto 1fr; }
+    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading p:last-child {
+      border-top: 0; white-space: nowrap; font-size: min(13px, calc((100vw - 224px) / 8.8));
+    }
     :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-grid { grid-template-columns: repeat(2, 1fr); }
-    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell { min-height: 96px; }
+    /* The 96px floor only padded every cell with air: the name is centred, so the surplus fell
+       equally above and below it. Sit the cell on its own content instead, keeping enough top
+       padding that the absolutely positioned category tag still clears the name. */
+    :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell { min-height: 0; padding-block: 22px; }
     :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell:nth-last-child(-n+1) { grid-column: auto; }
     :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell strong { font-size: 14px; }
   }

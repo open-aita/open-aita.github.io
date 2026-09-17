@@ -117,7 +117,10 @@
     :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .award-code-token--purple { --award-height: 35px; }
     :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .award-code-token--red { --award-height: 39px; }
     :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .innovation-layout section > div { grid-template-columns: 1fr; }
-    :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .innovation-layout article { min-height: 170px; border-right: 0; }
+    /* One column has no neighbour to line up with, so the card's 190px floor only ever bought empty
+       space under the title. Hug the copy instead, and pull the number and title back together. */
+    :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .innovation-layout article { min-height: 0; border-right: 0; }
+    :where([data-plugin="achievements"], [data-plugin-owner="achievements"]) .innovation-layout article h4 { margin-top: 20px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

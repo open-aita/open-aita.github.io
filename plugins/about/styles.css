@@ -104,10 +104,14 @@
   @media (max-width: 680px) {
 
     :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy { min-height: 480px; padding: 24px 20px; }
+    /* Stacked, the copy sits above the art and needs its own solid band behind the text; the base
+       rules' geometry is for the side-by-side desktop layout. Only the ground follows the desktop
+       one: #000, the same colour as the panel underneath, not the raised-card --surface, which
+       showed through as a grey card. */
     :where([data-plugin="about"], [data-plugin-owner="about"]) .about-copy::after {
       background:
-        linear-gradient(to bottom, var(--surface) 0%, var(--surface) 38%, transparent 76%, var(--surface) 100%),
-        linear-gradient(90deg, var(--surface) 0%, transparent 80%);
+        linear-gradient(to bottom, #000 0%, #000 38%, transparent 76%, #000 100%),
+        linear-gradient(90deg, #000 0%, transparent 80%);
     }
     :where([data-plugin="about"], [data-plugin-owner="about"]) .about-field-frame {
       inset: auto -16% -2%; width: 132%; height: 74%;

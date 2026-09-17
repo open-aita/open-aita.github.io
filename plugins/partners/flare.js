@@ -4,8 +4,7 @@
 
 const FLIGHT = 1500;     // every arc is in the air for the same time, so they all land together
 const HOLD = 2000;       // the completed fan sits lit before it leaves
-const FADE = 1100;
-const PULSE = 1400;
+const FADE = 1100; const PULSE = 1400;
 const MIN_ARC = 4;       // targets sitting on the origin have no arc to draw
 
 export function createFlare(reducedMotion) {
@@ -14,15 +13,11 @@ export function createFlare(reducedMotion) {
   const bursts = new Map();
 
   function stop(burst) {
-    for (const animation of burst.playing) animation.cancel();
-    for (const node of burst.nodes) node.remove();
+    for (const animation of burst.playing) animation.cancel(); for (const node of burst.nodes) node.remove();
   }
 
   function clearLayer(svg) {
-    const burst = svg && bursts.get(svg);
-    if (!burst) return;
-    stop(burst);
-    bursts.delete(svg);
+    const burst = svg && bursts.get(svg); if (!burst) return; stop(burst); bursts.delete(svg);
   }
 
   function clear() {
@@ -60,18 +55,13 @@ export function createFlare(reducedMotion) {
   function oneWay(p0, p1, p2, p3) {
     let sign = 0, previous = 0;
     for (let i = 1; i <= 48; i += 1) {
-      const t = i / 49, m = 1 - t;
-      const vx = m*m*(p1.x - p0.x) + 2*m*t*(p2.x - p1.x) + t*t*(p3.x - p2.x);
+      const t = i / 49, m = 1 - t; const vx = m*m*(p1.x - p0.x) + 2*m*t*(p2.x - p1.x) + t*t*(p3.x - p2.x);
       const vy = m*m*(p1.y - p0.y) + 2*m*t*(p2.y - p1.y) + t*t*(p3.y - p2.y);
       const angle = Math.atan2(vy, vx);
       if (i === 1) { previous = angle; continue; }
-      let delta = angle - previous;
-      while (delta > Math.PI) delta -= 2 * Math.PI;
-      while (delta < -Math.PI) delta += 2 * Math.PI;
-      previous = angle;
-      if (Math.abs(delta) < 1e-4) continue;
-      const direction = Math.sign(delta);
-      if (!sign) sign = direction;
+      let delta = angle - previous; while (delta > Math.PI) delta -= 2 * Math.PI;
+      while (delta < -Math.PI) delta += 2 * Math.PI; previous = angle; if (Math.abs(delta) < 1e-4) continue;
+      const direction = Math.sign(delta); if (!sign) sign = direction;
       else if (direction !== sign) return false;
     }
     return true;
@@ -83,8 +73,7 @@ export function createFlare(reducedMotion) {
   const BAND = 35 * Math.PI / 180;
 
   function bands(aimed) {
-    const out = [];
-    let band = null;
+    const out = []; let band = null;
     for (const point of aimed) {
       if (!band || point.bearing - band[band.length - 1].bearing > BAND) out.push(band = []);
       band.push(point);
@@ -93,37 +82,28 @@ export function createFlare(reducedMotion) {
   }
 
   function arcPath(from, to, rank, box) {
-    const dx = to.x - from.x, dy = to.y - from.y;
-    const length = Math.hypot(dx, dy) || 1;
-    const ux = dx / length, uy = dy / length;
-    const launch = LAUNCH_MIN + (LAUNCH_MAX - LAUNCH_MIN) * rank;
+    const dx = to.x - from.x, dy = to.y - from.y; const length = Math.hypot(dx, dy) || 1;
+    const ux = dx / length, uy = dy / length; const launch = LAUNCH_MIN + (LAUNCH_MAX - LAUNCH_MIN) * rank;
     const arrive = ARRIVE_MIN + (ARRIVE_MAX - ARRIVE_MIN) * rank;
-    const reach = length * (TANGENT_MAX - (TANGENT_MAX - TANGENT_MIN) * rank);
-    let scale = 1;
-    let c1, c2;
+    const reach = length * (TANGENT_MAX - (TANGENT_MAX - TANGENT_MIN) * rank); let scale = 1; let c1, c2;
     for (let attempt = 0; attempt < 12; attempt += 1) {
-      const [lx, ly] = rot(ux, uy, launch);
-      const [ax, ay] = rot(ux, uy, -arrive);
+      const [lx, ly] = rot(ux, uy, launch); const [ax, ay] = rot(ux, uy, -arrive);
       c1 = { x: from.x + lx * reach * scale, y: from.y + ly * reach * scale };
       c2 = { x: to.x - ax * reach * scale, y: to.y - ay * reach * scale };
       // A steep ray can swing out of the frame, which clips it mid-flight; pull it back in.
-      if ((!box || inside(from, c1, c2, to, box)) && oneWay(from, c1, c2, to)) break;
-      scale *= 0.8;
+      if ((!box || inside(from, c1, c2, to, box)) && oneWay(from, c1, c2, to)) break; scale *= 0.8;
     }
     return `M ${from.x} ${from.y} C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${to.x} ${to.y}`;
   }
 
   function element(tag, attrs) {
     const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
-    return node;
+    for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value); return node;
   }
 
   /** @returns {number} ms until the burst has fully left, or 0 when nothing was fired. */
   function fire(svg, from, points) {
-    if (!svg || !from || reducedMotion.matches) return 0;
-    clearLayer(svg);
-    const aimed = points
+    if (!svg || !from || reducedMotion.matches) return 0; clearLayer(svg); const aimed = points
       .filter(point => Number.isFinite(point?.x) && Number.isFinite(point?.y)
         && Math.hypot(point.x - from.x, point.y - from.y) >= MIN_ARC)
       .map(point => {
@@ -145,18 +125,14 @@ export function createFlare(reducedMotion) {
       });
     }
 
-    const burst = { playing: [], nodes: [] };
-    bursts.set(svg, burst);
+    const burst = { playing: [], nodes: [] }; bursts.set(svg, burst);
     for (const arc of arcs) {
       // A wide, dim copy under the bright stroke reads as glow without an SVG filter.
       for (const layer of [{ cls: 'flare-glow', peak: .26 }, { cls: 'flare-line', peak: 1 }]) {
-        const node = element('path', { class: layer.cls, d: arc });
-        svg.append(node);
-        burst.nodes.push(node);
+        const node = element('path', { class: layer.cls, d: arc }); svg.append(node); burst.nodes.push(node);
         const total = node.getTotalLength();
         node.style.strokeDasharray = `${total}`;
-        node.style.strokeDashoffset = `${total}`;
-        burst.playing.push(node.animate(
+        node.style.strokeDashoffset = `${total}`; burst.playing.push(node.animate(
           [{ strokeDashoffset: total }, { strokeDashoffset: 0 }],
           { duration: FLIGHT, easing: 'linear', fill: 'forwards' }));
         burst.playing.push(node.animate(
@@ -166,9 +142,7 @@ export function createFlare(reducedMotion) {
     }
 
     const pulse = element('circle', { class: 'flare-origin', cx: from.x, cy: from.y, r: 44 });
-    svg.append(pulse);
-    burst.nodes.push(pulse);
-    burst.playing.push(pulse.animate(
+    svg.append(pulse); burst.nodes.push(pulse); burst.playing.push(pulse.animate(
       [{ transform: 'scale(.06)', opacity: .85 }, { transform: 'scale(1)', opacity: 0 }],
       { duration: PULSE, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' }));
 

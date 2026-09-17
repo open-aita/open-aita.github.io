@@ -6,13 +6,11 @@ import { ROOT, readJson, listContentCollections, getTaskRegistry, chapterManifes
 import { inspectArtifact, filesUnder } from './artifact.mjs';
 
 export async function verifyRepository() {
-  const checks = [];
-  const errors = [];
+  const checks = []; const errors = [];
   const check = (id, issues, details = {}) => {
     checks.push({ id, status: issues.length ? 'failed' : 'passed', ...details, issues });
     errors.push(...issues.map(message => ({ code: id, message })));
-  };
-  const exists = file => fs.access(path.join(ROOT,file)).then(()=>true,()=>false);
+  }; const exists = file => fs.access(path.join(ROOT,file)).then(()=>true,()=>false);
   const required = ['apps/site/src/pages/index.astro','apps/site/astro.config.mjs','packages/domain/schema.mjs','packages/design-system/tokens.css','AGENTS.md','README.md'];
   check('repository-layout', (await Promise.all(required.map(async file=>(await exists(file))?null:`Missing ${file}`))).filter(Boolean));
   const collections = Object.fromEntries((await listContentCollections()).map(item=>[item.name,item.data]));
@@ -20,8 +18,7 @@ export async function verifyRepository() {
   check('content-schema', contentErrors.map(item=>`${item.pointer}: ${item.message}`));
   check('content-inventory', [], { counts: Object.fromEntries(Object.entries(collections).map(([name,data])=>[name,Array.isArray(data)?data.length:1])) });
 
-  const manifests = await chapterManifests();
-  const chapterIssues = [];
+  const manifests = await chapterManifests(); const chapterIssues = [];
   const seenIds = new Set(), seenOrders = new Set(), seenAnchors = new Set();
   for (const manifest of manifests) {
     const folder = `plugins/${manifest.id}`;
@@ -40,8 +37,7 @@ export async function verifyRepository() {
   if (await exists('index.html')) chapterIssues.push('Legacy root index.html duplicates the Astro entry');
   check('chapter-contract', chapterIssues, { chapters: manifests.map(m=>({id:m.id,entry:`plugins/${m.id}/${m.entry}`,anchor:m.demoEntry,order:m.order})) });
 
-  const tasks = (await getTaskRegistry()).tasks;
-  const taskIssues = [];
+  const tasks = (await getTaskRegistry()).tasks; const taskIssues = [];
   const declared = new Set(manifests.flatMap(m=>m.operations));
   for (const task of tasks) {
     if (!declared.has(task.id) && !['site','media','redirect'].includes(task.plugin)) taskIssues.push(`Undeclared operation ${task.id}`);
@@ -66,8 +62,7 @@ export async function verifyRepository() {
   for (const item of collections['media-assets']) for (const key of ['path','fallbackPath']) if (item[key] && !(await exists(`apps/site/public/${item[key]}`))) mediaIssues.push(`${item.id}: missing ${item[key]}`);
   check('media-files', mediaIssues);
 
-  const artifact = await inspectArtifact(ROOT, manifests);
-  checks.push(...artifact.checks);
+  const artifact = await inspectArtifact(ROOT, manifests); checks.push(...artifact.checks);
   errors.push(...artifact.errors.map(message=>({code:'artifact',message})));
   const recipes = await testRecipes();
   check('recipe-tests', recipes.failures.map(f=>`${f.recipe}: ${f.errors.join('; ')}`), { total: recipes.total, passed: recipes.passed });
@@ -83,8 +78,7 @@ function hasEvidence(input) {
 export async function testRecipes() {
   const base = path.join(ROOT, 'agent', 'recipes');
   const entries = (await fs.readdir(base, { withFileTypes: true })).filter((entry) => entry.isDirectory()).sort((a,b) => a.name.localeCompare(b.name));
-  const failures = [];
-  const requests = [];
+  const failures = []; const requests = [];
   const work = path.join(ROOT, '.work');
   await fs.mkdir(work, { recursive: true });
   const fixture = await fs.mkdtemp(path.join(work, 'recipes-'));
@@ -101,8 +95,7 @@ export async function testRecipes() {
       const task = await operations.getTask(assertions.operation);
       await operations.validateOperationInput(task, request);
       const changePlan = await operations.plan(assertions.operation, request);
-      const change = changePlan.changes[0];
-      const errors = [];
+      const change = changePlan.changes[0]; const errors = [];
       if (changePlan.operation !== assertions.operation) errors.push('operation mismatch');
       if (change.type !== assertions.changeType) errors.push(`change type ${change.type} != ${assertions.changeType}`);
       if (assertions.mustRequireEvidence && !hasEvidence(request)) errors.push('evidence missing');
@@ -111,8 +104,7 @@ export async function testRecipes() {
       const original = await operations.readJson(task.allowedWritePaths[0]);
       const preview = await operations.apply(changePlan, { dryRun: true });
       if (JSON.stringify(original) !== JSON.stringify(await operations.readJson(task.allowedWritePaths[0]))) errors.push('dry-run wrote content');
-      const applied = await operations.apply(changePlan);
-      const repeated = await operations.apply(changePlan);
+      const applied = await operations.apply(changePlan); const repeated = await operations.apply(changePlan);
       if (!preview.dryRun || !applied.ok || !repeated.alreadyApplied) errors.push('apply / preview / idempotence failed');
       const after = await operations.readJson(applied.sourcePath);
       const actual = Array.isArray(after) ? after.find(item => item.id === request.id) : after;
@@ -152,8 +144,7 @@ export async function testRecipes() {
       }
     }
     // The critical failure path: an invalid patch must be rejected before any write.
-    const before = await operations.readJson('content/projects.json');
-    let rejected = false;
+    const before = await operations.readJson('content/projects.json'); let rejected = false;
     try { await operations.plan('research.update-project', { id: before[0].id, patch: { title: 42 } }); }
     catch (error) { rejected = error.code === 'AITA_OPERATION_INPUT_INVALID'; }
     if (!rejected || JSON.stringify(before) !== JSON.stringify(await operations.readJson('content/projects.json'))) {

@@ -5,13 +5,8 @@ export function mount(root) {
   // Purple perspective matrix with visible RGB separation and a cyan energy beam.
   const joinCanvas = root.querySelector("#join-particle-field");
   if (joinCanvas instanceof HTMLCanvasElement) {
-    const joinContext = joinCanvas.getContext("2d", { alpha: true });
-    let joinWidth = 1;
-    let joinHeight = 1;
-    let joinDpr = 1;
-    let joinAnimationFrame = 0;
-    let joinLastDraw = 0;
-    let joinVisible = false;
+    const joinContext = joinCanvas.getContext("2d", { alpha: true }); let joinWidth = 1; let joinHeight = 1;
+    let joinDpr = 1; let joinAnimationFrame = 0; let joinLastDraw = 0; let joinVisible = false;
 
     const joinHash = (x, y, seed) => {
       const value = Math.sin(x * 127.1 + y * 311.7 + seed * 71.9) * 43758.5453;
@@ -19,59 +14,46 @@ export function mount(root) {
     };
 
     const resizeJoinCanvas = () => {
-      const rect = joinCanvas.getBoundingClientRect();
-      joinWidth = Math.max(1, rect.width);
-      joinHeight = Math.max(1, rect.height);
-      joinDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = joinCanvas.getBoundingClientRect(); joinWidth = Math.max(1, rect.width);
+      joinHeight = Math.max(1, rect.height); joinDpr = Math.min(window.devicePixelRatio || 1, 2);
       joinCanvas.width = Math.round(joinWidth * joinDpr);
       joinCanvas.height = Math.round(joinHeight * joinDpr);
-      joinContext?.setTransform(joinDpr, 0, 0, joinDpr, 0, 0);
-      if (reduceMotion) drawJoinField(0);
+      joinContext?.setTransform(joinDpr, 0, 0, joinDpr, 0, 0); if (reduceMotion) drawJoinField(0);
     };
 
     const drawJoinField = (time = 0) => {
-      if (!joinContext) return;
-      if (!reduceMotion && time > 0 && (!joinVisible || doc.hidden)) return;
+      if (!joinContext) return; if (!reduceMotion && time > 0 && (!joinVisible || doc.hidden)) return;
       if (!reduceMotion && joinLastDraw && time - joinLastDraw < 32) {
-        joinAnimationFrame = requestAnimationFrame(drawJoinField);
-        return;
+        joinAnimationFrame = requestAnimationFrame(drawJoinField); return;
       }
-      joinLastDraw = time;
-      joinContext.clearRect(0, 0, joinWidth, joinHeight);
+      joinLastDraw = time; joinContext.clearRect(0, 0, joinWidth, joinHeight);
 
       const columns = Math.max(36, Math.min(96, Math.round(joinWidth / 19.5)));
       const rows = Math.max(15, Math.min(26, Math.round(joinHeight / 20)));
       const glitchPhase = Math.floor(time / 96);
       const glitchTime = !reduceMotion && time % 4600 > 3590 && time % 4600 < 3810;
 
-      joinContext.save();
-      joinContext.globalCompositeOperation = "lighter";
+      joinContext.save(); joinContext.globalCompositeOperation = "lighter";
 
       // A smaller interleaved lattice closes the gaps without flattening the foreground grid.
       const backColumns = Math.max(58, Math.min(148, Math.round(joinWidth / 12)));
       const backRows = Math.max(22, Math.min(40, Math.round(joinHeight / 13)));
       for (let row = 0; row < backRows; row += 1) {
-        const v = (row + 0.42) / backRows;
-        const depth = v ** 1.72;
+        const v = (row + 0.42) / backRows; const depth = v ** 1.72;
         for (let column = 0; column < backColumns; column += 1) {
-          if (joinHash(column, row, 61) < 0.035) continue;
-          const u = (column + 0.5) / backColumns;
+          if (joinHash(column, row, 61) < 0.035) continue; const u = (column + 0.5) / backColumns;
           const cyanBeam = Math.exp(-((u - 0.57) ** 2) / 0.0032);
           const beamA = Math.exp(-((u - 0.67) ** 2) / 0.004);
           const beamB = Math.exp(-((u - 0.855) ** 2) / 0.0048);
-          const energy = Math.min(1, Math.max(cyanBeam * 0.9, beamA * 0.78 + beamB));
-          const x = joinWidth * (
+          const energy = Math.min(1, Math.max(cyanBeam * 0.9, beamA * 0.78 + beamB)); const x = joinWidth * (
             0.012 + u * 0.976
             + (u - 0.5) * depth * 0.14
             + (cyanBeam * 0.07 + beamA * 0.078 + beamB * 0.064) * depth
             + Math.sin(u * 9.2 + v * 2.8) * depth * 0.005
-          );
-          const drift = reduceMotion ? 0 : Math.sin(time * 0.00044 + u * 8.8 + v * 5.1) * 0.32;
-          const y = joinHeight * (0.025 + v * 0.93) + drift;
-          if (x < -12 || x > joinWidth + 12) continue;
+          ); const drift = reduceMotion ? 0 : Math.sin(time * 0.00044 + u * 8.8 + v * 5.1) * 0.32;
+          const y = joinHeight * (0.025 + v * 0.93) + drift; if (x < -12 || x > joinWidth + 12) continue;
 
-          const noise = joinHash(column, row, 67);
-          const particleWidth = 0.46 + depth * 0.66 + energy * 0.34;
+          const noise = joinHash(column, row, 67); const particleWidth = 0.46 + depth * 0.66 + energy * 0.34;
           const particleHeight = 0.9 + depth * 1.75 + energy * 1.35;
           const alpha = 0.08 + depth * 0.2 + energy * 0.22 + noise * 0.035;
           joinContext.fillStyle = cyanBeam > 0.18
@@ -90,14 +72,12 @@ export function mount(root) {
       }
 
       for (let row = 0; row < rows; row += 1) {
-        const v = row / (rows - 1);
-        const depth = v ** 1.7;
+        const v = row / (rows - 1); const depth = v ** 1.7;
         const rowGlitch = glitchTime && joinHash(row, glitchPhase, 29) > 0.68;
         const rowShift = rowGlitch ? (joinHash(row, glitchPhase, 31) - 0.5) * Math.min(28, joinWidth * 0.025) : 0;
 
         for (let column = 0; column < columns; column += 1) {
-          if (joinHash(column, row, 3) < 0.055) continue;
-          const u = column / (columns - 1);
+          if (joinHash(column, row, 3) < 0.055) continue; const u = column / (columns - 1);
           const beamA = Math.exp(-((u - 0.67) ** 2) / 0.0034);
           const beamB = Math.exp(-((u - 0.855) ** 2) / 0.0042);
           const cyanBeam = Math.exp(-((u - 0.57) ** 2) / 0.0028);
@@ -108,17 +88,14 @@ export function mount(root) {
           const wave = Math.sin(u * 8.5 + v * 2.4) * depth * 0.006;
           const drift = reduceMotion ? 0 : Math.sin(time * 0.00052 + u * 10.5 + v * 4.2) * 0.45;
           const x = joinWidth * (0.018 + u * 0.964 + perspective + fieldBend + wave) + rowShift;
-          const y = joinHeight * (0.03 + v * 0.925) + drift;
-          if (x < -16 || x > joinWidth + 16) continue;
+          const y = joinHeight * (0.03 + v * 0.925) + drift; if (x < -16 || x > joinWidth + 16) continue;
 
-          const noise = joinHash(column, row, 11);
-          const particleWidth = 0.84 + depth * 1.22 + energy * 0.82;
+          const noise = joinHash(column, row, 11); const particleWidth = 0.84 + depth * 1.22 + energy * 0.82;
           const particleHeight = 1.7 + depth * 4.15 + energy * 3.6;
           const alpha = Math.min(0.98, 0.19 + depth * 0.46 + energy * 0.4 + noise * 0.09);
           const splitBurst = joinHash(column, row, 23) > 0.88;
           const channelSplit = 1.25 + depth * 1.65 + energy * 0.72 + (splitBurst ? 2.8 : 0) + (rowGlitch ? 4.2 : 0);
-          const verticalSplit = splitBurst || rowGlitch ? 1.15 : 0.4;
-          const cyanDominant = cyanBeam > 0.18;
+          const verticalSplit = splitBurst || rowGlitch ? 1.15 : 0.4; const cyanDominant = cyanBeam > 0.18;
 
           joinContext.fillStyle = `rgba(245, 42, 255, ${alpha * (rowGlitch || splitBurst ? 0.72 : 0.46)})`;
           joinContext.fillRect(x - channelSplit, y + verticalSplit, particleWidth, particleHeight * 0.88);
@@ -154,26 +131,21 @@ export function mount(root) {
       if (!reduceMotion && joinVisible && !doc.hidden) joinAnimationFrame = requestAnimationFrame(drawJoinField);
     };
 
-    resizeJoinCanvas();
-    drawJoinField();
+    resizeJoinCanvas(); drawJoinField();
     window.addEventListener("resize", resizeJoinCanvas, { passive: true });
     const syncJoinAnimation = () => {
       cancelAnimationFrame(joinAnimationFrame);
       if (!reduceMotion && joinVisible && !doc.hidden) {
-        joinLastDraw = 0;
-        joinAnimationFrame = requestAnimationFrame(drawJoinField);
+        joinLastDraw = 0; joinAnimationFrame = requestAnimationFrame(drawJoinField);
       }
     };
     if (!reduceMotion) {
       if ("IntersectionObserver" in window) {
         const joinObserver = new IntersectionObserver(([entry]) => {
-          joinVisible = entry.isIntersecting;
-          syncJoinAnimation();
-        });
-        joinObserver.observe(joinCanvas);
+          joinVisible = entry.isIntersecting; syncJoinAnimation();
+        }); joinObserver.observe(joinCanvas);
       } else {
-        joinVisible = true;
-        syncJoinAnimation();
+        joinVisible = true; syncJoinAnimation();
       }
     }
     doc.addEventListener("visibilitychange", syncJoinAnimation);

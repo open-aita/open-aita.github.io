@@ -13,8 +13,7 @@ export class AitaOperationError extends Error {
   constructor(code, message, details = {}) {
     super(message);
     this.name = 'AitaOperationError';
-    this.code = code;
-    this.details = details;
+    this.code = code; this.details = details;
   }
 }
 
@@ -33,9 +32,8 @@ export async function readJson(relativePath) {
   }
 }
 
-export async function writeJsonAtomic(relativePath, value) {
-  const absolutePath = path.join(ROOT, relativePath);
-  const directory = path.dirname(absolutePath);
+async function writeJsonAtomic(relativePath, value) {
+  const absolutePath = path.join(ROOT, relativePath); const directory = path.dirname(absolutePath);
   await fs.mkdir(directory, { recursive: true });
   const temporaryPath = `${absolutePath}.tmp-${process.pid}-${Date.now()}`;
   await fs.writeFile(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
@@ -43,11 +41,9 @@ export async function writeJsonAtomic(relativePath, value) {
     await fs.rename(temporaryPath, absolutePath);
   } catch (error) {
     if (['EEXIST', 'EPERM', 'EACCES'].includes(error?.code)) {
-      await fs.rm(absolutePath, { force: true });
-      await fs.rename(temporaryPath, absolutePath);
+      await fs.rm(absolutePath, { force: true }); await fs.rename(temporaryPath, absolutePath);
     } else {
-      await fs.rm(temporaryPath, { force: true });
-      throw error;
+      await fs.rm(temporaryPath, { force: true }); throw error;
     }
   }
 }
@@ -64,7 +60,7 @@ export function stableStringify(value) {
   return JSON.stringify(stableValue(value));
 }
 
-export function sha256(value) {
+function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
@@ -80,16 +76,14 @@ async function listFiles(directory, predicate = () => true) {
     }
     entries.sort((a, b) => a.name.localeCompare(b.name));
     for (const entry of entries) {
-      const absolute = path.join(current, entry.name);
-      if (entry.isDirectory()) await walk(absolute);
+      const absolute = path.join(current, entry.name); if (entry.isDirectory()) await walk(absolute);
       else if (predicate(absolute)) output.push(absolute);
     }
   }
-  await walk(directory);
-  return output;
+  await walk(directory); return output;
 }
 
-export async function sourceRevision() {
+async function sourceRevision() {
   const files = [
     ...(await listFiles(CONTENT_DIR, (file) => file.endsWith('.json'))),
     ...(await listFiles(path.join(ROOT, 'plugins'), (file) => file.endsWith('chapter.manifest.json'))),
@@ -131,8 +125,7 @@ export async function getTask(operationId) {
 }
 
 export async function validateOperationInput(task, input) {
-  const schema = operationSchema(task);
-  const errors = validateSchema(schema, input);
+  const schema = operationSchema(task); const errors = validateSchema(schema, input);
   if (errors.length) throw new AitaOperationError('AITA_OPERATION_INPUT_INVALID', `Operation 输入不符合 Schema：${task.id}`, { operationId: task.id, errors });
   return { ok: true, schemaSource: 'packages/domain/schema.mjs' };
 }
@@ -156,15 +149,10 @@ export async function queryEntity(entityId) {
       if (value.id === entityId) return value;
       for (const child of Object.values(value)) { const match = find(child); if (match) return match; }
       return null;
-    };
-    const entity = find(collection.data);
+    }; const entity = find(collection.data);
     if (entity) {
       return {
-        ok: true,
-        entityId,
-        collection: collection.name,
-        sourcePath: collection.path,
-        entity,
+        ok: true, entityId, collection: collection.name, sourcePath: collection.path, entity,
       };
     }
   }
@@ -192,8 +180,7 @@ async function affectedRoutesFor(task) {
 }
 
 function plannedChange(task, input) {
-  const mode = task.target.mode;
-  const entityId = input.id ?? null;
+  const mode = task.target.mode; const entityId = input.id ?? null;
   if (mode === 'create') return { type: 'create-entity', entityId, fields: Object.keys(input).sort() };
   if (mode === 'upsert') return { type: 'upsert-entity', entityId, fields: Object.keys(input).sort() };
   if (mode === 'update') return { type: 'update-entity', entityId, fields: Object.keys(input.patch ?? {}).sort() };
@@ -219,40 +206,27 @@ async function assertPlanPreconditions(task, input) {
 }
 
 export async function plan(operationId, input) {
-  const task = await getTask(operationId);
-  await validateOperationInput(task, input);
-  await assertPlanPreconditions(task, input);
-  await previewOperation(task, input);
-  const baseRevision = await sourceRevision();
-  const change = plannedChange(task, input);
+  const task = await getTask(operationId); await validateOperationInput(task, input);
+  await assertPlanPreconditions(task, input); await previewOperation(task, input);
+  const baseRevision = await sourceRevision(); const change = plannedChange(task, input);
   const payload = {
     schemaVersion: 'aita.change-plan/v1',
-    operation: task.id,
-    operationVersion: task.version,
-    baseRevision,
-    risk: task.risk,
-    preconditions: [
+    operation: task.id, operationVersion: task.version, baseRevision, risk: task.risk, preconditions: [
       'operation input matches JSON Schema',
       'base revision remains unchanged',
       'all writes stay inside allowed paths',
       ...(input.evidenceRefs ? ['required evidence references are present'] : []),
-    ],
-    changes: [change],
-    affectedRoutes: await affectedRoutesFor(task),
-    affectedPaths: task.allowedWritePaths,
-    requiredChecks: task.requiredChecks,
-    allowedWritePaths: task.allowedWritePaths,
-    input: stableValue(input),
+    ], changes: [change], affectedRoutes: await affectedRoutesFor(task),
+    affectedPaths: task.allowedWritePaths, requiredChecks: task.requiredChecks,
+    allowedWritePaths: task.allowedWritePaths, input: stableValue(input),
   };
   const planId = `plan-${sha256(stableStringify(payload)).slice(0, 16)}`;
-  const unsigned = { ...payload, planId };
-  const planHash = sha256(stableStringify(unsigned));
+  const unsigned = { ...payload, planId }; const planHash = sha256(stableStringify(unsigned));
   return { ...unsigned, planHash };
 }
 
 function verifyPlanHash(changePlan) {
-  const { planHash, ...unsigned } = changePlan;
-  const expected = sha256(stableStringify(unsigned));
+  const { planHash, ...unsigned } = changePlan; const expected = sha256(stableStringify(unsigned));
   if (!planHash || planHash !== expected) {
     throw new AitaOperationError('AITA_PLAN_TAMPERED', 'Change Plan 哈希不匹配，计划可能已被修改', { expected, actual: planHash ?? null });
   }
@@ -263,44 +237,35 @@ function entityIndex(items, id) {
 }
 
 function transformDocument(task, input, current) {
-  const relativePath = task.allowedWritePaths[0];
-  const document = structuredClone(current);
-  const mode = task.target.mode;
-  let before = null;
-  let after = null;
+  const relativePath = task.allowedWritePaths[0]; const document = structuredClone(current);
+  const mode = task.target.mode; let before = null; let after = null;
 
   if (mode === 'set') {
     if (Array.isArray(document) || !document || typeof document !== 'object') throw new AitaOperationError('AITA_TARGET_SHAPE_INVALID', `${relativePath} 不是设置对象`);
     const targetPath = task.target.path ?? input.key;
     const value = task.target.path === 'about.overview' ? { value: input.overview, evidenceRefs: input.evidenceRefs ?? [] }
       : input.value;
-    before = structuredClone(document);
-    setByPath(document, targetPath, value);
+    before = structuredClone(document); setByPath(document, targetPath, value);
     after = structuredClone(document);
   } else if (mode === 'upsert-nested') {
     if (Array.isArray(document) || !document || typeof document !== 'object') throw new AitaOperationError('AITA_TARGET_SHAPE_INVALID', `${relativePath} 不是设置对象`);
     const keys = task.target.path.split('.');
     let cursor = document;
-    for (const key of keys.slice(0, -1)) cursor = cursor[key] ??= {};
-    const finalKey = keys.at(-1);
+    for (const key of keys.slice(0, -1)) cursor = cursor[key] ??= {}; const finalKey = keys.at(-1);
     const entries = Array.isArray(cursor[finalKey]) ? cursor[finalKey] : [];
     const index = entityIndex(entries, input.id);
     before = index >= 0 ? structuredClone(entries[index]) : null;
-    if (index >= 0) entries[index] = { ...entries[index], ...input };
-    else entries.push(input);
-    cursor[finalKey] = entries;
-    after = structuredClone(index >= 0 ? entries[index] : entries.at(-1));
+    if (index >= 0) entries[index] = { ...entries[index], ...input }; else entries.push(input);
+    cursor[finalKey] = entries; after = structuredClone(index >= 0 ? entries[index] : entries.at(-1));
   } else {
     if (!Array.isArray(document)) throw new AitaOperationError('AITA_TARGET_SHAPE_INVALID', `${relativePath} 不是实体数组`);
     const index = entityIndex(document, input.id);
     if (mode === 'create') {
       if (index >= 0) throw new AitaOperationError('AITA_ENTITY_ALREADY_EXISTS', `实体已存在：${input.id}`, { entityId: input.id });
-      document.push(input);
-      after = structuredClone(input);
+      document.push(input); after = structuredClone(input);
     } else if (mode === 'upsert') {
       before = index >= 0 ? structuredClone(document[index]) : null;
-      if (index >= 0) document[index] = { ...document[index], ...input };
-      else document.push(input);
+      if (index >= 0) document[index] = { ...document[index], ...input }; else document.push(input);
       after = structuredClone(index >= 0 ? document[index] : document.at(-1));
     } else {
       if (index < 0) throw new AitaOperationError('AITA_ENTITY_NOT_FOUND', `未找到实体：${input.id}`, { entityId: input.id });
@@ -315,23 +280,20 @@ function transformDocument(task, input, current) {
   return { document, before, after };
 }
 
-export async function previewOperation(task, input) {
+async function previewOperation(task, input) {
   await validateOperationInput(task, input);
   const collections = Object.fromEntries((await listContentCollections()).map(item => [item.name, item.data]));
   const candidate = transformDocument(task, input, collections[task.target.collection]);
-  collections[task.target.collection] = candidate.document;
-  const errors = validateContent(collections);
+  collections[task.target.collection] = candidate.document; const errors = validateContent(collections);
   if (errors.length) throw new AitaOperationError('AITA_CONTENT_INVALID', '变更后的内容未通过领域校验，未写入文件', { errors });
   return candidate;
 }
 
 export async function apply(changePlan, context = {}) {
-  verifyPlanHash(changePlan);
-  const task = await getTask(changePlan.operation);
+  verifyPlanHash(changePlan); const task = await getTask(changePlan.operation);
   if (task.version !== changePlan.operationVersion) {
     throw new AitaOperationError('AITA_OPERATION_VERSION_MISMATCH', 'Operation 版本与计划不一致', {
-      planned: changePlan.operationVersion,
-      current: task.version,
+      planned: changePlan.operationVersion, current: task.version,
     });
   }
   if (stableStringify(task.allowedWritePaths) !== stableStringify(changePlan.allowedWritePaths)) {
@@ -347,8 +309,7 @@ export async function apply(changePlan, context = {}) {
   const currentRevision = await sourceRevision();
   if (currentRevision !== changePlan.baseRevision) {
     throw new AitaOperationError('AITA_PLAN_BASE_REVISION_MISMATCH', '仓库基线已变化，旧 Plan 已失效', {
-      plannedRevision: changePlan.baseRevision,
-      currentRevision,
+      plannedRevision: changePlan.baseRevision, currentRevision,
       suggestedAction: 'regenerate-plan',
     });
   }
@@ -356,33 +317,20 @@ export async function apply(changePlan, context = {}) {
   if (context.dryRun) {
     return { ok: true, dryRun: true, planId: changePlan.planId, before, after, affectedRoutes: changePlan.affectedRoutes, nextActions: ['apply-plan'] };
   }
-  const relativePath = task.allowedWritePaths[0];
-  const beforeDocument = await readJson(relativePath);
-  await fs.mkdir(HISTORY_DIR, { recursive: true });
-  await writeJsonAtomic(relativePath, document);
+  const relativePath = task.allowedWritePaths[0]; const beforeDocument = await readJson(relativePath);
+  await fs.mkdir(HISTORY_DIR, { recursive: true }); await writeJsonAtomic(relativePath, document);
   const newRevision = await sourceRevision();
   const history = {
     schemaVersion: 'aita.apply-history/v1',
-    planId: changePlan.planId,
-    operation: changePlan.operation,
-    risk: changePlan.risk,
-    sourcePath: relativePath,
-    baseRevision: changePlan.baseRevision,
-    resultRevision: newRevision,
-    before,
-    after,
-    documentChanged: stableStringify(beforeDocument) !== stableStringify(document),
-    affectedRoutes: changePlan.affectedRoutes,
-    requiredChecks: changePlan.requiredChecks,
+    planId: changePlan.planId, operation: changePlan.operation, risk: changePlan.risk,
+    sourcePath: relativePath, baseRevision: changePlan.baseRevision, resultRevision: newRevision, before,
+    after, documentChanged: stableStringify(beforeDocument) !== stableStringify(document),
+    affectedRoutes: changePlan.affectedRoutes, requiredChecks: changePlan.requiredChecks,
   };
   await fs.writeFile(historyPath, `${JSON.stringify(history, null, 2)}\n`, 'utf8');
   return {
-    ok: true,
-    alreadyApplied: false,
-    planId: changePlan.planId,
-    baseRevision: changePlan.baseRevision,
-    resultRevision: newRevision,
-    sourcePath: relativePath,
+    ok: true, alreadyApplied: false, planId: changePlan.planId, baseRevision: changePlan.baseRevision,
+    resultRevision: newRevision, sourcePath: relativePath,
     nextActions: ['rebuild-static-artifact', 'run-semantic-diff', 'run-verify'],
   };
 }
@@ -410,17 +358,12 @@ export async function semanticDiff(planId = null) {
   if (!files.includes(target)) throw new AitaOperationError('AITA_HISTORY_NOT_FOUND', `未找到 Apply 历史：${planId}`, { planId });
   const history = JSON.parse(await fs.readFile(path.join(HISTORY_DIR, target), 'utf8'));
   return {
-    ok: true,
-    planId: history.planId,
-    operation: history.operation,
-    risk: history.risk,
+    ok: true, planId: history.planId, operation: history.operation, risk: history.risk,
     entityChange: {
       entityId: history.after?.id ?? history.before?.id ?? null,
       type: history.before === null ? 'created' : history.after === null ? 'removed' : 'updated',
       fields: changedFields(history.before, history.after),
-    },
-    pageChanges: history.affectedRoutes,
-    sourcePath: history.sourcePath,
+    }, pageChanges: history.affectedRoutes, sourcePath: history.sourcePath,
     checksRequired: history.requiredChecks,
     revisions: { before: history.baseRevision, after: history.resultRevision },
   };
@@ -433,13 +376,9 @@ export async function describeRepository() {
   const collections = await listContentCollections();
   const entityCounts = Object.fromEntries(collections.map((collection) => [collection.name, Array.isArray(collection.data) ? collection.data.length : 1]));
   return {
-    ok: true,
-    ...manifest,
-    plugins: (await chapterManifests()).map(chapter=>chapter.id),
-    currentRevision: await sourceRevision(),
-    operationCount: tasks.tasks.length,
-    componentCount: Object.keys(components.components).length,
-    entityCounts,
+    ok: true, ...manifest, plugins: (await chapterManifests()).map(chapter=>chapter.id),
+    currentRevision: await sourceRevision(), operationCount: tasks.tasks.length,
+    componentCount: Object.keys(components.components).length, entityCounts,
     nextActions: ['task-list', 'ui-list', 'verify'],
   };
 }

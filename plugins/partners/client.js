@@ -16,12 +16,10 @@ export function mount(root) {
   const cloudReady = {};
   // Where each beacon actually sits in its layer, filled in by the overlay renders. The flare
   // ends on these, not on the geographic anchor, so the arcs land on the markers a reader sees.
-  const beaconPoints = { main: new Map(), gba: new Map() };
-  let loading = false;
+  const beaconPoints = { main: new Map(), gba: new Map() }; let loading = false;
   const scriptBase = new URL("/assets/images/partners/", location.href);
   const borderSource = new URL('/assets/geo/gba-borders.json', location.href).href;
-  const drawRects = {};
-  let borders = null;
+  const drawRects = {}; let borders = null;
 
   const $ = (sel, scope=root) => scope.querySelector(sel);
   const $$ = (sel, scope=root) => [...scope.querySelectorAll(sel)];
@@ -30,12 +28,10 @@ export function mount(root) {
   // The detail panel cycles on its own so the section reads as a live atlas instead of a
   // directory that needs clicking. It walks the research institutes and universities only,
   // narrowed by whatever filter or search is active.
-  const ROTATE_INTERVAL = 3300;
-  const ROTATE_CATEGORIES = new Set(['ACADEMIC','INSTITUTE']);
+  const ROTATE_INTERVAL = 3300; const ROTATE_CATEGORIES = new Set(['ACADEMIC','INSTITUTE']);
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const rotation = { enabled: !reducedMotion.matches, holding: false, visible: false, timer: 0 };
-  const flare = createFlare(reducedMotion);
-  let flareGeneration = 0;
+  const flare = createFlare(reducedMotion); let flareGeneration = 0;
   const FLARE_DELAY = 260;   // let the scroll settle before the burst starts
   // Which pool members have had their turn since the last full lap.
   const rotationSeen = new Set();
@@ -52,62 +48,46 @@ export function mount(root) {
   function stopRotation() { clearTimeout(rotation.timer); rotation.timer = 0; }
 
   function scheduleRotation() {
-    stopRotation();
-    if (rotationRunning()) rotation.timer = setTimeout(advanceRotation, ROTATE_INTERVAL);
+    stopRotation(); if (rotationRunning()) rotation.timer = setTimeout(advanceRotation, ROTATE_INTERVAL);
   }
 
   function advanceRotation() {
     rotation.timer = 0;
     if (rotationRunning()) {
-      const pool = rotationPool();
-      const index = pool.findIndex(p => p.id === state.lockedId);
+      const pool = rotationPool(); const index = pool.findIndex(p => p.id === state.lockedId);
       if (pool.length > 1) {
-        state.lockedId = pool[(index + 1) % pool.length].id;
-        updateUI();
-        noteVisited(pool);
+        state.lockedId = pool[(index + 1) % pool.length].id; updateUI(); noteVisited(pool);
       }
     }
     scheduleRotation();
   }
 
   function noteVisited(pool) {
-    if (!pool.length) return;
-    rotationSeen.add(state.lockedId);
-    if (!pool.every(p => rotationSeen.has(p.id))) return;
-    rotationSeen.clear();
-    onRotationCycle();
+    if (!pool.length) return; rotationSeen.add(state.lockedId);
+    if (!pool.every(p => rotationSeen.has(p.id))) return; rotationSeen.clear(); onRotationCycle();
   }
 
   function setRotation(enabled) {
-    rotation.enabled = enabled;
-    updateUI();
-    scheduleRotation();
+    rotation.enabled = enabled; updateUI(); scheduleRotation();
   }
 
   function updateRotationToggle() {
-    const button = $('#rotation-toggle');
-    if (!button) return;
+    const button = $('#rotation-toggle'); if (!button) return;
     const mode = rotation.enabled ? 'auto' : 'hold';
     // Runs on every hover, so leave the button alone once it already says the right thing.
-    if (!button.hidden && button.dataset.mode === mode) return;
-    button.hidden = false;
-    button.textContent = rotation.enabled ? 'AUTO' : 'HOLD';
-    button.dataset.mode = mode;
+    if (!button.hidden && button.dataset.mode === mode) return; button.hidden = false;
+    button.textContent = rotation.enabled ? 'AUTO' : 'HOLD'; button.dataset.mode = mode;
     button.setAttribute('aria-pressed', String(rotation.enabled));
     button.setAttribute('aria-label', rotation.enabled ? '暂停合作单位自动轮询' : '在各科研机构、院校之间自动轮询');
   }
 
   function loadCloudImages() {
-    if (loading) return;
-    loading = true;
+    if (loading) return; loading = true;
     Object.keys(CLOUDS).forEach(key => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.fetchPriority = 'low';
+      const image = new Image(); image.decoding = 'async'; image.fetchPriority = 'low';
       image.src = new URL(`network-${key}.webp?v=20260905-2`, scriptBase).href;
       cloudReady[key] = image.decode().then(() => {
-        cloudImages[key] = image;
-        if (started) renderCloud($(key === 'main' ? '#main-map' : '#gba-map'), key);
+        cloudImages[key] = image; if (started) renderCloud($(key === 'main' ? '#main-map' : '#gba-map'), key);
       }).catch(error => {
         console.warn(`Network ${key} background could not load:`, error);
       });
@@ -115,8 +95,7 @@ export function mount(root) {
   }
 
   function fitRect(containerW, containerH, dataW, dataH) {
-    const dataAspect = dataW / dataH;
-    const boxAspect = containerW / containerH;
+    const dataAspect = dataW / dataH; const boxAspect = containerW / containerH;
     if (boxAspect > dataAspect) {
       const h = containerH, w = h * dataAspect;
       return {x:(containerW-w)/2, y:0, width:w, height:h};
@@ -126,8 +105,7 @@ export function mount(root) {
   }
 
   function coverRect(containerW, containerH, dataW, dataH, focusX, focusY) {
-    const dataAspect = dataW / dataH;
-    const boxAspect = containerW / containerH;
+    const dataAspect = dataW / dataH; const boxAspect = containerW / containerH;
     if (boxAspect > dataAspect) {
       const w = containerW, h = w / dataAspect;
       return {x:0, y:(containerH-h)*focusY, width:w, height:h};
@@ -137,27 +115,19 @@ export function mount(root) {
   }
 
   function renderCloud(canvas, key) {
-    const cloud = CLOUDS[key];
-    const image = cloudImages[key];
-    const cssW = Math.max(1, canvas.clientWidth);
-    const cssH = Math.max(1, canvas.clientHeight);
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(cssW*dpr);
-    canvas.height = Math.round(cssH*dpr);
-    const ctx = canvas.getContext('2d', {alpha:true});
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.clearRect(0,0,cssW,cssH);
-    const rect = key === 'gba'
+    const cloud = CLOUDS[key]; const image = cloudImages[key]; const cssW = Math.max(1, canvas.clientWidth);
+    const cssH = Math.max(1, canvas.clientHeight); const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(cssW*dpr); canvas.height = Math.round(cssH*dpr);
+    const ctx = canvas.getContext('2d', {alpha:true}); ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,cssW,cssH); const rect = key === 'gba'
       ? (cssW >= 760
           ? coverRect(cssW,cssH,cloud.size[0],cloud.size[1],.60,.50)
           : {x:0, y:0, width:cssW, height:cssH})
       : fitRect(cssW,cssH,cloud.size[0],cloud.size[1]);
-    drawRects[key] = rect;
-    // The retained source/browser export tool owns the point loops and glow pass.
+    drawRects[key] = rect; // The retained source/browser export tool owns the point loops and glow pass.
     // One bitmap blit replaces 32,431 per-point paths during first scroll.
     if (image) {
-      ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height);
-      canvas.classList.add('is-ready');
+      ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height); canvas.classList.add('is-ready');
     }
   }
 
@@ -165,8 +135,7 @@ export function mount(root) {
     fetch(borderSource)
       .then(response => { if (!response.ok) throw new Error(String(response.status)); return response.json(); })
       .then(data => {
-        borders = data;
-        if (started) renderBorders();
+        borders = data; if (started) renderBorders();
       })
       .catch(error => console.warn('Network city outlines could not load:', error));
   }
@@ -175,19 +144,15 @@ export function mount(root) {
   // can tell where one city stops. These are the real prefecture outlines, drawn in the cloud's
   // own pixel grid and placed by viewBox, so a resize only rewrites one attribute.
   function renderBorders() {
-    const panel = $('#gba-panel');
-    const svg = $('#gba-borders');
-    const rect = drawRects.gba;
-    if (!panel || !svg || !borders || !rect) return;
-    const [gridW, gridH] = borders.grid;
+    const panel = $('#gba-panel'); const svg = $('#gba-borders'); const rect = drawRects.gba;
+    if (!panel || !svg || !borders || !rect) return; const [gridW, gridH] = borders.grid;
     const scaleX = rect.width / gridW, scaleY = rect.height / gridH;
     // The layer covers the panel, but the bitmap was blitted into `rect` — on a wide panel a crop
     // of the cloud that starts left of the panel. Point the viewBox at that same part of the grid
     // so every outline falls on the pixels the cloud was drawn to.
     const viewX = -rect.x / scaleX, viewY = -rect.y / scaleY;
     svg.setAttribute('viewBox', `${viewX} ${viewY} ${panel.clientWidth / scaleX} ${panel.clientHeight / scaleY}`);
-    svg.setAttribute('preserveAspectRatio', 'none');
-    if (svg.childElementCount) return;
+    svg.setAttribute('preserveAspectRatio', 'none'); if (svg.childElementCount) return;
     const [lon0, lat0, lon1, lat1] = borders.frame;
     const gx = lon => ((lon - lon0) / (lon1 - lon0) * gridW).toFixed(1);
     const gy = lat => ((lat1 - lat) / (lat1 - lat0) * gridH).toFixed(1);
@@ -199,19 +164,15 @@ export function mount(root) {
         return line;
       }).join('');
       const shape = svgEl('g', { class: 'city-shape', 'data-city-en': city.en });
-      shape.append(svgEl('path', { class: 'city-border', d }));
-      fragment.append(shape);
+      shape.append(svgEl('path', { class: 'city-border', d })); fragment.append(shape);
     }
     svg.append(fragment);
   }
 
   function project(key, lon, lat) {
-    const cloud = CLOUDS[key];
-    const rect = drawRects[key];
-    const [lon0,lat0,lon1,lat1] = cloud.bounds;
+    const cloud = CLOUDS[key]; const rect = drawRects[key]; const [lon0,lat0,lon1,lat1] = cloud.bounds;
     return {
-      x: rect.x + ((lon-lon0)/(lon1-lon0))*rect.width,
-      y: rect.y + ((lat1-lat)/(lat1-lat0))*rect.height
+      x: rect.x + ((lon-lon0)/(lon1-lon0))*rect.width, y: rect.y + ((lat1-lat)/(lat1-lat0))*rect.height
     };
   }
 
@@ -228,23 +189,18 @@ export function mount(root) {
   ];
 
   function onScreen(selector) {
-    const el = $(selector);
-    if (!el) return false;
-    const box = el.getBoundingClientRect();
+    const el = $(selector); if (!el) return false; const box = el.getBoundingClientRect();
     return Math.min(box.bottom, innerHeight) - Math.max(box.top, 0) > box.height * .5;
   }
 
   function fireFlares(specs) {
     for (const spec of specs) {
-      const layer = $(spec.layer);
-      const origin = drawRects[spec.key] && spec.origin();
-      if (!layer || !origin) continue;
-      const points = partners
+      const layer = $(spec.layer); const origin = drawRects[spec.key] && spec.origin();
+      if (!layer || !origin) continue; const points = partners
         .filter(p => spec.mine(p) && matches(p))
         .map(p => beaconPoints[spec.key].get(p.id))
         .filter(Boolean);
-      const quiet = flare.fire(layer, origin, points);
-      const generation = flareGeneration;
+      const quiet = flare.fire(layer, origin, points); const generation = flareGeneration;
       if (quiet) setTimeout(() => { if (generation === flareGeneration) flare.clearLayer(layer); }, quiet);
     }
   }
@@ -252,18 +208,14 @@ export function mount(root) {
   // Runs from the flare observer, which is registered after the section observer that starts
   // rendering, so the projection and the decoded bitmaps are already in place by then.
   function launchFlare(spec) {
-    if (spec.fired || !drawRects[spec.key] || !cloudReady[spec.key]) return false;
-    spec.fired = true;
+    if (spec.fired || !drawRects[spec.key] || !cloudReady[spec.key]) return false; spec.fired = true;
     const frame = $(spec.target);
     // A phone shows this map about 350px wide; the arcs would overlap into a single smear.
     if (!frame || frame.clientWidth < 720 || reducedMotion.matches || document.hidden) return true;
-    if (!spec.origin()) return true;
-    const generation = flareGeneration;
+    if (!spec.origin()) return true; const generation = flareGeneration;
     cloudReady[spec.key].then(() => {
-      if (document.hidden || generation !== flareGeneration) return;
-      fireFlares([spec]);
-    });
-    return true;
+      if (document.hidden || generation !== flareGeneration) return; fireFlares([spec]);
+    }); return true;
   }
 
   // The panel walking the whole pool is the cue to shoot again — the map answers the directory.
@@ -275,15 +227,13 @@ export function mount(root) {
 
   function svgEl(tag, attrs) {
     const el = document.createElementNS('http://www.w3.org/2000/svg',tag);
-    for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,String(v));
-    return el;
+    for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,String(v)); return el;
   }
 
   function createLineGroup(svg, p, anchor, end, city=false) {
     const kind = p.precisionKind || 'regional';
     const g = svgEl('g', {'class':`line-group is-${kind}`, 'data-partner-id':p.id});
-    const dx = end.x-anchor.x, dy = end.y-anchor.y;
-    const length = Math.hypot(dx,dy) || 1;
+    const dx = end.x-anchor.x, dy = end.y-anchor.y; const length = Math.hypot(dx,dy) || 1;
     const bend = city ? Math.min(12,length*.12) : 0;
     const path = `M ${anchor.x} ${anchor.y} Q ${(anchor.x+end.x)/2-bend*dy/length} ${(anchor.y+end.y)/2+bend*dx/length} ${end.x} ${end.y}`;
     const line = svgEl('path', {d:path,'class':`signal-line${city?' signal-line-city':''}`});
@@ -293,13 +243,9 @@ export function mount(root) {
   }
 
   function createBeacon(layer, p, end, micro=false) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = `beacon${micro?' beacon--micro':''}`;
-    b.dataset.partnerId = p.id;
-    b.dataset.family = p.family;
-    b.dataset.shape = p.shape;
-    b.dataset.precisionKind = p.precisionKind;
+    const b = document.createElement('button'); b.type = 'button';
+    b.className = `beacon${micro?' beacon--micro':''}`; b.dataset.partnerId = p.id;
+    b.dataset.family = p.family; b.dataset.shape = p.shape; b.dataset.precisionKind = p.precisionKind;
     b.dataset.labelAlign = p.align || 'right';
     b.style.left = `${end.x}px`; b.style.top = `${end.y}px`;
     b.title = `${p.name}\n${p.address}`;
@@ -307,36 +253,27 @@ export function mount(root) {
     b.innerHTML = '<span class="beacon-core" aria-hidden="true"></span><span class="beacon-number"></span>';
     b.querySelector('.beacon-number').textContent = p.number;
     if (!micro && !p.hideLabel) {
-      const label = document.createElement('span');
-      label.className = 'beacon-label';
-      label.textContent = p.label || p.anchor;
-      b.append(label);
+      const label = document.createElement('span'); label.className = 'beacon-label';
+      label.textContent = p.label || p.anchor; b.append(label);
     }
-    bindPartnerEvents(b,p.id);
-    layer.append(b);
+    bindPartnerEvents(b,p.id); layer.append(b);
   }
 
   function renderMainOverlay() {
-    const frame = $('#main-map-frame');
-    const svg = $('#main-lines');
-    const layer = $('#main-beacons');
+    const frame = $('#main-map-frame'); const svg = $('#main-lines'); const layer = $('#main-beacons');
     svg.replaceChildren(); layer.replaceChildren();
     svg.setAttribute('viewBox',`0 0 ${frame.clientWidth} ${frame.clientHeight}`);
-    const scale = frame.clientWidth / CLOUDS.main.size[0];
-    beaconPoints.main.clear();
+    const scale = frame.clientWidth / CLOUDS.main.size[0]; beaconPoints.main.clear();
     partners.filter(p=>p.group==='main').forEach(p => {
       const anchor = project('main',p.lon,p.lat);
-      const end = {x:anchor.x+p.dx*scale, y:anchor.y+p.dy*scale};
-      beaconPoints.main.set(p.id, end);
-      createLineGroup(svg,p,anchor,end,false);
-      createBeacon(layer,p,end,false);
+      const end = {x:anchor.x+p.dx*scale, y:anchor.y+p.dy*scale}; beaconPoints.main.set(p.id, end);
+      createLineGroup(svg,p,anchor,end,false); createBeacon(layer,p,end,false);
     });
 
     // Regional cluster and headquarters must not share a geographic anchor.
     const gbaAnchor = project('main',113.72,22.72);
     const clusterEnd = {x:gbaAnchor.x-38*scale,y:gbaAnchor.y-82*scale};
-    const pseudo = {id:'GBA'};
-    createLineGroup(svg,pseudo,gbaAnchor,clusterEnd,false);
+    const pseudo = {id:'GBA'}; createLineGroup(svg,pseudo,gbaAnchor,clusterEnd,false);
     const button = document.createElement('button');
     button.type='button'; button.className='cluster-beacon'; button.id='gba-cluster-beacon';
     button.style.left=`${clusterEnd.x}px`; button.style.top=`${clusterEnd.y}px`;
@@ -349,8 +286,7 @@ export function mount(root) {
     const hqAnchor = project('main',hq.lon,hq.lat);
     const hqEnd = {x:hqAnchor.x+24*scale,y:hqAnchor.y+26*scale};
     createLineGroup(svg,{id:'HQ',precisionKind:'host'},hqAnchor,hqEnd);
-    const hqLabel = document.createElement('span');
-    hqLabel.className = 'hq-anchor-label';
+    const hqLabel = document.createElement('span'); hqLabel.className = 'hq-anchor-label';
     hqLabel.style.left = `${hqEnd.x}px`; hqLabel.style.top = `${hqEnd.y}px`;
     hqLabel.innerHTML = `AITA HQ / ${String(hqCount).padStart(2,'0')}<small>JIEYANG CAMPUS</small>`;
     layer.append(hqLabel);
@@ -360,12 +296,9 @@ export function mount(root) {
   }
 
   function renderGbaOverlay() {
-    const panel = $('#gba-panel');
-    const svg = $('#gba-lines');
-    const layer = $('#gba-beacons');
+    const panel = $('#gba-panel'); const svg = $('#gba-lines'); const layer = $('#gba-beacons');
     svg.replaceChildren(); layer.replaceChildren();
-    svg.setAttribute('viewBox',`0 0 ${panel.clientWidth} ${panel.clientHeight}`);
-    const placed = [];
+    svg.setAttribute('viewBox',`0 0 ${panel.clientWidth} ${panel.clientHeight}`); const placed = [];
     beaconPoints.gba.clear();
     partners.filter(p=>p.group==='gba').forEach(p => {
       const anchor = project('gba',p.lon,p.lat);
@@ -384,11 +317,8 @@ export function mount(root) {
           if (score<bestScore) {bestScore=score;end=point;}
         }
       }
-      end ||= anchor;
-      placed.push(end);
-      beaconPoints.gba.set(p.id, end);
-      createLineGroup(svg,p,anchor,end,true);
-      createBeacon(layer,p,end,true);
+      end ||= anchor; placed.push(end); beaconPoints.gba.set(p.id, end);
+      createLineGroup(svg,p,anchor,end,true); createBeacon(layer,p,end,true);
     });
     const cities = {
       GUANGZHOU: {...project('gba',113.313,23.132),dx:-12,dy:-132},
@@ -397,8 +327,7 @@ export function mount(root) {
       ...(byId.has('org:029') ? { JIEYANG: {...project('gba',byId.get('org:029').lon,byId.get('org:029').lat),dx:-18,dy:-102} } : {})
     };
     for (const [city,pt] of Object.entries(cities)) {
-      const el = panel.querySelector(`[data-city-label="${city}"]`);
-      if (!el) continue;
+      const el = panel.querySelector(`[data-city-label="${city}"]`); if (!el) continue;
       const x=Math.max(70,Math.min(panel.clientWidth-92,pt.x+pt.dx));
       const y=Math.max(58,Math.min(panel.clientHeight-44,pt.y+pt.dy));
       el.style.left=`${x}px`; el.style.top=`${y}px`;
@@ -414,8 +343,7 @@ export function mount(root) {
   }
 
   function matches(p) {
-    if (!p) return false;
-    const typeOK = state.filter==='ALL' || p.family===state.filter;
+    if (!p) return false; const typeOK = state.filter==='ALL' || p.family===state.filter;
     const q = state.query.trim().toLowerCase();
     const queryOK = !q || `${p.number} ${p.name} ${p.anchor} ${p.city} ${p.category} ${p.address} ${p.pinBasis}`.toLowerCase().includes(q);
     return typeOK && queryOK;
@@ -423,57 +351,41 @@ export function mount(root) {
 
 
   function updateSelection() {
-    const id = activeId();
-    const p = byId.get(id);
-    $('#locate-index').disabled = !p;
+    const id = activeId(); const p = byId.get(id); $('#locate-index').disabled = !p;
     if (!p) {
       $('#selection-status').textContent = `00 / ${partners.length}`;
-      $('#selection-code').textContent = 'NO MATCH';
-      $('#selection-name').textContent = '未找到匹配的合作单位';
+      $('#selection-code').textContent = 'NO MATCH'; $('#selection-name').textContent = '未找到匹配的合作单位';
       ['anchor', 'map', 'position', 'address', 'basis', 'precision', 'category', 'display'].forEach(field => {
         $('#selection-' + field).textContent = '—';
-      });
-      $('#selection-note').textContent = '调整类别或搜索关键词，或点击 RESET 恢复完整名录。';
-      return;
+      }); $('#selection-note').textContent = '调整类别或搜索关键词，或点击 RESET 恢复完整名录。'; return;
     }
     $('#selection-status').textContent = `${p.number} / ${partners.length}`;
     $('#selection-code').textContent = `NODE:${p.number} / ${p.category}`;
-    $('#selection-name').textContent = p.name;
-    $('#selection-anchor').textContent = p.anchor;
-    $('#selection-map').textContent = p.map;
-    $('#selection-position').textContent = formatPosition(p);
-    $('#selection-address').textContent = p.address;
-    $('#selection-basis').textContent = p.pinBasis;
-    $('#selection-precision').textContent = p.precision;
-    $('#selection-category').textContent = p.category;
+    $('#selection-name').textContent = p.name; $('#selection-anchor').textContent = p.anchor;
+    $('#selection-map').textContent = p.map; $('#selection-position').textContent = formatPosition(p);
+    $('#selection-address').textContent = p.address; $('#selection-basis').textContent = p.pinBasis;
+    $('#selection-precision').textContent = p.precision; $('#selection-category').textContent = p.category;
     $('#selection-display').textContent = displayMode(p);
     // The note line only speaks up when nothing matches, to point back at the controls.
     $('#selection-note').textContent = '';
   }
 
   function updateUI() {
-    const id = activeId();
-    const pActive = byId.get(id);
-    $$('.beacon[data-partner-id]').forEach(el => {
-      const p=byId.get(el.dataset.partnerId);
-      el.classList.toggle('is-active',el.dataset.partnerId===id);
-      el.classList.toggle('is-filtered',!matches(p));
-      el.disabled = !matches(p);
+    const id = activeId(); const pActive = byId.get(id);
+    // Beacons and index rows are both selectable buttons for a partner; they take
+    // the same active/filtered state from the current selection.
+    const syncSelectable = selector => $$(selector).forEach(el => {
+      const p=byId.get(el.dataset.partnerId); el.classList.toggle('is-active',el.dataset.partnerId===id);
+      el.classList.toggle('is-filtered',!matches(p)); el.disabled = !matches(p);
       el.setAttribute('aria-pressed', String(el.dataset.partnerId === id));
-    });
+    }); syncSelectable('.beacon[data-partner-id]');
     $$('.line-group[data-partner-id]').forEach(el => {
-      const pid=el.dataset.partnerId;
-      if (pid==='GBA' || pid==='HQ') return;
-      const p=byId.get(pid);
-      el.classList.toggle('is-active',pid===id);
-      el.classList.toggle('is-filtered',!matches(p));
-    });
-    const gbaVisible = partners.some(p=>p.group==='gba' && p.city!=='揭阳' && matches(p));
-    const gbaActive = pActive?.group==='gba' && pActive.city!=='揭阳';
-    const cluster=$('#gba-cluster-beacon');
+      const pid=el.dataset.partnerId; if (pid==='GBA' || pid==='HQ') return; const p=byId.get(pid);
+      el.classList.toggle('is-active',pid===id); el.classList.toggle('is-filtered',!matches(p));
+    }); const gbaVisible = partners.some(p=>p.group==='gba' && p.city!=='揭阳' && matches(p));
+    const gbaActive = pActive?.group==='gba' && pActive.city!=='揭阳'; const cluster=$('#gba-cluster-beacon');
     if(cluster){
-      cluster.classList.toggle('is-active',gbaActive);
-      cluster.classList.toggle('is-filtered',!gbaVisible);
+      cluster.classList.toggle('is-active',gbaActive); cluster.classList.toggle('is-filtered',!gbaVisible);
       cluster.disabled = !gbaVisible;
     }
     const clusterLine=$('.line-group[data-partner-id="GBA"]');
@@ -483,18 +395,9 @@ export function mount(root) {
       hqLine.classList.toggle('is-related',pActive?.city==='揭阳');
       hqLine.classList.toggle('is-filtered',!partners.some(p=>p.city==='揭阳' && matches(p)));
     }
-    $$('.partner-index-item').forEach(el => {
-      const p=byId.get(el.dataset.partnerId);
-      el.classList.toggle('is-active',el.dataset.partnerId===id);
-      el.classList.toggle('is-filtered',!matches(p));
-      el.disabled = !matches(p);
-      el.setAttribute('aria-pressed', String(el.dataset.partnerId === id));
-    });
-    const visible=partners.filter(matches).length;
+    syncSelectable('.partner-index-item'); const visible=partners.filter(matches).length;
     $('#search-count').textContent=`${String(visible).padStart(2,'0')} / ${partners.length}`;
-    $('#index-empty').classList.toggle('is-visible',visible===0);
-    updateSelection();
-    updateRotationToggle();
+    $('#index-empty').classList.toggle('is-visible',visible===0); updateSelection(); updateRotationToggle();
   }
 
   function buildIndex() {
@@ -502,46 +405,31 @@ export function mount(root) {
   }
 
   function setFilter(value) {
-    state.filter=value;
-    state.hoverId=null;
-    rotationSeen.clear();
+    state.filter=value; state.hoverId=null; rotationSeen.clear();
     $$('.filter-button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.networkFilter===value)));
     if (!state.lockedId || !matches(byId.get(state.lockedId))) state.lockedId = partners.find(matches)?.id || null;
-    updateUI();
-    scheduleRotation();
+    updateUI(); scheduleRotation();
   }
 
   function renderAll() {
     // A re-render means the projection moved, so retract anything still in flight.
-    flareGeneration += 1;
-    flare.clear();
-    renderCloud($('#main-map'),'main');
-    renderCloud($('#gba-map'),'gba');
-    renderBorders();
-    renderMainOverlay();
-    renderGbaOverlay();
-    updateUI();
+    flareGeneration += 1; flare.clear(); renderCloud($('#main-map'),'main'); renderCloud($('#gba-map'),'gba');
+    renderBorders(); renderMainOverlay(); renderGbaOverlay(); updateUI();
   }
 
   buildIndex();
   $$('.filter-button').forEach(b=>b.addEventListener('click',()=>setFilter(b.dataset.networkFilter)));
   $('#partner-search').addEventListener('input', e => {
-    state.query = e.target.value;
-    state.hoverId = null;
-    rotationSeen.clear();
+    state.query = e.target.value; state.hoverId = null; rotationSeen.clear();
     if (!state.lockedId || !matches(byId.get(state.lockedId))) {
       state.lockedId = partners.find(matches)?.id || null;
     }
-    updateUI();
-    scheduleRotation();
+    updateUI(); scheduleRotation();
   });
   $('#locate-index').addEventListener('click',()=>{ const el=$(`.partner-index-item[data-partner-id="${activeId()}"]`); if(el) el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'}); });
   function resetSelection() {
-    state.lockedId = partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null;
-    state.query = '';
-    $('#partner-search').value = '';
-    rotation.enabled = !reducedMotion.matches;
-    setFilter('ALL');
+    state.lockedId = partners.find(p => p.id === 'org:010')?.id ?? partners[0]?.id ?? null; state.query = '';
+    $('#partner-search').value = ''; rotation.enabled = !reducedMotion.matches; setFilter('ALL');
   }
   $('#clear-selection').addEventListener('click', resetSelection);
   root.addEventListener('keydown',e=>{ if(e.key==='Escape') resetSelection(); });
@@ -556,51 +444,37 @@ export function mount(root) {
     if (rotation.holding) stopRotation(); else scheduleRotation();
   });
   selectionPanel.addEventListener('pointerout', event => {
-    if (event.relatedTarget && selectionPanel.contains(event.relatedTarget)) return;
-    rotation.holding = false;
+    if (event.relatedTarget && selectionPanel.contains(event.relatedTarget)) return; rotation.holding = false;
     scheduleRotation();
   });
 
   // The cloud is static: draw only near the viewport and after an actual resize.
-  let started = false;
-  let resizeTimer = 0;
+  let started = false; let resizeTimer = 0;
   const scheduleRender = () => {
-    if (!started) return;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(renderAll, 90);
+    if (!started) return; clearTimeout(resizeTimer); resizeTimer = setTimeout(renderAll, 90);
   };
   if (typeof ResizeObserver === 'function') {
-    const ro = new ResizeObserver(scheduleRender);
-    ro.observe($('#main-map-frame'));
+    const ro = new ResizeObserver(scheduleRender); ro.observe($('#main-map-frame'));
     ro.observe($('#gba-panel'));
   } else {
     window.addEventListener('resize', scheduleRender);
   }
   updateUI();
   const startRendering = () => {
-    if (started) return;
-    started = true;
-    loadCloudImages();
-    loadBorders();
-    renderAll();
-  };
-  // Fetch at low priority after the first page load; draw only near the viewport.
+    if (started) return; started = true; loadCloudImages(); loadBorders(); renderAll();
+  }; // Fetch at low priority after the first page load; draw only near the viewport.
   if (document.readyState === 'complete') { loadCloudImages(); loadBorders(); }
   else window.addEventListener('load', () => { loadCloudImages(); loadBorders(); }, { once: true });
   if (typeof IntersectionObserver === 'function') {
     const observer = new IntersectionObserver(entries => {
-      if (!entries.some(entry => entry.isIntersecting)) return;
-      startRendering();
-      observer.disconnect();
-    }, { rootMargin: '400px' });
-    observer.observe(root);
+      if (!entries.some(entry => entry.isIntersecting)) return; startRendering(); observer.disconnect();
+    }, { rootMargin: '400px' }); observer.observe(root);
     // Only cycle while the panel is actually on screen; off-screen it would burn through
     // the pool the reader never sees.
     const visibilityObserver = new IntersectionObserver(entries => {
       rotation.visible = entries.some(entry => entry.isIntersecting);
       if (rotation.visible) scheduleRotation(); else stopRotation();
-    }, { threshold: 0 });
-    visibilityObserver.observe($('.selection-panel'));
+    }, { threshold: 0 }); visibilityObserver.observe($('.selection-panel'));
     // Fires only once the map is genuinely in view — a burst at the first sliver of the frame
     // is over before the reader has scrolled to it — and a beat after the page-level reveal
     // (margin -8%, threshold .08), so the heading settles first and the map answers it.
@@ -608,17 +482,14 @@ export function mount(root) {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         const spec = flares.find(item => item.target === `#${entry.target.id}`);
-        if (!spec || spec.fired || spec.pending) continue;
-        spec.pending = true;
+        if (!spec || spec.fired || spec.pending) continue; spec.pending = true;
         setTimeout(() => {
-          spec.pending = false;
-          if (launchFlare(spec)) flareObserver.unobserve(entry.target);
+          spec.pending = false; if (launchFlare(spec)) flareObserver.unobserve(entry.target);
         }, FLARE_DELAY);
       }
     }, { threshold: .8, rootMargin: '0px 0px -8%' });
     flares.forEach(spec => { const el = $(spec.target); if (el) flareObserver.observe(el); });
   } else {
-    rotation.visible = true;
-    startRendering();
+    rotation.visible = true; startRendering();
   }
 }

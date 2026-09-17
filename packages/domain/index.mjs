@@ -8,8 +8,7 @@ export { contentSchema };
 export function operationSchema(task) {
   const collection = contentSchema.properties[task.target.collection];
   const reference = collection.items?.$ref ?? collection.$ref;
-  const definition = contentSchema.$defs[reference.split('/').at(-1)];
-  const fields = definition.properties;
+  const definition = contentSchema.$defs[reference.split('/').at(-1)]; const fields = definition.properties;
   const object = (properties, required = Object.keys(properties)) => ({ type: 'object', properties, required, additionalProperties: false });
   let schema;
   switch (task.target.mode) {
@@ -29,23 +28,17 @@ export function operationSchema(task) {
   }
   return { ...schema, $defs: contentSchema.$defs, title: task.id };
 }
-const ajv = new Ajv2020({ allErrors: true, strict: false });
-addFormats(ajv);
-ajv.addSchema(contentSchema);
+const ajv = new Ajv2020({ allErrors: true, strict: false }); addFormats(ajv); ajv.addSchema(contentSchema);
 const cache = new Map();
 
 export function validateSchema(schema, value) {
-  const key = JSON.stringify(schema);
-  if (!cache.has(key)) cache.set(key, ajv.compile(schema));
-  const validate = cache.get(key);
-  validate(value);
+  const key = JSON.stringify(schema); if (!cache.has(key)) cache.set(key, ajv.compile(schema));
+  const validate = cache.get(key); validate(value);
   return (validate.errors ?? []).map(({ instancePath, message, params }) => ({ pointer: instancePath || '/', message, ...params }));
 }
 
 export function validateContent(collections) {
-  const errors = validateSchema(contentSchema, collections);
-  const ids = new Set();
-  const refs = [];
+  const errors = validateSchema(contentSchema, collections); const ids = new Set(); const refs = [];
   function walk(value, pointer) {
     if (Array.isArray(value)) { value.forEach((item, i) => walk(item, `${pointer}/${i}`)); return; }
     if (!value || typeof value !== 'object') return;
@@ -63,8 +56,7 @@ export function validateContent(collections) {
   walk(collections, '');
   for (const ref of refs) if (!ids.has(ref.id)) errors.push({ pointer: ref.pointer, message: `Unresolved reference: ${ref.id}` });
   for (const [name, items] of Object.entries(collections)) {
-    if (!Array.isArray(items)) continue;
-    const slugs = new Set();
+    if (!Array.isArray(items)) continue; const slugs = new Set();
     for (const item of items) if (item.slug) {
       if (slugs.has(item.slug)) errors.push({ pointer: `/${name}`, message: `Duplicate slug: ${item.slug}` });
       slugs.add(item.slug);

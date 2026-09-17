@@ -1,7 +1,6 @@
 // Static iframe effects retain their own dependency realm and load near the viewport.
 // Their canonical source lives with its chapter; public/effects is disposable output.
-import { cp, mkdir, rm } from 'node:fs/promises';
-import path from 'node:path';
+import { cp, mkdir, rm } from 'node:fs/promises'; import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 export async function prepareEffects(root = new URL('../', import.meta.url)) {
   const destination = new URL('apps/site/public/effects/', root);

@@ -20,15 +20,13 @@ const OUT = path.join(ROOT, 'apps/site/public/assets/geo/gba-borders.json');
 
 // The cloud this layer is registered against. Keep in step with network-cloud-source.json's
 // `gba` entry: the client maps these degrees through the same rect the bitmap is drawn into.
-const FRAME = [110.45, 20.85, 117.75, 24.5];
-const GRID = [1360, 680];
+const FRAME = [110.45, 20.85, 117.75, 24.5]; const GRID = [1360, 680];
 // The cloud is 1360px across 7.3° — 186px per degree — and the panel shows a crop of it at
 // roughly two thirds that. 0.005° is about one cloud pixel, so simplifying this far costs
 // nothing the reader can see and keeps the file an order of magnitude below the bitmap.
 const TOLERANCE = 0.005;
 // Rings are kept past the frame edge so a border that leaves and re-enters stays continuous.
-const MARGIN = 0.12;
-const MIN_EXTENT = 0.006;   // ≈1 cloud pixel: below this a ring is a speck, not a shape
+const MARGIN = 0.12; const MIN_EXTENT = 0.006;   // ≈1 cloud pixel: below this a ring is a speck, not a shape
 
 const PROVINCES = [
   { adcode: '440000', full: true },   // 广东省 — prefecture-level cities
@@ -62,8 +60,7 @@ async function source({ adcode, full }) {
 
 const rings = feature => {
   const { type, coordinates } = feature.geometry;
-  const polygons = type === 'MultiPolygon' ? coordinates : [coordinates];
-  return polygons.flat(1);
+  const polygons = type === 'MultiPolygon' ? coordinates : [coordinates]; return polygons.flat(1);
 };
 
 const inFrame = ([lon, lat]) =>
@@ -72,9 +69,7 @@ const inFrame = ([lon, lat]) =>
 // Strokes, never fills, so a border may simply stop where it leaves the frame: cut the ring into
 // the runs that are actually on screen instead of clipping the polygon into a closed shape.
 function visibleRuns(ring) {
-  const count = ring.length;
-  const runs = [];
-  let run = null;
+  const count = ring.length; const runs = []; let run = null;
   for (let i = 0; i < count; i++) {
     const a = ring[i], b = ring[(i + 1) % count];
     if (inFrame(a) || inFrame(b)) {
@@ -84,17 +79,14 @@ function visibleRuns(ring) {
   }
   // The wrap-around edge joins the last run back onto the first.
   if (runs.length > 1 && run && run[run.length - 1][0] === runs[0][0][0] && run[run.length - 1][1] === runs[0][0][1]) {
-    runs[0] = run.concat(runs[0].slice(1));
-    runs.pop();
+    runs[0] = run.concat(runs[0].slice(1)); runs.pop();
   }
   return runs;
 }
 
 function simplify(points, tolerance) {
-  if (points.length < 3) return points;
-  const keep = new Uint8Array(points.length);
-  keep[0] = keep[points.length - 1] = 1;
-  const stack = [[0, points.length - 1]];
+  if (points.length < 3) return points; const keep = new Uint8Array(points.length);
+  keep[0] = keep[points.length - 1] = 1; const stack = [[0, points.length - 1]];
   // A closed ring ends where it starts, which would anchor the recursion on a zero-length
   // baseline: every distance measures 0 and the whole ring collapses to its two ends.
   const last = points.length - 1;
@@ -104,24 +96,17 @@ function simplify(points, tolerance) {
       const distance = Math.hypot(points[i][0] - points[0][0], points[i][1] - points[0][1]);
       if (distance > farthest) { farthest = distance; anchor = i; }
     }
-    keep[anchor] = 1;
-    stack.push([0, anchor], [anchor, last]);
+    keep[anchor] = 1; stack.push([0, anchor], [anchor, last]);
   }
   while (stack.length) {
-    const [first, last] = stack.pop();
-    if (last - first < 2) continue;
-    const [x1, y1] = points[first], [x2, y2] = points[last];
-    const dx = x2 - x1, dy = y2 - y1;
-    const norm = Math.hypot(dx, dy) || 1;
-    let index = -1, farthest = tolerance;
+    const [first, last] = stack.pop(); if (last - first < 2) continue;
+    const [x1, y1] = points[first], [x2, y2] = points[last]; const dx = x2 - x1, dy = y2 - y1;
+    const norm = Math.hypot(dx, dy) || 1; let index = -1, farthest = tolerance;
     for (let i = first + 1; i < last; i++) {
-      const [x, y] = points[i];
-      const distance = Math.abs(dy * x - dx * y + x2 * y1 - y2 * x1) / norm;
+      const [x, y] = points[i]; const distance = Math.abs(dy * x - dx * y + x2 * y1 - y2 * x1) / norm;
       if (distance > farthest) { farthest = distance; index = i; }
     }
-    if (index < 0) continue;
-    keep[index] = 1;
-    stack.push([first, index], [index, last]);
+    if (index < 0) continue; keep[index] = 1; stack.push([first, index], [index, last]);
   }
   return points.filter((_, i) => keep[i]);
 }
@@ -129,28 +114,22 @@ function simplify(points, tolerance) {
 const extent = points => {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const [x, y] of points) {
-    if (x < minX) minX = x;
-    if (x > maxX) maxX = x;
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
+    if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y;
   }
   return Math.hypot(maxX - minX, maxY - minY);
 };
 
 const round3 = value => Math.round(value * 1000) / 1000;
 
-const cities = [];
-let rawPoints = 0, builtPoints = 0;
+const cities = []; let rawPoints = 0, builtPoints = 0;
 for (const province of PROVINCES) {
   const collection = await source(province);
   for (const feature of collection.features) {
-    const { adcode, name, center } = feature.properties;
-    const paths = [];
+    const { adcode, name, center } = feature.properties; const paths = [];
     for (const ring of rings(feature)) {
       rawPoints += ring.length;
       for (const run of visibleRuns(ring)) {
-        const line = simplify(run, TOLERANCE);
-        if (line.length < 2 || extent(line) < MIN_EXTENT) continue;
+        const line = simplify(run, TOLERANCE); if (line.length < 2 || extent(line) < MIN_EXTENT) continue;
         const flat = [];
         for (const [lon, lat] of line) {
           const x = round3(lon), y = round3(lat);
@@ -160,14 +139,10 @@ for (const province of PROVINCES) {
         if (flat.length >= 4) { paths.push(flat); builtPoints += flat.length / 2; }
       }
     }
-    if (!paths.length) continue;
-    const zh = name.replace(/(市|特别行政区|自治区|省)$/, '');
+    if (!paths.length) continue; const zh = name.replace(/(市|特别行政区|自治区|省)$/, '');
     cities.push({
-      id: adcode,
-      zh,
-      en: EN[adcode] ?? zh.toUpperCase(),
-      center: center ? [round3(center[0]), round3(center[1])] : null,
-      paths,
+      id: adcode, zh, en: EN[adcode] ?? zh.toUpperCase(),
+      center: center ? [round3(center[0]), round3(center[1])] : null, paths,
     });
   }
 }
@@ -177,16 +152,11 @@ const output = {
   source: 'DataV.GeoAtlas administrative boundaries / https://geo.datav.aliyun.com/areas_v3/bound/',
   retrieved: new Date().toISOString().slice(0, 10),
   note: 'Prefecture-level outlines for the Network detail figure, clipped to the cloud frame and simplified. Paths are flat [lon,lat,...] degree runs; the page strokes them as a dot chain, never filled.',
-  frame: FRAME,
-  grid: GRID,
-  tolerance: TOLERANCE,
-  cities,
+  frame: FRAME, grid: GRID, tolerance: TOLERANCE, cities,
 };
 
-fs.mkdirSync(path.dirname(OUT), { recursive: true });
-const json = JSON.stringify(output);
-fs.writeFileSync(OUT, json + '\n');
-const gz = (await import('node:zlib')).gzipSync(Buffer.from(json));
+fs.mkdirSync(path.dirname(OUT), { recursive: true }); const json = JSON.stringify(output);
+fs.writeFileSync(OUT, json + '\n'); const gz = (await import('node:zlib')).gzipSync(Buffer.from(json));
 console.log(`\n${path.relative(ROOT, OUT)}`);
 console.log(`  ${cities.length} cities, ${cities.reduce((n, c) => n + c.paths.length, 0)} runs`);
 console.log(`  source points ${rawPoints} → ${builtPoints} (${(builtPoints / rawPoints * 100).toFixed(1)}%)`);

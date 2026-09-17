@@ -104,27 +104,19 @@
   export const createResearchGalaxy = () => {
     const surface = document.createElement("canvas");
     const gl = surface.getContext("webgl", {
-      alpha: true,
-      antialias: false,
-      depth: false,
-      stencil: false,
-      premultipliedAlpha: true
+      alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true
     });
     if (!gl) return null; // The existing 2D inflow and keywords remain usable.
 
     let seed = 20260903;
     const random = () => {
-      seed = (seed * 16807) % 2147483647;
-      return (seed - 1) / 2147483646;
-    };
-    const normal = () => Math.sqrt(-2 * Math.log(Math.max(0.00001, random())))
+      seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646;
+    }; const normal = () => Math.sqrt(-2 * Math.log(Math.max(0.00001, random())))
       * Math.cos(random() * Math.PI * 2);
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const smooth = (min, max, value) => {
-      const t = clamp((value - min) / (max - min), 0, 1);
-      return t * t * (3 - 2 * t);
-    };
-    const mixColor = (a, b, t) => a.map((channel, i) => channel + (b[i] - channel) * t);
+      const t = clamp((value - min) / (max - min), 0, 1); return t * t * (3 - 2 * t);
+    }; const mixColor = (a, b, t) => a.map((channel, i) => channel + (b[i] - channel) * t);
     // NGC 2336 (NASA/ESA Hubble) informs the pale stellar bulge and dusty,
     // blue-grey overlap. Keep the site's outer violet arms, without a pink ring.
     // https://science.nasa.gov/image-detail/big-beautiful-and-blue-2/
@@ -135,11 +127,9 @@
       return mixColor(cool, base, smooth(0.74, 1.38, r));
     };
     const clusters = Array.from({ length: 420 }, (_, index) => {
-      const radius = 0.26 + random() * 2.16;
-      const arm = index % 4;
+      const radius = 0.26 + random() * 2.16; const arm = index % 4;
       return {
-        radius,
-        angle: arm * Math.PI * 0.5 + Math.log(radius + 0.16) * 2.15
+        radius, angle: arm * Math.PI * 0.5 + Math.log(radius + 0.16) * 2.15
           + normal() * 0.24 + Math.sin(radius * 5.6 + arm * 1.7) * 0.40,
         spread: 0.02 + radius * 0.025 + Math.pow(random(), 2) * 0.09
       };
@@ -156,16 +146,14 @@
       { count: 9200, color: [0.30, 0.90, 1.00], size: 3.3, alpha: 0.90, min: 1.16, max: 2.44, speed: 0.77, depth: 0.065, shape: 0, clumps: 0.52 },
       { count: 7600, color: [0.46, 0.13, 1.00], size: 3.2, alpha: 0.90, min: 0.015, max: 0.90, speed: 0.94, depth: 0.035, shape: 0, clumps: 0.38, bulge: true },
       { count: 2200, color: [0.92, 0.97, 1.00], size: 4.8, alpha: 0.97, min: 0.28, max: 2.40, speed: 0.85, depth: 0.050, shape: 2, clumps: 0.65 }
-    ];
-    const stride = 11;
+    ]; const stride = 11;
     const particles = new Float32Array(layers.reduce((sum, layer) => sum + layer.count, 0) * stride);
     let cursor = 0;
     layers.forEach((layer) => {
       layer.first = cursor / stride;
       const knots = clusters.filter((knot) => knot.radius >= layer.min && knot.radius <= layer.max);
       for (let index = 0; index < layer.count; index += 1) {
-        let radius;
-        let angle;
+        let radius; let angle;
         if (layer.bulge) {
           // A centrally concentrated stellar population, not an annular rim.
           radius = layer.min + (layer.max - layer.min) * Math.pow(random(), 1.65);
@@ -178,8 +166,7 @@
           radius = layer.min + (layer.max - layer.min) * Math.pow(random(), 0.9);
           angle = random() * Math.PI * 2;
         }
-        const grain = random();
-        const light = 0.80 + random() * 0.20;
+        const grain = random(); const light = 0.80 + random() * 0.20;
         const color = layer.min < 0.5 && layer.shape !== 2
           ? blendedDust(radius, angle, layer.color) : layer.color;
         const edgeAlpha = layer.bulge ? 1 - smooth(0.24, 0.90, radius) : 1;
@@ -189,120 +176,81 @@
         const dustAlpha = 1 - smooth(0.45, 0.92, dustWave)
           * smooth(0.16, 0.34, radius) * (1 - smooth(0.80, 1.30, radius)) * 0.52;
         particles.set([
-          Math.cos(angle) * radius,
-          normal() * layer.depth,
-          Math.sin(angle) * radius,
-          layer.size * (0.50 + grain * grain * 0.50),
-          grain,
-          layer.speed * (0.97 + grain * 0.06),
-          layer.shape,
-          color[0] * light,
-          color[1] * light,
-          color[2] * light,
+          Math.cos(angle) * radius, normal() * layer.depth, Math.sin(angle) * radius,
+          layer.size * (0.50 + grain * grain * 0.50), grain, layer.speed * (0.97 + grain * 0.06), layer.shape,
+          color[0] * light, color[1] * light, color[2] * light,
           layer.alpha * (0.72 + grain * 0.28) * edgeAlpha * dustAlpha
-        ], cursor);
-        cursor += stride;
+        ], cursor); cursor += stride;
       }
     });
 
     // Compact only nearby purple dust, once at initialization. Keep the seeded
     // clouds and all accent layers; no clustering or buffer uploads per frame.
-    cursor = 0;
-    const averagedFields = [0, 1, 2, 5, 7, 8, 9, 10];
+    cursor = 0; const averagedFields = [0, 1, 2, 5, 7, 8, 9, 10];
     layers.forEach((layer) => {
-      const sourceFirst = layer.first;
-      const sourceCount = layer.count;
-      layer.first = cursor / stride;
+      const sourceFirst = layer.first; const sourceCount = layer.count; layer.first = cursor / stride;
       if (!layer.mergeDust) {
         particles.copyWithin(cursor, sourceFirst * stride, (sourceFirst + sourceCount) * stride);
-        cursor += sourceCount * stride;
-        return;
+        cursor += sourceCount * stride; return;
       }
       const cells = new Map();
       for (let index = sourceFirst; index < sourceFirst + sourceCount; index += 1) {
-        const source = index * stride;
-        const radius = Math.hypot(particles[source], particles[source + 2]);
-        let key;
-        // Preserve bright grains, the inner rim and the sparse outer silhouette.
+        const source = index * stride; const radius = Math.hypot(particles[source], particles[source + 2]);
+        let key; // Preserve bright grains, the inner rim and the sparse outer silhouette.
         if (particles[source + 4] < 0.9 && radius > 0.34 && radius < 2.04) {
           // Local position, depth and speed bands prevent unrelated orbits merging.
           key = `${Math.floor(particles[source] / 0.055)},${Math.floor(particles[source + 2] / 0.055)},${Math.floor(particles[source + 1] / 0.08)},${Math.floor(particles[source + 4] * 2)}`;
         }
-        const group = key === undefined ? undefined : cells.get(key);
-        const area = particles[source + 3] ** 2;
+        const group = key === undefined ? undefined : cells.get(key); const area = particles[source + 3] ** 2;
         if (group && group.count < 4) {
-          group.area += area;
-          group.count += 1;
-          const weight = area / group.area;
+          group.area += area; group.count += 1; const weight = area / group.area;
           for (const field of averagedFields) {
             particles[group.offset + field] += (particles[source + field] - particles[group.offset + field]) * weight;
           }
           // Flecks cover more of their square than soft dust: normalize coverage
           // instead of multiplying diameter/brightness by the number of grains.
-          particles[group.offset + 3] = Math.sqrt(group.area) * 0.75;
-          particles[group.offset + 6] = 1;
+          particles[group.offset + 3] = Math.sqrt(group.area) * 0.75; particles[group.offset + 6] = 1;
           continue;
         }
         particles.copyWithin(cursor, source, source + stride);
-        if (key !== undefined) cells.set(key, { offset: cursor, area, count: 1 });
-        cursor += stride;
+        if (key !== undefined) cells.set(key, { offset: cursor, area, count: 1 }); cursor += stride;
       }
       layer.count = cursor / stride - layer.first;
     });
 
-    let program;
-    let buffer;
-    let uniforms;
-    let available = false;
+    let program; let buffer; let uniforms; let available = false;
     const compile = (type, source) => {
-      const shader = gl.createShader(type);
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
+      const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader);
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        const message = gl.getShaderInfoLog(shader);
-        gl.deleteShader(shader);
-        throw new Error(message);
+        const message = gl.getShaderInfoLog(shader); gl.deleteShader(shader); throw new Error(message);
       }
       return shader;
     };
     const initialize = () => {
       const vertex = compile(gl.VERTEX_SHADER, vertexSource);
-      const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
-      program = gl.createProgram();
-      gl.attachShader(program, vertex);
-      gl.attachShader(program, fragment);
-      gl.linkProgram(program);
-      gl.deleteShader(vertex);
-      gl.deleteShader(fragment);
+      const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource); program = gl.createProgram();
+      gl.attachShader(program, vertex); gl.attachShader(program, fragment); gl.linkProgram(program);
+      gl.deleteShader(vertex); gl.deleteShader(fragment);
       if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-      gl.useProgram(program);
-      buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.useProgram(program); buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       gl.bufferData(gl.ARRAY_BUFFER, particles.subarray(0, cursor), gl.STATIC_DRAW);
       [["aPosition", 3, 0], ["aParticle", 4, 3], ["aColor", 4, 7]].forEach(([name, size, offset]) => {
-        const location = gl.getAttribLocation(program, name);
-        gl.enableVertexAttribArray(location);
+        const location = gl.getAttribLocation(program, name); gl.enableVertexAttribArray(location);
         gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride * 4, offset * 4);
-      });
-      uniforms = Object.fromEntries(["uViewport", "uCenter", "uScale", "uDpr", "uTime", "uWordPulse"]
+      }); uniforms = Object.fromEntries(["uViewport", "uCenter", "uScale", "uDpr", "uTime", "uWordPulse"]
         .map((name) => [name, gl.getUniformLocation(program, name)]));
-      gl.disable(gl.DEPTH_TEST);
-      gl.enable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST); gl.enable(gl.BLEND);
       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-      gl.clearColor(0, 0, 0, 0);
-      available = true;
+      gl.clearColor(0, 0, 0, 0); available = true;
     };
     try {
       initialize();
     } catch (error) {
-      console.warn("Research galaxy could not initialize:", error);
-      if (buffer) gl.deleteBuffer(buffer);
-      if (program) gl.deleteProgram(program);
-      return null;
+      console.warn("Research galaxy could not initialize:", error); if (buffer) gl.deleteBuffer(buffer);
+      if (program) gl.deleteProgram(program); return null;
     }
     surface.addEventListener("webglcontextlost", (event) => {
-      event.preventDefault();
-      available = false;
+      event.preventDefault(); available = false;
     });
     surface.addEventListener("webglcontextrestored", () => {
       try { initialize(); }
@@ -313,26 +261,19 @@
       // The existing Research loop owns time, visibility, resize and reduced
       // motion. This renderer never starts a second animation loop.
       draw(context, width, height, dpr, time, centerX, centerY, wordPulse) {
-        if (!available) return;
-        const narrow = width < 720;
+        if (!available) return; const narrow = width < 720;
         const pixelRatio = Math.min(dpr, 1.75, Math.sqrt(2200000 / (width * height)));
         const pixelWidth = Math.max(1, Math.round(width * pixelRatio));
         const pixelHeight = Math.max(1, Math.round(height * pixelRatio));
         if (surface.width !== pixelWidth || surface.height !== pixelHeight) {
-          surface.width = pixelWidth;
-          surface.height = pixelHeight;
+          surface.width = pixelWidth; surface.height = pixelHeight;
         }
-        gl.viewport(0, 0, pixelWidth, pixelHeight);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.useProgram(program);
+        gl.viewport(0, 0, pixelWidth, pixelHeight); gl.clear(gl.COLOR_BUFFER_BIT); gl.useProgram(program);
         const radius = narrow ? Math.min(width * 0.64, height * 0.44)
           : Math.min(width * 0.43, height * 0.94);
-        gl.uniform2f(uniforms.uViewport, width, height);
-        gl.uniform2f(uniforms.uCenter, centerX, centerY);
-        gl.uniform1f(uniforms.uScale, radius / 2.4);
-        gl.uniform1f(uniforms.uDpr, pixelRatio);
-        gl.uniform1f(uniforms.uTime, time / 1000);
-        gl.uniform1f(uniforms.uWordPulse, wordPulse);
+        gl.uniform2f(uniforms.uViewport, width, height); gl.uniform2f(uniforms.uCenter, centerX, centerY);
+        gl.uniform1f(uniforms.uScale, radius / 2.4); gl.uniform1f(uniforms.uDpr, pixelRatio);
+        gl.uniform1f(uniforms.uTime, time / 1000); gl.uniform1f(uniforms.uWordPulse, wordPulse);
         layers.forEach((layer) => gl.drawArrays(gl.POINTS, layer.first, Math.round(layer.count * (narrow ? 0.6 : 1))));
         context.drawImage(surface, 0, 0, width, height);
       }

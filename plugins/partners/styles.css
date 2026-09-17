@@ -8,47 +8,28 @@
   :where([data-plugin="partners"], [data-plugin-owner="partners"]).network-section .section-kicker { color: var(--heading-accent-projects); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]).partner-strip { margin-top: 0; margin-bottom: var(--section-gap); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading {
-    min-height: 62px;
-    display: grid;
-    grid-template-columns: 1fr 2.4fr;
-    align-items: center;
-    border-top: 1px solid var(--border);
-    border-inline: 1px solid var(--border);
+    min-height: 62px; display: grid; grid-template-columns: 1fr 2.4fr; align-items: center;
+    border-top: 1px solid var(--border); border-inline: 1px solid var(--border);
   }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading p { padding: 16px; }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading p:first-child { color: var(--text); font: 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .strip-heading p:last-child { color: var(--muted); border-left: 1px solid var(--border); font: 13px/1.6 var(--sans); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--border);
     border-left: 1px solid var(--border);
   }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell {
-    position: relative;
-    min-height: 104px;
-    display: grid;
-    place-items: center;
-    padding: 18px;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
+    position: relative; min-height: 104px; display: grid; place-items: center; padding: 18px;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden;
     transition: background .2s ease;
   }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell:hover { background: var(--surface); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell small {
-    position: absolute;
-    top: 7px;
-    right: 8px;
-    color: var(--text-micro);
-    font: 10px/1 var(--mono);
+    position: absolute; top: 7px; right: 8px; color: var(--text-micro); font: 10px/1 var(--mono);
     letter-spacing: .05em;
   }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell strong {
-    color: rgba(255, 255, 255, .62);
-    font: 500 15px/1.3 var(--sans);
-    text-align: center;
-    transition: color .2s ease;
+    color: rgba(255, 255, 255, .62); font: 500 15px/1.3 var(--sans); text-align: center; transition: color .2s ease;
   }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell:hover strong { color: var(--text); }
   :where([data-plugin="partners"], [data-plugin-owner="partners"]) .partner-cell--count strong { color: var(--text); font: 500 30px/1 var(--sans); letter-spacing: -.02em; }
@@ -98,8 +79,7 @@
      mismatch leaves dead bands beside it and drifts the percentage-placed overlays. */
   #network .map-frame { position: relative; isolation: isolate; aspect-ratio: 2442 / 780; overflow: hidden; border: 1px solid var(--border); background:
       radial-gradient(circle at 79% 72%, rgba(154,167,184,.055), transparent 22%),
-      radial-gradient(circle at 10% 40%, rgba(168,185,255,.035), transparent 24%),
-      var(--bg-deep); }
+      radial-gradient(circle at 10% 40%, rgba(168,185,255,.035), transparent 24%), var(--bg-deep); }
   #network .map-frame::before { content: ""; position: absolute; z-index: 0; inset: 0; pointer-events: none; opacity: .38; background-image:
       linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
@@ -293,8 +273,7 @@
   }
 
   @media (max-width: 520px) {
-  #network .section-heading h2 .heading-chapter,
-  #network .section-heading h2 .heading-context,
+  #network .section-heading h2 .heading-chapter, #network .section-heading h2 .heading-context,
   #network .section-heading h2 .heading-focus { display: block; }
   #network .atlas-toolbar { grid-template-columns: 1fr 1fr 1fr; }
   #network .atlas-metric { display: block; padding: 9px 8px; }

@@ -6,8 +6,7 @@ export async function filesUnder(directory) {
   const entries = await fs.readdir(directory, { withFileTypes: true }).catch(error => {
     if (error.code === 'ENOENT') return [];
     throw error;
-  });
-  const files = await Promise.all(entries.map(entry => entry.isDirectory()
+  }); const files = await Promise.all(entries.map(entry => entry.isDirectory()
     ? filesUnder(path.join(directory, entry.name)) : [path.join(directory, entry.name)]));
   return files.flat();
 }
@@ -17,8 +16,7 @@ export async function inspectArtifact(root, manifests) {
   const files = await filesUnder(dist);
   const buffers = new Map(await Promise.all(files.map(async file => [path.relative(dist, file).split(path.sep).join('/'), await fs.readFile(file)])));
   if (!buffers.has('index.html')) return { ok: false, errors: ['Run npm run build: dist/index.html is missing.'], checks: [] };
-  const errors = [];
-  const checks = [];
+  const errors = []; const checks = [];
   const check = (id, issues, details = {}) => {
     checks.push({ id, status: issues.length ? 'failed' : 'passed', ...details, issues });
     errors.push(...issues.map(issue => `${id}: ${issue}`));
@@ -31,15 +29,13 @@ export async function inspectArtifact(root, manifests) {
   const duplicates = ids.filter((id,i) => ids.indexOf(id) !== i);
   const absent = [...new Set([...anchors, ...manifests.map(m => m.demoEntry.slice(1))].filter(id => !ids.includes(id)))];
   check('html-structure', [...duplicates.map(id => `Duplicate ID ${id}`), ...absent.map(id => `Missing anchor #${id}`)]);
-  const images = [...markup.matchAll(/<img\b[^>]*>/g)].map(m=>m[0]);
-  check('accessibility-baseline', [
+  const images = [...markup.matchAll(/<img\b[^>]*>/g)].map(m=>m[0]); check('accessibility-baseline', [
     ...images.filter(tag=>!/\salt(?:\s|=|\/?>)/i.test(tag)).map(tag=>`Image without alt: ${tag.slice(0,100)}`),
     ...(!/<html\b[^>]*lang="zh-CN"/.test(markup) ? ['Missing document language'] : []),
     ...(!markup.includes('class="skip-link"') ? ['Missing skip link'] : []),
   ]);
 
-  const missing = [];
-  const remote = [];
+  const missing = []; const remote = [];
   function reference(from, value, runtime = true) {
     if (!value || /^(?:#|%23|data:|blob:|mailto:|tel:)/.test(value)) return;
     if (/^(?:https?:)?\/\//.test(value)) { if (runtime) remote.push(`${from}: ${value}`); return; }

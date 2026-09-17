@@ -12,8 +12,7 @@ const contributor = object({ displayName: text, role: text, order: { type: 'inte
 const entity = (prefix, fields, required) => object({
   id: { type: 'string', pattern: `^${prefix}:[a-zA-Z0-9][a-zA-Z0-9_-]*$` },
   title: local, slug: { type: 'string', pattern: '^[a-z0-9][a-z0-9-]*$' },
-  contributors: array(contributor), evidenceRefs: refs, verifiedAt: date,
-  ...fields,
+  contributors: array(contributor), evidenceRefs: refs, verifiedAt: date, ...fields,
 }, ['id', 'evidenceRefs', ...required]);
 
 const definitions = {
@@ -82,6 +81,5 @@ export const contentSchema = {
   ...object({
     ...Object.fromEntries(Object.entries(collectionTypes).map(([name, type]) => [name, array({ $ref: `#/$defs/${type}` })])),
     settings: { $ref: '#/$defs/settings' }, 'member-paths': { $ref: '#/$defs/paths' },
-  }),
-  $defs: definitions,
+  }), $defs: definitions,
 };

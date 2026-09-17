@@ -10,8 +10,7 @@ export function mount(root) {
       projectCards.forEach((card) => {
         const categories = (card.dataset.category || "").split(/\s+/);
         const hidden = filter !== "all" && !categories.includes(filter);
-        card.hidden = hidden;
-        if (!hidden) visibleCount += 1;
+        card.hidden = hidden; if (!hidden) visibleCount += 1;
       });
       if (projectCount) projectCount.textContent = `${String(visibleCount).padStart(2, "0")} SHOWN`;
     });

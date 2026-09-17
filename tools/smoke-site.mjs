@@ -11,18 +11,14 @@ import { loadContent } from '../packages/content-loader-git/index.mjs';
 export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smoke'), testFailure = true } = {}) {
   await fs.mkdir(outputDirectory, {recursive:true});
   const server = await preview({root:path.join(ROOT,'apps/site'),logLevel:'silent',server:{host:'127.0.0.1',port:0}});
-  const url = `http://127.0.0.1:${server.port}`;
-  let browser;
+  const url = `http://127.0.0.1:${server.port}`; let browser;
   const report = {ok:false,createdAt:new Date().toISOString(),pages:[],faultIsolation:null};
   try {
     browser = await chromium.launch({headless:true,channel:process.env.AITA_BROWSER_CHANNEL || (process.platform==='win32'?'msedge':undefined),args:['--enable-unsafe-swiftshader']});
-    const content = loadContent();
-    const chapters = await chapterManifests();
+    const content = loadContent(); const chapters = await chapterManifests();
     for (const width of [1440,390]) {
       const page = await browser.newPage({viewport:{width,height:900},reducedMotion:width===390?'reduce':'no-preference'});
-      const errors=[], remote=[], missing=[];
-      const networkRequests=[];
-      let releaseGba;
+      const errors=[], remote=[], missing=[]; const networkRequests=[]; let releaseGba;
       const delayedGba=new Promise(resolve=>{releaseGba=resolve;});
       page.on('pageerror',error=>errors.push(error.message));
       page.on('response',response=>{if(response.status()>=400)missing.push(`${response.status()} ${response.url()}`);});
@@ -30,10 +26,8 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
         const request=route.request().url();
         if (/^https?:/.test(request) && !request.startsWith(url+'/')) {remote.push(request);return route.abort();}
         if (request.includes('/assets/images/partners/network-')) networkRequests.push(request);
-        if (width===1440 && request.includes('/network-gba.webp')) await delayedGba;
-        return route.continue();
-      });
-      await page.goto(url);
+        if (width===1440 && request.includes('/network-gba.webp')) await delayedGba; return route.continue();
+      }); await page.goto(url);
       await page.waitForFunction(()=>['top','about','projects','outputs','network','activities','main-content'].every(id=>document.getElementById(id)?.dataset.enhanced==='true'));
       assert.equal(await page.locator('#join').getAttribute('data-enhanced'),'waiting','Distant canvas should not initialize during the first load');
       for (const src of await page.locator('.hero-background').evaluateAll(images=>images.map(img=>img.currentSrc))) assert.match(src,/\.webp$/);
@@ -63,15 +57,13 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       assert.equal(await page.locator('.project-card').count(),currentProjects.length);
       await page.locator('[data-filter="medical"]').click();
       assert.equal(await page.locator('.project-card:not([hidden])').count(),currentProjects.filter(p=>p.category==='medical').length);
-      await page.locator('[data-filter="all"]').click();
-      await page.locator('.gallery-card').first().click();
+      await page.locator('[data-filter="all"]').click(); await page.locator('.gallery-card').first().click();
       assert.equal(await page.locator('#activities dialog[open]').count(),1);
       assert.equal(await page.locator('#activities dialog img').evaluate(img=>img.src),await page.locator('.gallery-card img').first().evaluate(img=>img.currentSrc),'Lightbox should reuse the selected image');
       await page.locator('[data-lightbox-close]').click();
       await page.locator('#partner-search').fill('Datawhale');
       assert.equal(await page.locator('.partner-index-item:not([disabled])').count(),1);
-      await page.locator('#partner-search').fill('');
-      await page.locator('.award-records summary').click();
+      await page.locator('#partner-search').fill(''); await page.locator('.award-records summary').click();
       assert.equal(await page.locator('.award-records[open] li').count(),content.achievements.filter(a=>['competition','award','grant'].includes(a.type)).length);
       await page.locator('.award-records summary').click();
       assert.deepEqual(await page.locator('[data-join-link]').evaluateAll(links=>links.map(link=>link.getAttribute('href'))),Array(3).fill(content.recruitment[0].formUrl||'#join'));
@@ -83,8 +75,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
         await page.locator('.mobile-menu a[href="#paths"]').click();
         assert.equal(await page.locator('[data-menu-toggle]').getAttribute('aria-expanded'),'false');
       }
-      await page.locator('#join a[href="#top"]').click();
-      await page.waitForFunction(()=>scrollY<8);
+      await page.locator('#join a[href="#top"]').click(); await page.waitForFunction(()=>scrollY<8);
       await page.evaluate(()=>document.activeElement?.blur());
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Horizontal overflow');
       assert.deepEqual({errors,remote,missing},{errors:[],remote:[],missing:[]});
@@ -103,9 +94,7 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
           if(this.id==='research-field')throw new Error('Injected Research initialization failure');
           return getContext.apply(this,args);
         };
-      });
-      await page.goto(url);
-      await page.locator('#research').scrollIntoViewIfNeeded();
+      }); await page.goto(url); await page.locator('#research').scrollIntoViewIfNeeded();
       await page.waitForFunction(()=>document.querySelector('#research').dataset.enhanced==='false' && ['outputs','projects','main-content'].every(id=>document.getElementById(id).dataset.enhanced==='true'));
       await page.locator('[data-filter="agents"]').click();
       assert.equal(await page.locator('.project-card:not([hidden])').count(),content.projects.filter(p=>p.category==='agents'&&p.status!=='archived').length);
@@ -114,14 +103,11 @@ export async function inspectSite({ outputDirectory = path.join(ROOT,'.work/smok
       report.faultIsolation='Research failure is contained; navigation, project filter, Outputs and Join initialize.';
       await page.close();
     }
-    report.ok=true;
-    return report;
+    report.ok=true; return report;
   } catch(error) {
-    report.error=error.message;
-    throw error;
+    report.error=error.message; throw error;
   } finally {
-    await browser?.close();
-    await server.stop();
+    await browser?.close(); await server.stop();
     await fs.writeFile(path.join(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');
   }
 }

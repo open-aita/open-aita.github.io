@@ -14,8 +14,7 @@ export function mount(root) {
       if (typeof lightbox.showModal === "function") lightbox.showModal();
       else lightbox.setAttribute("open", "");
     });
-  });
-  lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
+  }); lightbox?.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
   lightbox?.addEventListener("click", (event) => {
     if (event.target === lightbox) closeLightbox();
   });

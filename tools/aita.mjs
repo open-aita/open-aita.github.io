@@ -13,8 +13,7 @@ const jsonMode = args.includes('--json');
 const cleanArgs = args.filter((arg) => arg !== '--json');
 
 function option(name) {
-  const index = cleanArgs.indexOf(name);
-  return index >= 0 ? cleanArgs[index + 1] : null;
+  const index = cleanArgs.indexOf(name); return index >= 0 ? cleanArgs[index + 1] : null;
 }
 
 function has(name) { return cleanArgs.includes(name); }
@@ -55,8 +54,7 @@ async function readInput(file) {
 async function main() {
   const [command, subcommand, third] = cleanArgs;
   if (!command || ['help','--help','-h'].includes(command)) {
-    emit({ ok: true, usage: usage() }, usage());
-    return;
+    emit({ ok: true, usage: usage() }, usage()); return;
   }
 
   if (command === 'describe') {
@@ -73,8 +71,7 @@ async function main() {
 
   if (command === 'task' && subcommand === 'schema') {
     if (!third) throw new AitaOperationError('AITA_OPERATION_REQUIRED', '缺少 Operation ID');
-    const task = await getTask(third);
-    const schema = operationSchema(task);
+    const task = await getTask(third); const schema = operationSchema(task);
     emit({ ok: true, operation: task.id, version: task.version, risk: task.risk, schemaPath: 'packages/domain/schema.mjs', schema });
     return;
   }
@@ -103,8 +100,7 @@ async function main() {
 
   if (command === 'query' && subcommand === 'entity') {
     if (!third) throw new AitaOperationError('AITA_ENTITY_ID_REQUIRED', '缺少永久实体 ID');
-    emit(await queryEntity(third));
-    return;
+    emit(await queryEntity(third)); return;
   }
 
   if (command === 'diff' && (subcommand === '--semantic' || cleanArgs.includes('--semantic'))) {
@@ -116,15 +112,13 @@ async function main() {
   if (command === 'verify') {
     const result = await verifyRepository();
     emit(result, result.ok ? `Verification passed: ${result.summary.passed} checks` : `Verification failed: ${result.summary.errorCount} errors`);
-    if (!result.ok) process.exitCode = 5;
-    return;
+    if (!result.ok) process.exitCode = 5; return;
   }
 
   if (command === 'recipe' && subcommand === 'test') {
     const result = await testRecipes();
     emit(result, result.ok ? `Recipe tests passed: ${result.passed}/${result.total}` : `Recipe tests failed: ${result.failures.length}`);
-    if (!result.ok) process.exitCode = 5;
-    return;
+    if (!result.ok) process.exitCode = 5; return;
   }
 
   if (command === 'ui' && subcommand === 'list') {
@@ -145,8 +139,7 @@ async function main() {
 
   if (command === 'preview' && subcommand === 'create') {
     const { createPreview } = await import('./preview-site.mjs');
-    emit(await createPreview());
-    return;
+    emit(await createPreview()); return;
   }
 
   throw new AitaOperationError('AITA_CLI_USAGE', `无法识别命令：${cleanArgs.join(' ')}`, { usage: usage() });

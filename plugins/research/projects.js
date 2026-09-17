@@ -1,5 +1,4 @@
 export function mount(root) {
-  // Project filtering.
   const filterButtons = [...root.querySelectorAll("[data-filter]")];
   const projectCards = [...root.querySelectorAll("[data-project-grid] .project-card")];
   const projectCount = root.querySelector("[data-project-count]");
@@ -17,5 +16,4 @@ export function mount(root) {
       if (projectCount) projectCount.textContent = `${String(visibleCount).padStart(2, "0")} SHOWN`;
     });
   });
-
 }

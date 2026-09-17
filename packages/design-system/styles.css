@@ -354,10 +354,6 @@
 
   /* -------------------------------------------------------- impact quote */
 
-  /* ------------------------------------------------------------ projects */
-  .status-dot--dev { color: var(--status-danger); }
-  .status-dot--dev::before { background: var(--status-danger); }
-
   /* ------------------------------------------------------------- outputs */
   .records-archive {
     border-top: 1px solid var(--border);

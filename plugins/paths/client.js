@@ -97,7 +97,7 @@ export function mount(root) {
         }
       }
     }
-    stroke(ctx, from = 0, to = this.length) {
+    stroke(ctx, from, to) {
       if (to <= from) return;
       if (from <= 0 && to >= this.length) ctx.stroke(this.path);
       else { ctx.beginPath(); this.trace(ctx, from, to); ctx.stroke(); }
@@ -112,9 +112,7 @@ export function mount(root) {
       if (!this.ctx) throw new Error('Canvas 2D unavailable');
       this.media = window.matchMedia('(prefers-reduced-motion: reduce)');
       this.reduced = this.media.matches;
-      this.paused = false;
       this.inView = true;
-      this.destroyed = false;
       this.raf = null;
       this.lastStamp = null;
       this.lastPaint = 0;
@@ -343,7 +341,7 @@ export function mount(root) {
       const walked = costToDistance(edge.cost0 + (this.time - edge.start) * edge.velocity);
       return clamp(walked - edge.travel, 0, edge.path.length);
     }
-    glowAt(x, y, diameter, alpha = 1) {
+    glowAt(x, y, diameter, alpha) {
       this.ctx.globalAlpha = alpha;
       this.ctx.drawImage(this.glow, x - diameter / 2, y - diameter / 2, diameter, diameter);
       this.ctx.globalAlpha = 1;
@@ -399,7 +397,7 @@ export function mount(root) {
       ctx.fillStyle = rgba(CONFIG.lightColor, .97 * alpha); ctx.fill();
     }
     render() {
-      if (this.destroyed || !this.edges) return;
+      if (!this.edges) return;
       const ctx = this.ctx;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -423,7 +421,7 @@ export function mount(root) {
       ctx.globalCompositeOperation = 'source-over';
     }
     canRun() {
-      return !this.destroyed && !this.paused && !this.reduced && this.inView && !document.hidden;
+      return !this.reduced && this.inView && !document.hidden;
     }
     sync() {
       if (!this.canRun()) {
@@ -447,45 +445,6 @@ export function mount(root) {
       }
       this.raf = requestAnimationFrame(this.frame);
     }
-    pause() { this.paused = true; this.sync(); }
-    play() { this.paused = false; this.sync(); }
-    restart() {
-      if (this.destroyed) return;
-      this.reset();
-      if (this.reduced) this.makeStatic();
-      this.render(); this.sync();
-    }
-    seek(seconds) {
-      if (!Number.isFinite(seconds) || seconds < 0 || seconds > 600) {
-        throw new RangeError('seconds must be between 0 and 600');
-      }
-      if (this.destroyed) return;
-      this.pause(); this.reset();
-      if (this.reduced) this.makeStatic();
-      else for (let i = 0, n = Math.round(seconds / STEP); i < n; i++) this.update(STEP);
-      this.render();
-    }
-    inspect() {
-      return {
-        time: this.time, paused: this.paused, reducedMotion: this.reduced,
-        compact: this.compact, edges: this.edges.length,
-        growing: this.edges.filter(e => e.state === 'growing').length,
-        reached: this.edges.filter(e => e.state === 'done' && !e.exit).length + 1,
-        generations: this.regions.map(r => r.generation),
-        canvas: [this.canvas.width, this.canvas.height],
-      };
-    }
-    destroy() {
-      if (this.destroyed) return;
-      this.pause(); this.destroyed = true;
-      this.resizeObserver.disconnect(); this.intersectionObserver.disconnect();
-      document.removeEventListener('visibilitychange', this.onVisibility);
-      this.media.removeEventListener('change', this.onMotion);
-      this.canvas.width = this.canvas.height = 1;
-      this.host.removeAttribute('data-ready');
-      this.edges = []; this.regions = []; this.base = [];
-    }
   }
-  const effect = new Paths(root.querySelector('.aita-paths'));
-  return () => effect.destroy();
+  new Paths(root.querySelector('.aita-paths'));
 }

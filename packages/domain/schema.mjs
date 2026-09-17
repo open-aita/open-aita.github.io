@@ -12,7 +12,7 @@ const contributor = object({ displayName: text, role: text, order: { type: 'inte
 const entity = (prefix, fields, required) => object({
   id: { type: 'string', pattern: `^${prefix}:[a-zA-Z0-9][a-zA-Z0-9_-]*$` },
   title: local, slug: { type: 'string', pattern: '^[a-z0-9][a-z0-9-]*$' },
-  contributors: array(contributor), evidenceRefs: refs, verifiedAt: date, maintainer: text,
+  contributors: array(contributor), evidenceRefs: refs, verifiedAt: date,
   ...fields,
 }, ['id', 'evidenceRefs', ...required]);
 
@@ -21,11 +21,11 @@ const definitions = {
     status: enumeration('unspecified', 'draft', 'active', 'completed', 'deployed', 'archived'),
     statusLabel: text, category: enumeration('medical', 'multimodal', 'systems', 'agents'),
     organizationIds: ids('org'), unresolvedOrganizationLabels: strings,
-    archiveReason: text, summary: local,
+    archiveReason: text,
   }, ['title', 'slug', 'status', 'category', 'organizationIds']),
   organization: entity('org', {
     name: local, category: text, listedPartner: { type: 'boolean' }, featured: { type: 'boolean' },
-    shortName: text, mapName: text, stripCategory: text, mapCategory: text, mapFamily: text, url,
+    shortName: text, mapName: text, stripCategory: text, mapCategory: text, mapFamily: text,
     mapLocation: object({ address: text, pinBasis: text, precision: text, precisionKind: text,
       lon: { type: ['number', 'null'] }, lat: { type: ['number', 'null'] } }),
   }, ['name', 'category', 'listedPartner']),
@@ -33,7 +33,7 @@ const definitions = {
     type: enumeration('paper', 'patent', 'softwareCopyright', 'openSystem', 'openSource'),
     citation: text, year: { type: ['integer', 'null'], minimum: 1900 },
     status: enumeration('draft', 'recorded', 'preprint', 'accepted', 'published', 'authorized', 'registered', 'archived'),
-    statusLabel: text, labels: strings, url, sourceTitle: text, summary: local,
+    statusLabel: text, labels: strings, url, sourceTitle: text,
     grade: text, featuredRank: { type: 'integer', minimum: 1 },
     display: object({ venue: text, linkLabel: text }, []),
   }, ['title', 'type', 'status']),
@@ -41,11 +41,11 @@ const definitions = {
     type: enumeration('nationalInnovationProject', 'provincialInnovationProject', 'competition', 'award', 'grant'), level: text,
   }, ['title', 'type']),
   event: entity('event', {
-    kind: text, mediaAssetIds: ids('media'), summary: local, date: { ...date, type: ['string', 'null'] },
+    kind: text, mediaAssetIds: ids('media'),
     display: object({ title: text, caption: text, label: text, variant: text }, ['title']),
   }, ['title', 'kind', 'mediaAssetIds']),
   news: entity('news', {
-    summary: local, relatedEntityIds: strings, status: enumeration('draft', 'published', 'archived'), date,
+    summary: local, status: enumeration('draft', 'published', 'archived'),
   }, ['title']),
   recruitment: entity('recruitment', {
     status: enumeration('draft', 'open', 'closed', 'archived'), summary: local,
@@ -54,8 +54,7 @@ const definitions = {
   media: entity('media', {
     path: { type: 'string', pattern: '^assets/[^?#]+$' }, fallbackPath: { type: 'string', pattern: '^assets/[^?#]+$' },
     alt: local, source: text, width: { type: 'integer', minimum: 1 }, height: { type: 'integer', minimum: 1 },
-    copyrightStatus: text, contentHash: text,
-    focalPoint: object({ x: { type: 'number', minimum: 0, maximum: 1 }, y: { type: 'number', minimum: 0, maximum: 1 } }),
+    copyrightStatus: text,
   }, ['path', 'alt', 'source', 'width', 'height']),
   evidence: object({ id: { type: 'string', pattern: '^evidence:' }, type: text, title: text, path: text, verifiedAt: date }),
   redirect: object({ id: { type: 'string', pattern: '^redirect:' }, from: { type: 'string', pattern: '^/' }, to: { type: 'string', pattern: '^/' }, statusCode: enumeration(301, 308) }),

@@ -37,7 +37,7 @@ const REVEAL_SECONDS = 1.2;
 const FORMATION_MORPH_PERIOD = 36;
 const FORMATION_MORPH_SPAN = 36;
 const FORMATION_TIME_OFFSET = 43.8;
-// Scene time runs slower than real time: one shape cycle takes a while.
+// Scene time runs slower than real time.
 const CLOCK_SCALE = REVEAL_SECONDS / 10;
 
 const MAX_SWARM_WIDTH = 1920;
@@ -282,16 +282,12 @@ const cameraInverse = m4();
 const cameraProjection = m4();
 const viewProjection = m4();
 const cameraState = {
-  position: [0, 0, CAMERA_DISTANCE],
-  rotationX: 0,
-  roll: 0,
   aspect: 1,
   zoom: 1,
   view: null,
 };
 
 function updateCameraTransform(layout) {
-  cameraState.position = layout.camera;
   const eye = layout.camera;
   const len = Math.hypot(eye[0], eye[1], eye[2]) || 1;
   // Look at the origin, then add the narrow-layout roll.
@@ -362,7 +358,6 @@ const es3 = source => `#version 300 es\n${source.replace(/^\n/, '')}`;
 const FORMATION_GLSL = `
   uniform float uTime;
   uniform float uReveal;
-  uniform float uScrollProgress;
   uniform float uScale;
   uniform float uShapeThickness;
 
@@ -440,8 +435,7 @@ const FORMATION_GLSL = `
   }
 
   vec3 agentPosition(vec4 agent) {
-    float scrollScale = 1.0 + 0.0033 * uScrollProgress;
-    return formationPositionAt(agent, uTime) * uScale * scrollScale;
+    return formationPositionAt(agent, uTime) * uScale;
   }
 `;
 
@@ -470,7 +464,7 @@ const POINT_VERTEX = `
     float streakHash = fract(aAgent.x * 5.391 + character * 11.77 + aAgent.y * 3.31);
     vStreak = step(0.972, streakHash);
     vStreakPurple = step(0.5, fract(streakHash * 977.0));
-    vec3 streakAhead = formationPositionAt(aAgent, uTime + 0.3) * uScale * (1.0 + 0.0033 * uScrollProgress);
+    vec3 streakAhead = formationPositionAt(aAgent, uTime + 0.3) * uScale;
     vec2 streakDelta = (modelViewMatrix * vec4(streakAhead, 1.0)).xy - viewPosition.xy;
     float streakDeltaLen = length(streakDelta);
     vStreakDir = streakDeltaLen > 1e-5 ? streakDelta / streakDeltaLen : vec2(1.0, 0.0);
@@ -491,7 +485,7 @@ const POINT_VERTEX = `
     size += smoothstep(0.976, 1.0, character) * 1.2;
 
     vOpacity = mix(0.57, 0.88, focalDepth) *
-      mix(0.74, 1.0, character) * cameraClearance * formationVisibility * (1.0 - uScrollProgress);
+      mix(0.74, 1.0, character) * cameraClearance * formationVisibility;
 
     // Scattered phases give the coloured filaments a soft, independent twinkle;
     // scene time drives it, so pausing pauses the shimmer too.
@@ -626,8 +620,6 @@ const BLIT_FRAGMENT = `
 /* --------------------------------------------------------------------- theme */
 
 const THEME_VARIABLES = [['--color-background', '#ffffff'], ['--color-primary-100', '#000000']];
-const DARK_INFECTION = '#ff1838';
-const LIGHT_INFECTION = '#be102b';
 
 function parseColor(value) {
   const hex = String(value).trim().replace('#', '');
@@ -651,7 +643,6 @@ function readTheme() {
     background,
     ink,
     dark,
-    infection: parseColor(dark ? DARK_INFECTION : LIGHT_INFECTION).map(toLinear),
     // Darker ink needs slightly more opacity to read against a light ground.
     contrast: 1.18 + (1.0 - 1.18) * smoothstep(0.25, 0.75, luminance),
   };
@@ -660,13 +651,8 @@ function readTheme() {
 /* ------------------------------------------------------------------ defaults */
 
 const DEFAULT_SETTINGS = {
-  particles: true,
-  dynamicParticles: true,
-  density: 1,
-  particleLimit: AGENT_COUNT,
   maxWidth: MAX_SWARM_WIDTH,
   postprocessing: true,
-  multisampling: true,
   // Sprite size in device pixels per unit of agent size.
   pointGain: 1.3,
   // Radius, in render-target texels, of the widest bokeh disc, and how much of
@@ -686,14 +672,13 @@ const DEFAULT_SETTINGS = {
 };
 
 function dynamicCount(width, height, capacity, settings) {
-  const limit = Math.min(AGENT_COUNT, capacity, settings.particleLimit);
-  if (!settings.particles || width <= 0 || height <= 0 || limit <= 0) return 0;
-  if (!settings.dynamicParticles) return limit;
+  const limit = Math.min(AGENT_COUNT, capacity);
+  if (width <= 0 || height <= 0 || limit <= 0) return 0;
   const layout = swarmLayout(width, height, settings.maxWidth);
   const reference = swarmLayout(REFERENCE_WIDTH, REFERENCE_HEIGHT, settings.maxWidth);
   const relative = height * layout.scale / FOCAL_PLANE_HEIGHT;
   const baseline = REFERENCE_HEIGHT * reference.scale / FOCAL_PLANE_HEIGHT;
-  const scaled = AGENT_COUNT * settings.density * (relative / baseline) ** 2 * layout.shortAxisScale;
+  const scaled = AGENT_COUNT * (relative / baseline) ** 2 * layout.shortAxisScale;
   return Math.min(limit, Math.max(PARTICLE_FLOOR, PARTICLE_STEP * Math.round(scaled / PARTICLE_STEP)));
 }
 
@@ -736,7 +721,7 @@ function buildProgram(gl, vertexSource, fragmentSource) {
 export function createCloudField(canvas, options = {}) {
   const gl = canvas.getContext('webgl2', {
     alpha: false,
-    antialias: options.antialias !== false,
+    antialias: true,
     depth: true,
     powerPreference: 'high-performance',
   });
@@ -841,8 +826,8 @@ export function createCloudField(canvas, options = {}) {
 
   const state = {
     width: 1, height: 1, dpr: 1,
-    count: 0, capacity: AGENT_COUNT,
-    elapsed: 0, scrollProgress: 0,
+    count: 0,
+    elapsed: 0,
     running: false, handle: 0, lastFrame: 0,
     narrowBox: { x: 0, y: 0, width: 1, height: 1 },
     framingReference: null,
@@ -862,10 +847,9 @@ export function createCloudField(canvas, options = {}) {
     for (const agent of samplePoints) {
       sampleFormation(agent, sceneTime, framingScratch, layout.thickness);
       // Scale, then the node's own short-axis squeeze, then tilt and lift.
-      const sx = framingScratch[0] * layout.scale;
+      const x = framingScratch[0] * layout.scale;
       const sy = framingScratch[1] * layout.scale * layout.shortAxisScale;
       const sz = framingScratch[2] * layout.scale;
-      const x = sx;
       const y = framingRotation[5] * sy + framingRotation[9] * sz + layout.centerY;
       const z = framingRotation[6] * sy + framingRotation[10] * sz;
       const depth = viewDistance(x, y, z);
@@ -964,7 +948,6 @@ export function createCloudField(canvas, options = {}) {
     gl.uniformMatrix4fv(point.locations.projectionMatrix, false, cameraProjection);
     gl.uniform1f(point.locations.uTime, sceneNow);
     gl.uniform1f(point.locations.uReveal, revealAmount(state.elapsed));
-    gl.uniform1f(point.locations.uScrollProgress, state.scrollProgress);
     gl.uniform1f(point.locations.uScale, layout.scale);
     gl.uniform1f(point.locations.uShapeThickness, layout.thickness);
     gl.uniform1f(point.locations.uPixelRatio, state.dpr);
@@ -974,12 +957,8 @@ export function createCloudField(canvas, options = {}) {
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
-    gl.depthMask(true);
-    gl.disable(gl.CULL_FACE);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.disable(gl.SCISSOR_TEST);
-    gl.colorMask(true, true, true, true);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, agents);
     gl.enableVertexAttribArray(0);
@@ -1079,7 +1058,6 @@ export function createCloudField(canvas, options = {}) {
     const dpr = Math.min(maxPixelRatio, window.devicePixelRatio || 1);
     const geometryChanged = width !== state.width || height !== state.height || dpr !== state.dpr || !targets.scene;
 
-    state.capacity = capacity;
     state.count = dynamicCount(width, height, capacity, settings);
     if (!geometryChanged) { syncAgents(); return false; }
 
@@ -1136,35 +1114,9 @@ export function createCloudField(canvas, options = {}) {
   measure();
 
   return {
-    canvas,
     start,
     stop,
-    resize: measure,
     configure,
-    refreshTheme() {
-      state.theme = readTheme();
-      render();
-    },
     get particleCount() { return state.count; },
-    get capacity() { return state.capacity; },
-    get running() { return state.running; },
-    get postprocessing() { return usePost; },
-    dispose() {
-      stop();
-      observer?.disconnect();
-      window.removeEventListener('resize', onResize);
-      releaseTargets();
-      for (const entry of [point, coc, bokeh, blit]) gl.deleteProgram(entry.program);
-      for (const buffer of [agents, quad]) gl.deleteBuffer(buffer);
-    },
   };
 }
-
-export const CLOUD_FIELD = {
-  AGENT_COUNT,
-  PARTICLE_FLOOR,
-  PARTICLE_STEP,
-  MAX_SWARM_WIDTH,
-  NARROW_BREAKPOINT,
-  DEFAULT_SETTINGS,
-};

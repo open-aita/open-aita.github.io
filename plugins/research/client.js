@@ -41,7 +41,7 @@ export function mount(root) {
       const t = clamp((value - start) / (end - start), 0, 1);
       return t * t * (3 - 2 * t);
     };
-    const fieldHash = (x, y, seed = 0) => {
+    const fieldHash = (x, y, seed) => {
       const value = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
       return value - Math.floor(value);
     };

@@ -2,16 +2,6 @@ export function mount() {
 const doc = document;
 const body = doc.body;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // Header state.
-  const header = doc.querySelector("[data-header]");
-  const updateScrollUI = () => {
-    const y = window.scrollY || doc.documentElement.scrollTop;
-    header?.classList.toggle("is-scrolled", y > 16);
-  };
-  updateScrollUI();
-  window.addEventListener("scroll", updateScrollUI, { passive: true });
-  window.addEventListener("resize", updateScrollUI, { passive: true });
-
   // Mobile navigation.
   const menuButton = doc.querySelector("[data-menu-toggle]");
   const mobileMenu = doc.querySelector("[data-mobile-menu]");

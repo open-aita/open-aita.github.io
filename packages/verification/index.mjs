@@ -5,7 +5,7 @@ import { validateContent, operationSchema, validateSchema } from '../domain/inde
 import { ROOT, readJson, listContentCollections, getTaskRegistry, chapterManifests } from '../operations-core/index.mjs';
 import { inspectArtifact, filesUnder } from './artifact.mjs';
 
-export async function verifyRepository({ changed = false, includeRecipes = true } = {}) {
+export async function verifyRepository() {
   const checks = [];
   const errors = [];
   const check = (id, issues, details = {}) => {
@@ -69,11 +69,9 @@ export async function verifyRepository({ changed = false, includeRecipes = true 
   const artifact = await inspectArtifact(ROOT, manifests);
   checks.push(...artifact.checks);
   errors.push(...artifact.errors.map(message=>({code:'artifact',message})));
-  if (includeRecipes) {
-    const recipes = await testRecipes();
-    check('recipe-tests', recipes.failures.map(f=>`${f.recipe}: ${f.errors.join('; ')}`), { total: recipes.total, passed: recipes.passed });
-  }
-  return { ok: errors.length===0, scope: 'full', changedRequested: changed,
+  const recipes = await testRecipes();
+  check('recipe-tests', recipes.failures.map(f=>`${f.recipe}: ${f.errors.join('; ')}`), { total: recipes.total, passed: recipes.passed });
+  return { ok: errors.length===0, scope: 'full',
     summary: {passed:checks.filter(c=>c.status==='passed').length,failed:checks.filter(c=>c.status==='failed').length,errorCount:errors.length},
     checks, errors, nextActions: errors.length?['fix-errors','rebuild','verify']:['review-current-preview'] };
 }

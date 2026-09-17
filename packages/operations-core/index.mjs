@@ -218,12 +218,12 @@ async function assertPlanPreconditions(task, input) {
   }
 }
 
-export async function plan(operationId, input, context = {}) {
+export async function plan(operationId, input) {
   const task = await getTask(operationId);
   await validateOperationInput(task, input);
   await assertPlanPreconditions(task, input);
   await previewOperation(task, input);
-  const baseRevision = context.baseRevision ?? await sourceRevision();
+  const baseRevision = await sourceRevision();
   const change = plannedChange(task, input);
   const payload = {
     schemaVersion: 'aita.change-plan/v1',
@@ -262,7 +262,7 @@ function entityIndex(items, id) {
   return items.findIndex((item) => item && item.id === id);
 }
 
-export function transformDocument(task, input, current) {
+function transformDocument(task, input, current) {
   const relativePath = task.allowedWritePaths[0];
   const document = structuredClone(current);
   const mode = task.target.mode;

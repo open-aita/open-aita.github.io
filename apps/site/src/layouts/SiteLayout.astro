@@ -27,7 +27,7 @@ const { content } = Astro.props;
 </head>
 <body>
 <a class="skip-link" href="#main-content">跳到正文</a>
-<header class="site-header" data-header="">
+<header class="site-header">
 <div class="header-inner">
 <Brand brand={content.settings.brand} />
 <nav aria-label="主要导航" class="primary-nav">{primary.map(c => <a href={c.demoEntry}><span>{c.navigation.primaryLabel}</span><small>{String(c.navigation.primaryOrder).padStart(2,'0')}</small></a>)}<a href="https://open-aita.pages.dev/"><span>BLOG</span><small>↗</small></a></nav>

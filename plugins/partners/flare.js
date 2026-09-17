@@ -14,7 +14,7 @@ export function createFlare(reducedMotion) {
   const bursts = new Map();
 
   function stop(burst) {
-    for (const animation of burst.playing) { try { animation.cancel(); } catch { /* already finished */ } }
+    for (const animation of burst.playing) animation.cancel();
     for (const node of burst.nodes) node.remove();
   }
 

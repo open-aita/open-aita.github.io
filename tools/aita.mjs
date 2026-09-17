@@ -10,7 +10,7 @@ import { operationSchema } from '../packages/domain/index.mjs';
 
 const args = process.argv.slice(2);
 const jsonMode = args.includes('--json');
-const cleanArgs = args.filter((arg) => arg !== '--json' && arg !== '--non-interactive');
+const cleanArgs = args.filter((arg) => arg !== '--json');
 
 function option(name) {
   const index = cleanArgs.indexOf(name);
@@ -34,7 +34,7 @@ function usage() {
   `  aita task apply <plan.json> [--dry-run] --json\n` +
   `  aita query entity <permanent-id> --json\n` +
   `  aita diff --semantic [plan-id] --json\n` +
-  `  aita verify [--changed] --json\n` +
+  `  aita verify --json\n` +
   `  aita recipe test --json\n` +
   `  aita ui list --json\n` +
   `  aita ui inspect <component> --json\n` +
@@ -82,8 +82,7 @@ async function main() {
   if (command === 'task' && subcommand === 'plan') {
     if (!third) throw new AitaOperationError('AITA_OPERATION_REQUIRED', '缺少 Operation ID');
     const input = await readInput(option('--input'));
-    const baseRevision = option('--base-revision') ?? undefined;
-    const changePlan = await plan(third, input, { baseRevision });
+    const changePlan = await plan(third, input);
     const output = option('--output');
     if (output) {
       const absolute = path.resolve(process.cwd(), output);
@@ -115,7 +114,7 @@ async function main() {
   }
 
   if (command === 'verify') {
-    const result = await verifyRepository({ changed: has('--changed'), includeRecipes: true });
+    const result = await verifyRepository();
     emit(result, result.ok ? `Verification passed: ${result.summary.passed} checks` : `Verification failed: ${result.summary.errorCount} errors`);
     if (!result.ok) process.exitCode = 5;
     return;
@@ -141,15 +140,6 @@ async function main() {
     const component = registry.components[third];
     if (!component) throw new AitaOperationError('AITA_COMPONENT_UNKNOWN', `未知组件：${third}`);
     emit({ ok: true, name: third, component, propsDefinition: component.source, validation: 'npm run check' });
-    return;
-  }
-
-  if (command === 'ui' && subcommand === 'validate') {
-    const result = await verifyRepository({ changed: has('--changed'), includeRecipes: false });
-    const uiChecks = result.checks.filter((check) => ['component-registry','accessibility-baseline','performance-budget','html-structure','local-assets','build-freshness'].includes(check.id));
-    const ok = uiChecks.length === 6 && uiChecks.every((check) => check.status === 'passed');
-    emit({ ok, checks: uiChecks });
-    if (!ok) process.exitCode = 5;
     return;
   }
 

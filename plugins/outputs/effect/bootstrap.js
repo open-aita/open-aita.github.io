@@ -31,9 +31,13 @@ const root = document.getElementById('hero-root');
 
 function readOverride() {
   const params = new URLSearchParams(window.location.search);
-  const value = params.has(OVERRIDE_PARAM)
-    ? params.get(OVERRIDE_PARAM)
-    : (() => { try { return window.localStorage.getItem(OVERRIDE_KEY); } catch { return null; } })();
+  let stored = null;
+  try {
+    stored = window.localStorage.getItem(OVERRIDE_KEY);
+  } catch {
+    // Storage can be blocked; the override is optional either way.
+  }
+  const value = params.has(OVERRIDE_PARAM) ? params.get(OVERRIDE_PARAM) : stored;
   if (value === null) return null;
   const level = Number(value);
   return Number.isInteger(level) && level >= 0 && level <= 3 ? level : null;
@@ -62,7 +66,8 @@ function mount() {
   host.append(canvas);
   root.append(host);
 
-  const level = LEVELS[override === null ? 1 : Math.min(override, LEVELS.length) - 1];
+  let quality = override === null ? 1 : Math.min(override, LEVELS.length) - 1;
+  const level = LEVELS[quality];
   // ?post=0 renders without the depth-of-field pass; ?bokeh=, ?focus= and ?gain=
   // override its shaping values. Useful when comparing the flock against a
   // reference render.
@@ -94,7 +99,6 @@ function mount() {
 
   let requested = window.parent === window;
   let active = false;
-  let quality = override === null ? 1 : Math.min(override, LEVELS.length) - 1;
   let announced = false;
   let sampling = false;
 
@@ -160,4 +164,4 @@ function mount() {
   sync();
 }
 
-if (root) mount();
+mount();

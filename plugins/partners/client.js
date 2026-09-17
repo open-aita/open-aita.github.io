@@ -6,8 +6,6 @@ import { createFlare } from './flare.js';
 export function mount(root) {
   'use strict';
 
-  if (!root) return;
-
   const CLOUDS = {"main":{"bounds":[-12,15,191.5,80],"size":[2442,780],"count":24359},"gba":{"bounds":[110.45,20.85,117.75,24.5],"size":[1360,680],"count":10042}};
 
   const partners = JSON.parse(root.querySelector('[data-network-data]').textContent);
@@ -127,7 +125,7 @@ export function mount(root) {
     return {x:0, y:(containerH-h)/2, width:w, height:h};
   }
 
-  function coverRect(containerW, containerH, dataW, dataH, focusX=.5, focusY=.5) {
+  function coverRect(containerW, containerH, dataW, dataH, focusX, focusY) {
     const dataAspect = dataW / dataH;
     const boxAspect = containerW / containerH;
     if (boxAspect > dataAspect) {
@@ -161,7 +159,6 @@ export function mount(root) {
       ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height);
       canvas.classList.add('is-ready');
     }
-    return rect;
   }
 
   function loadBorders() {
@@ -276,7 +273,7 @@ export function mount(root) {
     fireFlares(flares.filter(spec => spec.fired && onScreen(spec.target)));
   }
 
-  function svgEl(tag, attrs={}) {
+  function svgEl(tag, attrs) {
     const el = document.createElementNS('http://www.w3.org/2000/svg',tag);
     for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,String(v));
     return el;

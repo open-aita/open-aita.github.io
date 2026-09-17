@@ -13,7 +13,7 @@ export function mount(root) {
     let joinLastDraw = 0;
     let joinVisible = false;
 
-    const joinHash = (x, y, seed = 0) => {
+    const joinHash = (x, y, seed) => {
       const value = Math.sin(x * 127.1 + y * 311.7 + seed * 71.9) * 43758.5453;
       return value - Math.floor(value);
     };

@@ -1,14 +1,11 @@
 import { prepareEffect } from "../../packages/kernel/effects.js";
 export function mount(root) {
-  const doc = document;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-cloud", { warmup: true });
-  // Deterministic folded particle surface for the intellectual-property panel.
+  prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-cloud", { warmup: true });  // Deterministic folded particle surface for the intellectual-property panel.
   const ipCanvas = root.querySelector("#ip-particle-field");
   if (ipCanvas instanceof HTMLCanvasElement) {
     const ipContext = ipCanvas.getContext("2d", { alpha: true });
 
-    const hash = (x, y, seed = 0) => {
+    const hash = (x, y, seed) => {
       const value = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
       return value - Math.floor(value);
     };
@@ -27,7 +24,6 @@ prepareEffect(root.querySelector("[data-output-cloud-frame]"), "aita:output-clou
     };
 
     const drawIpField = () => {
-      if (!ipContext) return;
       const rect = ipCanvas.getBoundingClientRect();
       const width = Math.max(1, rect.width);
       const height = Math.max(1, rect.height);

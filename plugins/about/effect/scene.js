@@ -12,8 +12,6 @@ import * as THREE from './vendor/three.module.js';
 const Q = new URLSearchParams(location.search);
 const LITE = Q.has('lite');
 const T0 = parseFloat(Q.get('t') || '0');
-// Keep the collaboration graph stable when the parent grid crosses a breakpoint.
-
 const N = Math.min(1024, parseInt(Q.get('n')) || (LITE ? 360 : 480));  // 协作节点(≤宿主纹理容量)
 const DUST = parseInt(Q.get('dust')) || (LITE ? 192 : 256); // 尘埃场边长(² = 数量)
 const LINK_R = 1.05;                                    // 连线阈值
@@ -149,7 +147,6 @@ const pos = new Float32Array(N*3);
 const vel = new Float32Array(N*3);
 const heat = new Float32Array(N);          // 0..1 确认热度
 const confirmed = new Uint8Array(N);
-const confirmedAt = new Float32Array(N);
 const relDelay = new Float32Array(N);
 const sizeMul = new Float32Array(N);
 const perm = new Uint16Array(N);           // agent → 构形槽位
@@ -301,7 +298,6 @@ let linkCount = 0;
    ============================================================ */
 let round = 0, proposer = 0, verified = false, verifiedAt = -1;
 let glowPulse = 0, proofOpacity = 0, formation = 0;
-const rngRound = mulberry32(1);
 
 function resetRound(r){
   round = r;
@@ -314,7 +310,7 @@ function resetRound(r){
   }
   proposer = Math.floor(rng()*N);
   for (let i = 0; i < N; i++){
-    confirmed[i] = 0; confirmedAt[i] = 0;
+    confirmed[i] = 0;
     relDelay[i] = rng()*2.6;
     sizeMul[i] = 1;
   }
@@ -342,7 +338,6 @@ function bfs(hopLimit){
 
 /* ---------- 交互:光标力场 ---------- */
 const ndc = new THREE.Vector2(0, 0);
-const mouseWorld = new THREE.Vector3(999, 999, 0);
 const mouseLocal = new THREE.Vector3(999, 999, 0);
 let mouseOn = 0, mouseOnTarget = 0, idleTimer = 0;
 const ray = new THREE.Raycaster();
@@ -461,7 +456,6 @@ function frame(){
   ray.setFromCamera(ndc, camera);
   const hit = new THREE.Vector3();
   if (ray.ray.intersectPlane(planeZ, hit)){
-    mouseWorld.copy(hit);
     world.updateMatrixWorld();
     mouseLocal.copy(hit);
     world.worldToLocal(mouseLocal);
@@ -515,7 +509,7 @@ function frame(){
       if (confirmed[i]) continue;
       const dx = pos[i*3]-px, dy = pos[i*3+1]-py, dz = pos[i*3+2]-pz;
       if (mark[i] || dx*dx+dy*dy+dz*dz < waveR*waveR){
-        confirmed[i] = 1; confirmedAt[i] = time;
+        confirmed[i] = 1;
       }
     }
   }

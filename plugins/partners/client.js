@@ -411,10 +411,23 @@ export function mount(root) {
     updateUI(); scheduleRotation();
   }
 
+  // The first render lands while the reader is still scrolling toward the section. As one task it
+  // carried two canvas backing stores, two bitmap blits and ~290 nodes, which is a visible stall
+  // on a phone. One step per frame bounds what any single frame has to do; the drawing still
+  // happens in the same order, so the finished picture is the same one.
+  let renderStages = []; let stageFrame = 0;
+  const runStage = () => {
+    stageFrame = 0; const step = renderStages.shift(); if (!step) return;
+    step(); if (renderStages.length) stageFrame = requestAnimationFrame(runStage);
+  };
   function renderAll() {
     // A re-render means the projection moved, so retract anything still in flight.
-    flareGeneration += 1; flare.clear(); renderCloud($('#main-map'),'main'); renderCloud($('#gba-map'),'gba');
-    renderBorders(); renderMainOverlay(); renderGbaOverlay(); updateUI();
+    flareGeneration += 1; flare.clear();
+    renderStages = [
+      () => renderCloud($('#main-map'), 'main'), () => renderCloud($('#gba-map'), 'gba'),
+      renderBorders, renderMainOverlay, renderGbaOverlay, updateUI,
+    ];
+    if (!stageFrame) stageFrame = requestAnimationFrame(runStage);
   }
 
   buildIndex();

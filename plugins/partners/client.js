@@ -118,6 +118,32 @@ export function mount(root) {
     return {x:0, y:(containerH-h)/2, width:w, height:h};
   }
 
+  // What the regional panel is about: the partners it holds, with a margin so the outer markers do
+  // not sit on the edge of the frame. With nothing listed there is nothing to frame, so the region
+  // the cloud itself covers stands in.
+  const regional = (() => {
+    const listed = partners.filter(p => p.group === 'gba' && p.lon != null);
+    if (!listed.length) return CLOUDS.gba.bounds;
+    const lon = listed.map(p => p.lon), lat = listed.map(p => p.lat);
+    const padX = (Math.max(...lon) - Math.min(...lon)) * .12, padY = (Math.max(...lat) - Math.min(...lat)) * .12;
+    return [Math.min(...lon) - padX, Math.min(...lat) - padY, Math.max(...lon) + padX, Math.max(...lat) + padY];
+  })();
+
+  // The cloud covers a 7.3 x 3.65 degree frame and these partners sit in a 3.1 x 0.9 corner of it,
+  // so a panel that draws the whole frame leaves them in a fifth of its area. Zoom to their own
+  // bounds instead, never below the scale that fills the panel and never past the frame, so the
+  // drawing keeps its proportions whatever shape the panel takes.
+  function regionalRect(containerW, containerH, dataW, dataH) {
+    const [lon0, lat0, lon1, lat1] = CLOUDS.gba.bounds;
+    const left = (regional[0] - lon0) / (lon1 - lon0) * dataW, right = (regional[2] - lon0) / (lon1 - lon0) * dataW;
+    const top = (lat1 - regional[3]) / (lat1 - lat0) * dataH, bottom = (lat1 - regional[1]) / (lat1 - lat0) * dataH;
+    const scale = Math.max(Math.min(containerW / (right - left), containerH / (bottom - top)),
+      containerW / dataW, containerH / dataH);
+    const x = Math.min(Math.max((left + right - containerW / scale) / 2, 0), dataW - containerW / scale);
+    const y = Math.min(Math.max((top + bottom - containerH / scale) / 2, 0), dataH - containerH / scale);
+    return { x: -x * scale, y: -y * scale, width: dataW * scale, height: dataH * scale };
+  }
+
   function coverRect(containerW, containerH, dataW, dataH, focusX, focusY) {
     const dataAspect = dataW / dataH; const boxAspect = containerW / containerH;
     if (boxAspect > dataAspect) {
@@ -136,7 +162,7 @@ export function mount(root) {
     ctx.clearRect(0,0,cssW,cssH); const rect = key === 'gba'
       ? (cssW >= 760
           ? coverRect(cssW,cssH,cloud.size[0],cloud.size[1],.60,.50)
-          : {x:0, y:0, width:cssW, height:cssH})
+          : regionalRect(cssW,cssH,cloud.size[0],cloud.size[1]))
       : fitRect(cssW,cssH,cloud.size[0],cloud.size[1]);
     drawRects[key] = rect; // The retained source/browser export tool owns the point loops and glow pass.
     // One bitmap blit replaces 32,431 per-point paths during first scroll.
@@ -321,11 +347,15 @@ export function mount(root) {
       const angle = Math.atan2(p.display[1]*panel.clientHeight-anchor.y,p.display[0]*panel.clientWidth-anchor.x);
       const preferred = {x:anchor.x+72*Math.cos(angle),y:anchor.y+72*Math.sin(angle)};
       let end, bestScore = Infinity;
+      // The title and the foot of the panel are a fixed height, but a panel only as tall as the
+      // region is wide cannot spare both in full: take a share of the panel there instead, so the
+      // labels still have a band to spread into.
+      const insetTop = Math.min(78, panel.clientHeight*.3), insetBottom = Math.min(42, panel.clientHeight*.2);
       for (const radius of [34,58,82,106,130]) {
         for (let step=0;step<24;step++) {
           const a = angle+step*Math.PI/12;
           const point = {x:anchor.x+radius*Math.cos(a),y:anchor.y+radius*Math.sin(a)};
-          if (point.x<20 || point.x>panel.clientWidth-38 || point.y<78 || point.y>panel.clientHeight-42) continue;
+          if (point.x<20 || point.x>panel.clientWidth-38 || point.y<insetTop || point.y>panel.clientHeight-insetBottom) continue;
           const overlaps = placed.filter(pt=>Math.abs(pt.x-point.x)<38 && Math.abs(pt.y-point.y)<30).length;
           const score = overlaps*1e6+(point.x-preferred.x)**2+(point.y-preferred.y)**2;
           if (score<bestScore) {bestScore=score;end=point;}
@@ -340,10 +370,15 @@ export function mount(root) {
       'HONG KONG': {...project('gba',114.194,22.365),dx:72,dy:80},
       ...(byId.has('org:029') ? { JIEYANG: {...project('gba',byId.get('org:029').lon,byId.get('org:029').lat),dx:-18,dy:-102} } : {})
     };
+    const placedNames = [], insetTop = Math.min(58, panel.clientHeight*.25), insetFoot = panel.clientHeight - Math.min(44, panel.clientHeight*.2);
     for (const [city,pt] of Object.entries(cities)) {
       const el = panel.querySelector(`[data-city-label="${city}"]`); if (!el) continue;
       const x=Math.max(70,Math.min(panel.clientWidth-92,pt.x+pt.dx));
-      const y=Math.max(58,Math.min(panel.clientHeight-44,pt.y+pt.dy));
+      const wanted=pt.y+pt.dy; let y=Math.max(insetTop,Math.min(insetFoot,wanted));
+      // Two names pulled back from the same edge would print over each other — on a panel only as
+      // tall as the region is wide that is the usual outcome. Lift the later one a line.
+      while (wanted!==y && placedNames.some(n=>Math.abs(n.x-x)<100 && Math.abs(n.y-y)<15)) y-=16;
+      placedNames.push({x,y});
       el.style.left=`${x}px`; el.style.top=`${y}px`;
     }
   }

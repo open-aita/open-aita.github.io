@@ -289,7 +289,9 @@
   #network .hq-anchor-label { transform: translate(-100%, 8px); text-align: right; }
   #network .gba-meta { display: none; }
   #network .selection-panel { min-height: 420px; }
-  #network .gba-panel { min-height: 390px; }
+  /* The detail map is framed on the regional partners, so the panel is shaped like the region
+     rather than like the phone: a tall panel only adds empty sea above and below them. */
+  #network .gba-panel { min-height: 0; aspect-ratio: 3 / 2; }
   #network .partner-index-grid { grid-template-columns: 1fr; }
   #network .partner-index-item { min-height: 66px; }
   #network .index-copy strong { font-size: 13px; }

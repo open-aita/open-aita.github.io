@@ -116,16 +116,26 @@
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const smooth = (min, max, value) => {
       const t = clamp((value - min) / (max - min), 0, 1); return t * t * (3 - 2 * t);
-    }; const mixColor = (a, b, t) => a.map((channel, i) => channel + (b[i] - channel) * t);
+    };
     // NGC 2336 (NASA/ESA Hubble) informs the pale stellar bulge and dusty,
     // blue-grey overlap. Keep the site's outer violet arms, without a pink ring.
     // https://science.nasa.gov/image-detail/big-beautiful-and-blue-2/
-    const blendedDust = (radius, angle, base) => {
+    // Channels are mixed in place into a caller-owned array: the inner dust alone
+    // runs this for ~100k grains, and a per-call array is pure garbage.
+    const DUST_INNER = [1.00, 0.93, 0.76], DUST_MID = [0.76, 0.79, 0.84], DUST_OUTER = [0.42, 0.48, 0.72];
+    const blendedDust = (radius, angle, base, out) => {
       const r = radius + Math.sin(angle * 3 + radius * 4) * 0.055;
-      const stellar = mixColor([1.00, 0.93, 0.76], [0.76, 0.79, 0.84], smooth(0.24, 0.78, r));
-      const cool = mixColor(stellar, [0.42, 0.48, 0.72], smooth(0.52, 1.04, r));
-      return mixColor(cool, base, smooth(0.74, 1.38, r));
+      const toMid = smooth(0.24, 0.78, r);
+      const toOuter = smooth(0.52, 1.04, r);
+      const toArm = smooth(0.74, 1.38, r);
+      for (let channel = 0; channel < 3; channel += 1) {
+        const stellar = DUST_INNER[channel] + (DUST_MID[channel] - DUST_INNER[channel]) * toMid;
+        const cool = stellar + (DUST_OUTER[channel] - stellar) * toOuter;
+        out[channel] = cool + (base[channel] - cool) * toArm;
+      }
+      return out;
     };
+    const dustColor = [0, 0, 0];
     const clusters = Array.from({ length: 420 }, (_, index) => {
       const radius = 0.26 + random() * 2.16; const arm = index % 4;
       return {
@@ -168,19 +178,27 @@
         }
         const grain = random(); const light = 0.80 + random() * 0.20;
         const color = layer.min < 0.5 && layer.shape !== 2
-          ? blendedDust(radius, angle, layer.color) : layer.color;
+          ? blendedDust(radius, angle, layer.color, dustColor) : layer.color;
         const edgeAlpha = layer.bulge ? 1 - smooth(0.24, 0.90, radius) : 1;
         // Dust lanes interrupt the transition along curved, uneven strands.
         const dustWave = Math.sin(angle * 3 - Math.log(radius + 0.16) * 5.3
           + Math.sin(angle * 5 + radius * 7) * 0.38);
         const dustAlpha = 1 - smooth(0.45, 0.92, dustWave)
           * smooth(0.16, 0.34, radius) * (1 - smooth(0.80, 1.30, radius)) * 0.52;
-        particles.set([
-          Math.cos(angle) * radius, normal() * layer.depth, Math.sin(angle) * radius,
-          layer.size * (0.50 + grain * grain * 0.50), grain, layer.speed * (0.97 + grain * 0.06), layer.shape,
-          color[0] * light, color[1] * light, color[2] * light,
-          layer.alpha * (0.72 + grain * 0.28) * edgeAlpha * dustAlpha
-        ], cursor); cursor += stride;
+        // Written straight into the field: normal() advances the sequence, so the
+        // evaluation order here is part of the artwork, not an implementation detail.
+        particles[cursor] = Math.cos(angle) * radius;
+        particles[cursor + 1] = normal() * layer.depth;
+        particles[cursor + 2] = Math.sin(angle) * radius;
+        particles[cursor + 3] = layer.size * (0.50 + grain * grain * 0.50);
+        particles[cursor + 4] = grain;
+        particles[cursor + 5] = layer.speed * (0.97 + grain * 0.06);
+        particles[cursor + 6] = layer.shape;
+        particles[cursor + 7] = color[0] * light;
+        particles[cursor + 8] = color[1] * light;
+        particles[cursor + 9] = color[2] * light;
+        particles[cursor + 10] = layer.alpha * (0.72 + grain * 0.28) * edgeAlpha * dustAlpha;
+        cursor += stride;
       }
     });
 
@@ -199,7 +217,10 @@
         let key; // Preserve bright grains, the inner rim and the sparse outer silhouette.
         if (particles[source + 4] < 0.9 && radius > 0.34 && radius < 2.04) {
           // Local position, depth and speed bands prevent unrelated orbits merging.
-          key = `${Math.floor(particles[source] / 0.055)},${Math.floor(particles[source + 2] / 0.055)},${Math.floor(particles[source + 1] / 0.08)},${Math.floor(particles[source + 4] * 2)}`;
+          // Packed as one integer: the same lattice as the string it replaced, with
+          // no per-grain text.
+          key = ((Math.floor(particles[source] / 0.055) + 200) * 400 + (Math.floor(particles[source + 2] / 0.055) + 200)) * 800
+            + (Math.floor(particles[source + 1] / 0.08) + 200) * 2 + Math.floor(particles[source + 4] * 2);
         }
         const group = key === undefined ? undefined : cells.get(key); const area = particles[source + 3] ** 2;
         if (group && group.count < 4) {
